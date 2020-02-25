@@ -2,7 +2,7 @@ CC = g++
 debug = -g -Wall
 exe = bin/Octetpoly
 main = src/main.cpp
-objs = obj/main.o obj/Pion.o obj/Joueur.o obj/Ordi.o obj/Case.o obj/Plateau.o
+objs = obj/main.o obj/core/Pion.o obj/core/Joueur.o obj/core/Ordi.o obj/core/Case.o obj/core/Plateau.o
 
 ifeq ($(OS),Windows_NT)
 	test = if not exist
@@ -19,15 +19,16 @@ ALL: mkdir $(exe)
 mkdir:
 	$(test) obj $(pipe) mkdir obj
 	$(test) bin $(pipe) mkdir bin
+	$(test) obj/core $(pipe) mkdir obj/core
 
-bin/Octetpoly: src/main.cpp $(objs)
-	$(CC) -o $(exe) $(main) $(debug)
+bin/Octetpoly: $(objs)
+	$(CC) -o $(exe) $(objs) $(debug)
 
-obj/%.o: src/core/%.cpp
-	$(CC) -o $@ -c $+ $(debug)
+obj/%.o: src/%.cpp
+	$(CC) -o $@ -c $< $(debug)
 
 clean:
-	$(rm) $(objs)
+	$(rm) -r obj/;echo ok
 
 superclean:
 	$(rm) -r obj/ bin/
