@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Plateau.h"
+#include "core/Plateau.h"
 
 using namespace std;
 

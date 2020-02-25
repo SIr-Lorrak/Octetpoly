@@ -2,7 +2,7 @@
 #define OCTET_PION_H
 
 class Pion{
-	private:
+	private :
 
 };
 

@@ -2,7 +2,7 @@
 #define OCTET_CASE_H
 
 class Case{
-	
-}
+
+};
 
 #endif

@@ -5,6 +5,6 @@
 
 class Ordi : public Pion{
 
-}
+};
 
 #endif

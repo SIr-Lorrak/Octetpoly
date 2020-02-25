@@ -6,7 +6,7 @@
 #include "Ordi.h"
 
 class Plateau{
-	
-}
+
+};
 
 #endif

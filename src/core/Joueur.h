@@ -5,6 +5,6 @@
 
 class Joueur : public Pion{
 
-}
+};
 
 #endif
