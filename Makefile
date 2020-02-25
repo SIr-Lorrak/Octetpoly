@@ -6,13 +6,12 @@ objs = obj/main.o
 
 ifeq ($(OS),Windows_NT)
 	test = if not exist
-	pipe = 
+	pipe =  
 	rm = del
 else
 	test = test -d
 	pipe =||
-	rm = rm 
-
+	rm = rm
 endif
 
 ALL: mkdir $(exe)
@@ -24,8 +23,11 @@ mkdir:
 $(exe): $(main) $(objs)
 	$(CC) -o $(exe) $(main) $(debug)
 
-obj/main.o: $(main)
-	$(CC) -o obj/main.o -c $(main) $(debug)
+obj/%.o: src/%.cpp
+	$(CC) -o $@ -c $< $(debug)
 
 clean:
 	$(rm) $(objs)
+
+superclean:
+	$(rm) -r obj/ bin/
