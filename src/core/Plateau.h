@@ -2,11 +2,14 @@
 #define OCTET_PLATEAU_H
 
 #include "Case.h"
-#include "Joueur.h"
-#include "Ordi.h"
 
 class Plateau{
+	private : 
+		int test;
 
+	public : 
+		Plateau();
 };
+
 
 #endif

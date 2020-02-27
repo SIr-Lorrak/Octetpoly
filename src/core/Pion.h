@@ -3,6 +3,7 @@
 
 class Pion{
 	private :
+		int test;
 
 };
 
