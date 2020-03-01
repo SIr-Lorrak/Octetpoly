@@ -9,19 +9,51 @@ private:
 	int investissement;
 
 public:
+	//---------------------------------Constructeur--------------------------------------
+	/**
+	@brief Crée une case (constructeur par défaut)
+	@param none
+	**/
 	Case();
-
+	/**
+	@brief Destructeur de la classe
+	@param none
+	**/
 	~Case();
 
 
-	//Getters 
+	//----------------------------------Getters------------------------------------------
+	/**
+	@brief Récupére le champs occupation
+	@param none
+	**/ 
 	int getoccupation();
+	/**
+	@brief Récupére le champs type
+	@param none
+	**/ 
 	char gettype();
+	/**
+	@brief Récupére le champs investissement
+	@param none
+	**/ 
 	int getinvestissement();
 
-	//Setters
-	void setoccupation(int occupation);
+	//----------------------------------Setters------------------------------------------
+	/**
+	@brief affecte une valeur au champs occupation
+	@param occupant : int
+	**/ 
+	void setoccupation(int occupant);
+	/**
+	@brief affecte une valeur au champs type
+	@param categorie : char
+	**/ 
 	void settype(char categorie);
+	/**
+	@brief affecte une valeur au champs investissement
+	@param i : int
+	**/ 
 	void setinvestissement(int i);
 
 };

@@ -1,43 +1,37 @@
 #include "Case.h"
-
-Case::Case()
-{
+//---------------------------------Constructeur------------------------------------------
+Case::Case(){
 	occupation = 0;
 	type = '0';
 	investissement = 0;
 }
 
-Case::~Case()
-{
+Case::~Case(){
 	//TODO
 }
 
-int Case::getoccupation()
-{
+//-------------------------------------Getters-------------------------------------------
+int Case::getoccupation(){
 	return occupation;
 }
 
-char Case::gettype()
-{
+char Case::gettype(){
 	return type;
 }
 
-int Case::getinvestissement()
-{
+int Case::getinvestissement(){
 	return investissement;
 }
 
-void Case::setoccupation(int occupant)
-{
+//-------------------------------------Setters-------------------------------------------
+void Case::setoccupation(int occupant){
 	occupation = occupant;
 }
 
-void Case::settype(char categorie)
-{
+void Case::settype(char categorie){
 	type = categorie;
 }
 
-void Case::setinvestissement(int i)
-{
+void Case::setinvestissement(int i){
 	investissement = i;
 }

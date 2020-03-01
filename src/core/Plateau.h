@@ -6,17 +6,21 @@
 #include "Ordi.h"
 //#include <SDL_image.h>
 
-const int MAXP = 32;
+//Taille du plateau
+const int TPLATEAU = 32;
 
 class Plateau{
 private:
 
 	//Champs liée au plateau
 	unsigned int nbcase;
-	Case * tab;
-	unsigned int nbJoueur;
-	unsigned int nbOrdi;
+	Case * tabC;
 
+	unsigned int nbJoueur;
+	//Joueur * tabJ;
+
+	unsigned int nbOrdi;
+	//Ordi * tabO;
 	 	
 		
 	//Champs liée à la SDL
@@ -60,19 +64,24 @@ private:
  	//void afficherDestruction();	
 
 public:
-
-	Plateau();
-
+	//---------------------------------Constructeur--------------------------------------
 	/**
- 	@brief Créer le plateau 
+	@brief Crée le plateau (constructeur par défaut)
+	@param none
+	**/
+	Plateau();
+	/**
+ 	@brief Crée le plateau  
 	@param dimx,dimy,nbJoueur : unsigned int
 	**/
 	Plateau(const unsigned int dimx, const unsigned int dimy, const unsigned int nbJoueur);
-
+	/**
+	@brief Destructeur de la classe
+	@param none
+	**/
 	~Plateau();
 
-	//Case caseLibre(Case * c);
-
+	//---------------------------------Méthode-------------------------------------------
 
 };
 
