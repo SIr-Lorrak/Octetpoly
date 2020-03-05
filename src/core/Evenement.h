@@ -1,7 +1,11 @@
 #ifndef OCTET_EVENEMENT_H
 #define OCTET_EVENEMENT_H
 
-#include <string.h>
+#include <iostream>
+#include <string>
+using namespace std;
+
+const string tab_com[3] = {"maison","papa maison", "truc bidule"};
 
 class Evenement{
 	private :
@@ -10,12 +14,28 @@ class Evenement{
 		bool t; //true si l'evenement et bénéfique et false si il est maléfique
 
 	public :
-		Evenement(); //constructeur par défaut (inutile)
-		Evenement(const string nom,const unsigned int chance,const bool t); //constructeur
+		
 
-		getNom()const;
+};
 
-}
+
+
+class hacking{
+	private :
+		
+
+	public :
+
+
+		bool hack();
+		
+		
+
+
+};
+
+
+
 
 
 #endif
