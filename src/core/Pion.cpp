@@ -1,53 +1,71 @@
 #include "Pion.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include "Case.h"
 
 //Constructeur par défaut
 Pion::Pion(){
-
-	x = 0;
+	pos = 0;
 	karma = 0;
 	bitcoin = INITCOIN;
 	for (int i = 0; i < MAXCASEHT; i++)
 		{
-			IndCaseAchetee[i] = -1;
+			proprietes[i] = 0;
 		}
 	c = '*';
+	prisonnier = false;
 
 }
 
-Pion::Pion(){
-
-
-}
 
 //Accesseurs
-int Pion::getpos()const{ return pos;}
-int Pion::getkarma()const{ return karma;}
-float Pion::getbitcoin()const{ return bitcoin;}
-int Pion::getIndCaseAchetee(){
+int Pion::getpos(){ return pos;}
+int Pion::getkarma(){ return karma;}
+float Pion::getbitcoin(){ return bitcoin;}
+//int Pion::getIndCaseAchetee(){} //TODO
+char Pion::getc(){ return c;}
+bool Pion::getprisonnier(){ return prisonnier;}
 
-//A faire
-
-}
 
 //Mutateurs
-void Pion::setpos(const float pos1){ pos = pos1;}
-void Pion::setkarma(){ /*A faire*/ }
+void Pion::setc(const char c1){ c = c1;}
 
 //Fonction
-int Avancer(int pos)
+void Pion::Avancer(int pos, Des des)
 {
 	srand (time(NULL));      		//Initialisation de la fonction rand
-	int d1 = rand() % 6 + 1; 		//entier aléatoire entre 1 et 6 
-	int d2 = rand() % 6 + 1;
-	pos = pos + d1 + d2;
+
+	des.D1 = rand() % 6 + 1;		//entier aléatoire entre 1 et 6 
+	des.D1 = rand() % 6 + 1;
+
+	pos = pos + des.D1 + des.D2;
+
 	if(pos > MAXCASEP)
 	{
-		pos = pos - MAXCASEP - 1
+		pos = pos - MAXCASEP - 1;
 	}
-	
-	return pos;
+
 }
 
+void Pion::Prison()
+{
+
+	nom = Case::getnom();
+	pos = Case::getindCase();
+
+	if(prisonnier == false && nom == "Prison")
+	{
+		prisonnier = true;
+	}
+
+	if(prisonnier == false && pos = "indice de la case prison : 8 ?")
+	{
+		prisonnier = true;
+	}
+
+}
+
+
 //Destructeur
+
+Pion::~Pion(){}
