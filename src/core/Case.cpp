@@ -30,20 +30,17 @@ void Case::setOccupation(unsigned int occupant){
 	occupation = occupant;
 }
 
-void Case::setType(char categorie){
-	type = categorie;
-}
-
-void Case::setInvestissement(int i){
-	investissement = i;
-}
-
 void Case::setPrixAchat(unsigned int pa){
 	prixAchat = pa;
 }
 
 void Case::setPrixDeVente(unsigned int pdv){
 	prixDeVente = pdv;
+}
+
+void Case::setType(char categorie)
+{
+	investissement = categorie;
 }
 
 //-------------------------------------Méthodes------------------------------------------
@@ -54,4 +51,6 @@ void Case::initCase(char categorie,unsigned int pa, unsigned int pdv){
 	setPrixDeVente(pdv);
 }
 
-
+void Case::investir(int i){
+	investissement = i;
+}

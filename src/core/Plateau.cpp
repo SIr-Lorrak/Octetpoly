@@ -7,7 +7,7 @@ Plateau::Plateau(){
 	tabC = new Case[TPLATEAU];
 
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
-	//O : Porte Ouverte ; A : Publicité (an ad)
+	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase('D',0,0);
 	tabC[1].initCase('E',0,0);
 	tabC[2].initCase('E',0,0);
@@ -49,28 +49,11 @@ Plateau::~Plateau(){
 }
 
 //-------------------------------------Méthodes--------------------------------
-void Plateau::banque(){
+Case & Plateau::getCase(){
 
 }
 
-void Plateau::entreprise(){
+void Plateau::reset(){
 
 }
-
-void Plateau::prison(){
-
-}
-
-void Plateau::carteChance(){
-
-}
-
-void Plateau::campagneDePub(){
-
-}
-
-void Plateau::porteOuverte(){
-
-}
-
 

@@ -53,23 +53,23 @@ public:
 	@param categorie : char
 	**/ 
 	void setType(char categorie);
-	/**
-	@brief affecte une valeur au champs investissement
-	@param i : int
-	**/ 
-	void setInvestissement(int i);
-
+	
 	void setPrixAchat(unsigned int pa);
 
 	void setPrixDeVente(unsigned int pdv);
 
 	//---------------------------------Methodes------------------------------------------
-
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie
 	@param categorie : char, pa : unsigned : int, pdv : unsigned int
 	**/ 
 	void initCase(char categorie,unsigned int pa, unsigned int pdv);
+
+	/**
+	@brief Change l'investissment, le prixDeVente
+	@param i : int
+	**/ 
+	void investir(int i);
 
 
 };
