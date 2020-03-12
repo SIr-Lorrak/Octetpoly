@@ -4,17 +4,20 @@
 class Case{
 private:
 
-	int occupation;
+	unsigned int occupation;
 	char type;
 	int investissement;
+	unsigned int prixAchat;
+	unsigned int prixDeVente;
 
 public:
-	//---------------------------------Constructeur--------------------------------------
+	//---------------------------------Constructeurs--------------------------------------
 	/**
 	@brief Crée une case (constructeur par défaut)
 	@param none
 	**/
 	Case();
+
 	/**
 	@brief Destructeur de la classe
 	@param none
@@ -27,34 +30,47 @@ public:
 	@brief Récupére le champs occupation
 	@param none
 	**/ 
-	int getoccupation();
+	unsigned int getOccupation();
 	/**
 	@brief Récupére le champs type
 	@param none
 	**/ 
-	char gettype();
+	char getType();
 	/**
 	@brief Récupére le champs investissement
 	@param none
 	**/ 
-	int getinvestissement();
+	int getInvestissement();
 
 	//----------------------------------Setters------------------------------------------
 	/**
 	@brief affecte une valeur au champs occupation
 	@param occupant : int
 	**/ 
-	void setoccupation(int occupant);
+	void setOccupation(unsigned int occupant);
 	/**
 	@brief affecte une valeur au champs type
 	@param categorie : char
 	**/ 
-	void settype(char categorie);
+	void setType(char categorie);
 	/**
 	@brief affecte une valeur au champs investissement
 	@param i : int
 	**/ 
-	void setinvestissement(int i);
+	void setInvestissement(int i);
+
+	void setPrixAchat(unsigned int pa);
+
+	void setPrixDeVente(unsigned int pdv);
+
+	//---------------------------------Methodes------------------------------------------
+
+	/**
+	@brief Permet l'initialisation d'une case au lancement d'une partie
+	@param categorie : char, pa : unsigned : int, pdv : unsigned int
+	**/ 
+	void initCase(char categorie,unsigned int pa, unsigned int pdv);
+
 
 };
 
