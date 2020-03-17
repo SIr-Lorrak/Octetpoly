@@ -20,20 +20,49 @@ class Evenement{
 
 
 
-class hacking{
+class Hacking{
 	private :
-		
+	string mot;
+	unsigned int nbSaisie;
+	string motSaisie;
 
 	public :
 
+	Hacking();
+	void saisir(char N);
+	bool valider();
+	void motSuivant();
+	string getMot();
+	string getMotSaisie();
+	unsigned int getnbSaisie();
+	void fini(float N); 	
+};
 
-		bool hack();
-		
-		
 
+class clicker {
+	private :
+	
+
+	public :
+	
 
 };
 
+
+class Escape {
+	private :
+
+
+	public :
+};
+
+
+class Lucky {
+	private : 
+
+
+	public :
+};
 
 
 

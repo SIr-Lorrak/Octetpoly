@@ -1,10 +1,60 @@
 #include "Evenement.h"
 #include <iostream>
 #include <time.h>
+#include <chrono>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 
-bool hacking::hack(){
+
+Hacking::Hacking(){
+	srand (time(NULL));
+	int alea = rand()%2;
+	mot = tab_com[alea];
+	nbSaisie = 0;
+}
+
+
+void Hacking::saisir(char N){
+
+		motSaisie = motSaisie + N;
+}
+
+
+bool Hacking::valider(){
+	if(motSaisie==mot){
+		motSuivant();
+		return true;
+	}
+	else
+		return false;
+}
+
+
+void Hacking::motSuivant(){
+	srand (time(NULL));
+	int alea = rand()%2;
+	mot = tab_com[alea];
+	nbSaisie++;
+}
+
+
+string Hacking::getMot(){
+		return mot;
+}
+
+
+string Hacking::getMotSaisie(){
+	return motSaisie;
+}
+
+unsigned int Hacking::getnbSaisie(){
+	return nbSaisie;
+}
+
+
+/*void hacking::hack(){
 	string a;
 	clock_t tempsD, tempsF;
 	tempsD = clock();
@@ -12,12 +62,12 @@ bool hacking::hack(){
 	for(int i = 0;i<3;i++) {
 
 		cout<<tab_com[i]<<endl;
-		getline(cin,a);
-
-		while(a!=tab_com[i]){
+		
+		while(entrer_term()!=tab_com[i]){
 
 			cout<<"erreur"<<endl<<tab_com[i]<<endl;
-			getline(cin,a);
+
+			
 
 		}
 		if(i!=2){
@@ -27,19 +77,53 @@ bool hacking::hack(){
 		
 	}
 	tempsF = clock();
-	cout<<tempsD<<"   "<<tempsF<<endl;
-	float tps = (tempsF-tempsD)/60.0;
-	if (tps<8){
-		cout<< "vous avez reussi en "<<tps<<" seconds"<<endl;
-		return 0; 
-	}
-	else {
-		cout<<"vous avez perdu, vous avez mis "<<tps<<" second"<<endl;
-		return 1;
-	}
-
-
-
+	tps = (tempsF-tempsD)/60.0;
 
 }
 
+string hacking::entrer_term(){
+	string commande;
+	getline(cin,commande);
+	return commande;
+}
+
+
+string hacking::entrer(){
+	string commande;
+	string touche;
+	touche = fgetc(stdin);
+	 
+	while(touche!="enter"){
+		commande = commande+touche;
+		touche = fgetc(stdin);
+		
+
+	}
+	cout<<commande<<3<<endl;
+	return commande;
+
+}
+
+void hacking::gettps(){
+	cout<<tps<<endl;
+}
+
+
+
+
+void clicker::pub(){
+	nbclique = 0;
+	string touche = "a";
+	for(auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(2);std::chrono::system_clock::now() < runUntil;)
+	{
+		touche = fgetc(stdin);
+		cout<<touche<<2<<touche<<2<<touche<<2;
+		if(touche==" "){
+			cout<<touche<<1<<touche<<1<<touche<<1;
+			nbclique++;
+			touche = "a";
+		}
+	}
+	cout<<"fin"<<endl;
+
+}*/
