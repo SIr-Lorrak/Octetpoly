@@ -21,20 +21,27 @@ public:
 	/**
 	@brief Crée le plateau (constructeur par défaut)
 	@param none
-	**/
+	*/
 	Plateau();
+
 	/**
- 	
 	@brief Destructeur de la classe
 	@param none
-	**/
+	*/
 	~Plateau();
 
 	//---------------------------------Méthodes-------------------------------------------
 
-	Case & getCase();
+	/**
+	@brief Permet de récupèrer l'adresse d'une case
+	@param numCase : unsigned int
+	@return L'adresse d'une case
+	*/
+	Case & getCase(unsigned int numCase);
 
+	/*
 	void reset();
+	*/
 
 };
 

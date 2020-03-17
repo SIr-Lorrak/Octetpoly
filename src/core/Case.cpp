@@ -4,8 +4,8 @@ Case::Case(){
 	occupation = 0;
 	type = '0';
 	investissement = 0;
-	prixAchat = 0;
-	prixDeVente = 0;
+	prix = 0;
+	prixDeBase = 0;
 }
 
 Case::~Case(){
@@ -30,27 +30,19 @@ void Case::setOccupation(unsigned int occupant){
 	occupation = occupant;
 }
 
-void Case::setPrixAchat(unsigned int pa){
-	prixAchat = pa;
-}
-
-void Case::setPrixDeVente(unsigned int pdv){
-	prixDeVente = pdv;
-}
-
-void Case::setType(char categorie)
-{
-	investissement = categorie;
-}
-
 //-------------------------------------Méthodes------------------------------------------
 
-void Case::initCase(char categorie,unsigned int pa, unsigned int pdv){
-	setType(categorie);
-	setPrixAchat(pa);
-	setPrixDeVente(pdv);
+void Case::initCase(char categorie,unsigned int p){
+	prixDeBase = p;
+	prix = prixDeBase;
+	type = categorie;
+}
+
+void Case::initPrixDeBase(){
+	prix = prixDeBase;
 }
 
 void Case::investir(int i){
 	investissement = i;
+	//Modifie le prix en conséquence
 }

@@ -1,56 +1,93 @@
 #include "Jeu.h"
 
-void Plateau::banque(){
+//-------------------------------------Constructeurs--------------------------------------
 
+Jeu::Jeu(){
+	board;
 }
 
-void Plateau::entreprise(){
-
+Jeu::Jeu(unsigned int nbO){
+	board;
+	nbOrdi = nbO;
 }
 
-void Plateau::prison(){
-	if (true)
+Jeu::~Jeu(){
+	//TODO
+}
+
+//-------------------------------------Méthodes------------------------------------------
+void Jeu::banque(){
+	if(tourOrdi)
 	{
-		if(true)//Utilise une carte prison
-		{
 
-		}
-
-		else if(true)//Paye pour sortir
-		{
-
-		}
-		else if(true)//Lancer de dé
-		{
-
-		}
-
-		//FIN
 	}
-
 	else
 	{
-		//Le champs prisonier de pion passe à TRUE
-		//FIN
+
+	}
+
+}
+
+void Jeu::entreprise(){
+	if(tourOrdi)
+	{
+
+	}
+	else
+	{
+		
 	}
 }
 
-void Plateau::carteChance(){
+void Jeu::prison(){
+	if(tourOrdi){
+		
 
+	}
+	else{
+		
+	}
 }
 
-void Plateau::campagneDePub(){
+void Jeu::carteChance(){
+	if(tourOrdi)
+	{
 
+	}
+	else
+	{
+		
+	}
 }
 
-void Plateau::porteOuverte(){
+void Jeu::campagneDePub(){
+	if(tourOrdi)
+	{
 
+	}
+	else
+	{
+		
+	}
+}
+
+void Jeu::porteOuverte(){
+	if(tourOrdi)
+	{
+
+	}
+	else
+	{
+		
+	}
 }
 
 
 //A mettre dans jeu 
-void Plateau::ActionCase(){
-	switch('A'){
+void Jeu::actionCase(unsigned int num){
+
+	Case & c = board.getCase(num);
+	switch(c.getType()){
 		case 'E':
 			entreprise();
 			break;
@@ -83,5 +120,8 @@ void Plateau::ActionCase(){
 			prison();
 			break;
 	}
+}
+
+void Jeu::tourSuivant(){
 
 }
