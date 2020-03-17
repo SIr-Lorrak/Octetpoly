@@ -25,16 +25,18 @@ class Hacking{
 	string mot;
 	unsigned int nbSaisie;
 	string motSaisie;
+	int validation;
 
 	public :
 
 	Hacking();
 	void saisir(char N);
-	bool valider();
+	void valider();
 	void motSuivant();
 	string getMot();
 	string getMotSaisie();
 	unsigned int getnbSaisie();
+	int getValidation();
 	void fini(float N); 	
 };
 

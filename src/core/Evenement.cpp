@@ -13,6 +13,7 @@ Hacking::Hacking(){
 	int alea = rand()%2;
 	mot = tab_com[alea];
 	nbSaisie = 0;
+	validation = 2;
 }
 
 
@@ -22,13 +23,13 @@ void Hacking::saisir(char N){
 }
 
 
-bool Hacking::valider(){
+void Hacking::valider(){
 	if(motSaisie==mot){
 		motSuivant();
-		return true;
+		validation 0;
 	}
 	else
-		return false;
+		validation 1;
 }
 
 
@@ -51,6 +52,10 @@ string Hacking::getMotSaisie(){
 
 unsigned int Hacking::getnbSaisie(){
 	return nbSaisie;
+}
+
+int Hacking::getValidation(){
+	return validation;
 }
 
 

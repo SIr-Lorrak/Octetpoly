@@ -1,11 +1,13 @@
 #include <iostream>
 
 #include "core/Plateau.h"
+#include "TXT/jeuTXT.h"
 
 using namespace std;
 
 int main(int argc,char ** argv)
 {
-	cout<<"hello world"<<endl;
+	jeuTXT lala;
+	lala.runHacking();
 	return 0;
 }
