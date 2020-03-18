@@ -36,7 +36,7 @@ public:
 	@param numCase : unsigned int
 	@return L'adresse d'une case
 	*/
-	Case & getCase(unsigned int numCase);
+	Case * getCase(unsigned int numCase);
 
 	/*
 	void reset();

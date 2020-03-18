@@ -8,7 +8,7 @@ Pion::Pion()
 	karma = rand()%4-2;
 	nbpropriete = 0;
 	rang = 0;
-	propriete = new Case[MAXCASEHT];
+	propriete = new Case*[MAXCASEHT];
 	pos = 0;
 	bitcoin = INITCOIN;
 	car = '*';
@@ -40,19 +40,32 @@ void Pion::avancer()
 		
 unsigned int Pion::rapportePlus() const
 {
-	return 0;
+	int n = 0;
+	for(unsigned int i = 0; i<nbpropriete ; i++){
+		if(propriete[n]->getRapport()<propriete[i]->getRapport()) n=i;
+	}
+	return n;
 }
 
 unsigned int Pion::plusCher() const
 {
-	return 0;
+	int n = 0;
+	for(unsigned int i = 0; i<nbpropriete ; i++){
+		if(propriete[n]->getPrixDeBase()<propriete[i]->getPrixDeBase()) n=i;
+	}
+	return n;
 }
 
-void Pion::ajouterLettre(const char lettre)
+void Pion::ajouterLettre(const string lettre)
 {
 	nom+=lettre;
 }
 
 
 //Destructeur
-Pion::~Pion(){}
+Pion::~Pion(){
+	for(unsigned int i=0;i<nbpropriete;i++){
+		delete propriete[i];
+	}
+	delete [] propriete;
+}

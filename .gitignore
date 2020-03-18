@@ -4,5 +4,3 @@ obj/
 bin/
 
 doc/html
-
-src/mainTest.cpp

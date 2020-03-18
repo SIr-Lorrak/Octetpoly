@@ -5,6 +5,7 @@ Case::Case(){
 	type = '0';
 	investissement = 0;
 	prix = 0;
+	rapport = 0;
 	prixDeBase = 0;
 	prixM = 0;
 	prixB = 0;
@@ -31,6 +32,13 @@ unsigned int Case::getPrixB() const{
 	return prix;
 }
 
+unsigned int Case::getRapport() const{
+	return rapport;
+}
+
+unsigned int Case::getPrixDeBase() const{
+	return prixDeBase;
+}
 
 int Case::getInvestissement() const{
 	return investissement;

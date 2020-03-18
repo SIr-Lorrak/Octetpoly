@@ -7,6 +7,7 @@ private:
 	unsigned int occupation;
 	char type;
 	int investissement;
+	unsigned int rapport;
 	unsigned int prix;
 	unsigned int prixDeBase;
 	unsigned int prixM;
@@ -33,6 +34,18 @@ public:
 	@return occupation : unsigned int | 0 : Innocupé ; 1 : Joueur1 ; 2 : Joueur2 ; etc...
 	*/ 
 	unsigned int getOccupation() const;
+
+	/**
+	@brief
+	@param
+	*/
+	unsigned int getPrixDeBase() const;
+
+	/**
+	@brief
+	@param
+	*/
+	unsigned int getRapport() const;
 
 	/**
 	@brief Indique le prix de l'entreprise ou de la banque

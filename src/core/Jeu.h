@@ -28,20 +28,69 @@ class Jeu{
 		bool confirmation;
 		bool desLance;
 		bool avance;
+		
+//-------------------------------------Méthodes------------------------------------------
 
-
+		/**
+		@brief
+		@param
+		*/
 		void konamiCode(const string touche);
+
+		/**
+		@brief
+		@param
+		*/
 		void commencerPartie();
+
+		/**
+		@brief
+		@param
+		*/
 		void ajouterJoueur();
-		void ajouterLettre(const unsigned int j, const char lettre);
+
+		/**
+		@brief
+		@param
+		*/
+		void ajouterLettre(const unsigned int j, const string lettre);
+
+		/**
+		@brief
+		@param
+		*/
 		void sauver(const string & file) const ;
+
+		/**
+		@brief
+		@param
+		*/
 		void charger(const string & file);
 		
 
 	public :
+		/**
+		@brief
+		@param
+		*/
 		Jeu();
+
+		/**
+		@brief
+		@param
+		*/
 		void getOrdre(unsigned int tab[4]) const;
+
+		/**
+		@brief
+		@param
+		*/
 		void actionClavier(const string touche);
+
+		/**
+		@brief
+		@param
+		*/
 		void actionSouris(const float x,const float y);
 
 	/**
@@ -51,7 +100,6 @@ class Jeu{
 	void tourSuivant();
 
 	~Jeu();
-//-------------------------------------Méthodes------------------------------------------
 	/**
 	@brief Action possible sur l'entreprise 
 	@param none

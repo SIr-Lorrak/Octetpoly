@@ -78,11 +78,14 @@ void Jeu::ajouterJoueur()
 }
 
 
-void Jeu::ajouterLettre(const unsigned int n, const char lettre)
+void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 {
 	j[n]->ajouterLettre(lettre);
 }
 
+void Jeu::tourSuivant(){
+	//TODO
+}
 
 void Jeu::actionClavier(const string touche)
 {
@@ -104,7 +107,7 @@ void Jeu::actionClavier(const string touche)
 				attendreNom = false;
 			}
 			else if(touche != "\b"){// \b pour 'effacer'
-				j[nbJoueur]->ajouterLettre(touche[0]);
+				j[nbJoueur]->ajouterLettre(touche);
 			}
 		}
 	}
@@ -115,91 +118,46 @@ void Jeu::actionClavier(const string touche)
 		confirmation = false;
 	}
 }
-#include "Jeu.h"
 
 //-------------------------------------Constructeurs--------------------------------------
 
 Jeu::~Jeu(){
-	//TODO
+	delete [] o;
+	for(unsigned int i=0; i<nbJoueur; i++){
+		delete j[i];
+	}
 }
 
 //-------------------------------------Méthodes------------------------------------------
 void Jeu::banque(){
-	if(tourOrdi)
-	{
-		unsigned int posO = tabO[joueurCourant-1].getPos();
-		if(true)
-		{
-
-		}
-
-	}
-	else
-	{
-
-	}
-
+	
 }
 
 void Jeu::entreprise(){
-	if(tourOrdi)
-	{
-
-	}
-	else
-	{
-		
-	}
+	
 }
 
 void Jeu::prison(){
-	if(tourOrdi){
-		
-
-	}
-	else{
-		
-	}
+	
 }
 
 void Jeu::carteChance(){
-	if(tourOrdi)
-	{
-
-	}
-	else
-	{
-		
-	}
+	
 }
 
 void Jeu::campagneDePub(){
-	if(tourOrdi)
-	{
-
-	}
-	else
-	{
-		
-	}
+	
 }
 
 void Jeu::porteOuverte(){
-	if(tourOrdi)
-	{
-
-	}
-	else
-	{
-		
-	}
+	
 }
 
 
 //A mettre dans jeu 
 void Jeu::actionCase(unsigned int num){
 	//TODO enlever num pour le remplacer par tabJ[joueurCourant-1];
-	Case & c = board.getCase(num);
+	Case c = *p.getCase(num);
 	switch(c.getType()){
 		case 'E':
 			entreprise();
@@ -233,8 +191,4 @@ void Jeu::actionCase(unsigned int num){
 			prison();
 			break;
 	}
-}
-
-void Jeu::tourSuivant(){
-
 }

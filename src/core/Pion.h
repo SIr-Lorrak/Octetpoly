@@ -31,7 +31,7 @@ class Pion{
 		char car;	
 		Des d;					///Caractère du pion
 		bool prisonnier;
-		Case * propriete;
+		Case ** propriete;
 
 	public :
 
@@ -50,9 +50,25 @@ class Pion{
 
 	///---------------------------------Méthode-------------------------------------------
 
+
+		/**
+		@brief
+		@param
+		*/
 		unsigned int getRang() const;
+
+		/**
+		@brief
+		@param
+		*/
 		string getNom() const;
+
+		/**
+		@brief
+		@param
+		*/
 		unsigned int getNbPropriete() const;
+
 		/**
 		@brief Accesseur de la position du pion
 		@param none
@@ -70,12 +86,6 @@ class Pion{
 		@param none
 		**/
 		float getCoin() const;
-
-		/**
-		@brief Accesseur du tableau qui comporte les indices des cases achetées par le pion
-		@param none
-		**/
-		//int getIndCaseAchetee(); // void a la place de int
 
 		/**
 		@brief Accesseur du caractère du pion
@@ -101,10 +111,34 @@ class Pion{
 		**/
 		void avancer();
 
+		/**
+		@brief
+		@param
+		*/
 		Case & maxCase() const;
+
+		/**
+		@brief
+		@param
+		*/
 		unsigned int rapportePlus() const;
+
+		/**
+		@brief
+		@param
+		*/
 		unsigned int plusCher() const;
-		void ajouterLettre(const char lettre);
+
+		/**
+		@brief
+		@param
+		*/
+		void ajouterLettre(const string lettre);
+
+		/**
+		@brief
+		@param
+		*/
 		void lanceDes();
 
 };
