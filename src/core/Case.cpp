@@ -1,28 +1,62 @@
 #include "Case.h"
-#include <time.h>
-
-using namespace std;
-
-unsigned int Case::getPrix() const
-{
-	return 0;
-}
-unsigned int Case::getPrixM() const
-{
-	return 0;
+//---------------------------------Constructeurs------------------------------------------
+Case::Case(){
+	occupation = 0;
+	type = '0';
+	investissement = 0;
+	prix = 0;
+	prixDeBase = 0;
+	prixM = 0;
+	prixB = 0;
 }
 
-unsigned int Case::getPrixB() const
-{
-	return 0;
+Case::~Case(){
+	//TODO
 }
 
-unsigned int Case::getOccupation() const
-{
-	return 0;
+//-------------------------------------Getters-------------------------------------------
+unsigned int Case::getOccupation() const{
+	return occupation;
 }
 
-int Case::getInvestissement() const
-{
-	return 0;
+unsigned int Case::getPrix() const{
+	return prix;
+}
+
+unsigned int Case::getPrixM() const{
+	return prix;
+}
+
+unsigned int Case::getPrixB() const{
+	return prix;
+}
+
+
+int Case::getInvestissement() const{
+	return investissement;
+}
+
+char Case::getType() const{
+	return type;
+}
+//-------------------------------------Setters-------------------------------------------
+void Case::setOccupation(unsigned int occupant){
+	occupation = occupant;
+}
+
+//-------------------------------------Méthodes------------------------------------------
+
+void Case::initCase(char categorie,unsigned int p){
+	prixDeBase = p;
+	prix = prixDeBase;
+	type = categorie;
+}
+
+void Case::initPrixDeBase(){
+	prix = prixDeBase;
+}
+
+void Case::investir(int i){
+	investissement = i;
+	//Modifie le prix en conséquence
 }

@@ -43,6 +43,58 @@ class Jeu{
 		void getOrdre(unsigned int tab[4]) const;
 		void actionClavier(const string touche);
 		void actionSouris(const float x,const float y);
+
+	/**
+	@brief Détermine qui joue au tour suivant
+	@param none
+	*/
+	void tourSuivant();
+
+	~Jeu();
+//-------------------------------------Méthodes------------------------------------------
+	/**
+	@brief Action possible sur l'entreprise 
+	@param none
+	*/
+	void entreprise();
+
+	/**
+	@brief Action possible sur la banque 
+	@param none
+	*/
+	void banque();
+
+	/**
+	@brief Action possible en prison 
+	@param none
+	*/
+	void prison();
+
+	/**
+	@brief Tire une carte chance 
+	@param none	
+	*/
+	void carteChance();
+
+	/**
+	@brief Permet d'augmenter le loyer d'une entreprise
+	@param none
+	*/
+	void campagneDePub();
+
+	/**
+	@brief Permet de se déplacer sur une entreprises/banques 
+	(pas encore acheté) ou sur une des ses entreprises/banques
+	@param none
+	*/
+	void porteOuverte();
+
+	/**
+	@brief Détermine l'action possible sur la case
+	@param none
+	*/
+	void actionCase(unsigned int num);
+
 };
 
 #endif
