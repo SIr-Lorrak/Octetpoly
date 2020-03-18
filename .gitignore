@@ -3,4 +3,6 @@ obj/
 
 bin/
 
-doc/html/
+doc/html
+
+src/mainTest.cpp

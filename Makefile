@@ -7,7 +7,7 @@ bin = bin
 core = $(obj)/core/Pion.o $(obj)/core/Joueur.o $(obj)/core/Ordi.o $(obj)/core/Case.o $(obj)/core/Plateau.o $(obj)/core/Jeu.o
 
 exe_Test = Octetpoly_Test
-src_Test = $(core) $(obj)/main.o #rajouter ici les fichier nessecaire pour les test dans main (genre $(obj)/TXT/JeuTXT.o)
+src_Test = $(core) $(obj)/mainTest.o
 
 #exe_TXT = Octetpoly_TXT
 #src_TXT = $(core) $(obj)/TXT/mainTXT.o $(obj)/TXT/JeuTXT.o
