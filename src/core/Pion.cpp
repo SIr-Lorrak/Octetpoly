@@ -7,59 +7,50 @@ Pion::Pion()
 	srand(time(NULL));
 	karma = rand()%4-2;
 	nbpropriete = 0;
-	propriete = new Case[NBCASE];
+	rang = 0;
+	propriete = new Case[MAXCASEHT];
 	pos = 0;
 	bitcoin = INITCOIN;
-	c = '*';
+	car = '*';
 	prisonnier = false;
 }
 
-string Pion::getNom() const
+//accesseur
+unsigned int Pion::getRang()const	{ return rang;}
+string Pion::getNom() const			{ return nom;} 
+unsigned int Pion::getPos() const 	{ return pos;}
+char Pion::getCar() const			{ return car;}
+bool Pion::getPrisonnier() const	{ return prisonnier;}
+float Pion::getCoin() const			{ return bitcoin;}
+int Pion::getKarma() const			{ return karma;}
+unsigned int Pion::getNbPropriete() const {return nbpropriete;}
+void Pion::setCar(const char c)		{ car = c;}
+
+void Pion::lanceDes()
 {
-	return nom;
-} 
-
-int Pion::getpos(){ return pos;}
-char Pion::getc(){ return c;}
-bool Pion::getprisonnier(){ return prisonnier;}
-float Pion::getbitcoin(){ return bitcoin;}
-unsigned int Pion::getKarma() const
-{
-	return karma;
-}
-void Pion::setc(const char c1){ c = c1;}
-void Pion::Avancer(int pos, Des des)
-{
-	srand (time(NULL));      		//Initialisation de la fonction rand
-
-	des.D1 = rand() % 6 + 1;		//entier aléatoire entre 1 et 6 
-	des.D1 = rand() % 6 + 1;
-
-
-	pos = pos + des.D1 + des.D2;
-	if(pos > MAXCASEP)
-	{
-		pos = pos - MAXCASEP - 1;
-	}
-
+	srand(time(NULL));
+	d.D1 = rand()%6+1;
+	d.D2 = rand()%6+1;
 }
 
-unsigned int Pion::getNbPropriete() const
+void Pion::avancer()
 {
-	return nbpropriete;
-}
-unsigned int Pion::getRang() const
-{
-	return rang;
+	pos = (pos + d.D1 + d.D2)%MAXCASEP;
 }
 		
-Case & Pion::rapportePlus() const
+unsigned int Pion::rapportePlus() const
 {
-	return propriete[0];
+	return 0;
 }
-Case & Pion::plusCher() const
+
+unsigned int Pion::plusCher() const
 {
-	return propriete[0];
+	return 0;
+}
+
+void Pion::ajouterLettre(const char lettre)
+{
+	nom+=lettre;
 }
 
 
