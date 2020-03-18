@@ -9,6 +9,8 @@ private:
 	int investissement;
 	unsigned int prix;
 	unsigned int prixDeBase;
+	unsigned int prixM;
+	unsigned int prixB;
 
 public:
 	//---------------------------------Constructeurs--------------------------------------
@@ -26,26 +28,48 @@ public:
 
 	//----------------------------------Getters------------------------------------------
 	/**
-	@brief Récupére le champs occupation
+	@brief Indique à qui appartient l'entreprise ou la banque
 	@param none
-	@return occupation : unsigned int
+	@return occupation : unsigned int | 0 : Innocupé ; 1 : Joueur1 ; 2 : Joueur2 ; etc...
 	*/ 
-	unsigned int getOccupation();
+	unsigned int getOccupation() const;
 
 	/**
-	@brief Récupére le champs type
+	@brief Indique le prix de l'entreprise ou de la banque
 	@param none
-	@return type : char
+	@return prix : unsigned int
 	*/ 
-	char getType();
+	unsigned int getPrix() const;
 
 	/**
-	@brief Récupére le champs type
+	@brief Indique le prix d'un investissement illégal (mauvais)
 	@param none
-	@return investissement : int
+	@return prixM : unsigned int
 	*/ 
-	int getInvestissement();
+	unsigned int getPrixM() const;
 
+	/**
+	@brief Indique le prix d'un investissement légal (bon)
+	@param none
+	@return prixB : unsigned int
+	*/ 
+	unsigned int getPrixB() const;
+
+	/** 
+	@brief Indique l'investissement de l'entreprise
+	@param none
+	@return investissement : int | <0 si investissement illégal,
+	>0 si investissement dans le légal, =0 si aucun investissement
+	*/ 
+	int getInvestissement() const;
+
+	/**
+	@brief Récupére le type de la case
+	@param none
+	@return type : char | 'D' : Départ ; 'E' : Entreprise ; 'B' : Banque ; 'P' : Prison ;
+	'C' : Chance ; 'I' : Impôt ; 'O' : Porte Ouverte ; 'A' : Publicité (Advertising)
+	*/ 
+	char getType() const;
 	//----------------------------------Setters------------------------------------------
 	/**
 	@brief affecte une valeur au champs occupation
@@ -73,10 +97,11 @@ public:
 	void initPrixDeBase();
 
 	/**
-	@brief Change l'investissment, le prixDeVente
+	@brief Change l'investissment, le prix,le prixB, le prixM
 	@param i : int
 	*/ 
 	void investir(int i);
+
 };
 
 #endif

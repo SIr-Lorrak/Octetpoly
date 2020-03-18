@@ -13,7 +13,6 @@ class Plateau{
 private:
 
 	//Champs liée au plateau
-	unsigned int nbcase;
 	Case * tabC;
 
 public:

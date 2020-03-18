@@ -9,6 +9,7 @@ Jeu::Jeu(){
 Jeu::Jeu(unsigned int nbO){
 	board;
 	nbOrdi = nbO;
+	tabO[nbOrdi];
 }
 
 Jeu::~Jeu(){
@@ -19,6 +20,11 @@ Jeu::~Jeu(){
 void Jeu::banque(){
 	if(tourOrdi)
 	{
+		unsigned int posO = tabO[joueurCourant-1].getPos();
+		if(true)
+		{
+
+		}
 
 	}
 	else
@@ -85,7 +91,7 @@ void Jeu::porteOuverte(){
 
 //A mettre dans jeu 
 void Jeu::actionCase(unsigned int num){
-
+	//TODO enlever num pour le remplacer par tabJ[joueurCourant-1];
 	Case & c = board.getCase(num);
 	switch(c.getType()){
 		case 'E':

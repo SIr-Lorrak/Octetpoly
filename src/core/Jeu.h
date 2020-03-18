@@ -12,7 +12,7 @@ private:
 	unsigned char joueurCourant;
 	Plateau board;
 	//Joueur tabJ[];
-	//Ordi tabO[];
+	Ordi *tabO;
 	int tour;
 	bool tourOrdi;//bool qui permet de savoir à quelle tableau on doit accéder
 	//tourOrdi = false un joueur joue ; tourOrdi = true un ordi joue

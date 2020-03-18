@@ -6,6 +6,8 @@ Case::Case(){
 	investissement = 0;
 	prix = 0;
 	prixDeBase = 0;
+	prixM = 0;
+	prixB = 0;
 }
 
 Case::~Case(){
@@ -13,18 +15,30 @@ Case::~Case(){
 }
 
 //-------------------------------------Getters-------------------------------------------
-unsigned int Case::getOccupation(){
+unsigned int Case::getOccupation() const{
 	return occupation;
 }
 
-char Case::getType(){
-	return type;
+unsigned int Case::getPrix() const{
+	return prix;
 }
 
-int Case::getInvestissement(){
+unsigned int Case::getPrixM() const{
+	return prix;
+}
+
+unsigned int Case::getPrixB() const{
+	return prix;
+}
+
+
+int Case::getInvestissement() const{
 	return investissement;
 }
 
+char Case::getType() const{
+	return type;
+}
 //-------------------------------------Setters-------------------------------------------
 void Case::setOccupation(unsigned int occupant){
 	occupation = occupant;
