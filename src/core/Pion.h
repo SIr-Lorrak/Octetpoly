@@ -13,12 +13,12 @@ const int NBCASE = 32;
 class Pion{
 	private :
 		string nom;
-		unsigned int karma;
+		int karma;
 		float coin;
 		unsigned int nbpropriete;
 		unsigned int rang;
 
-		Case * propriete[NBCASE];
+		Case * propriete;
 
 	public :
 		Pion();
@@ -29,9 +29,10 @@ class Pion{
 		unsigned int getNbPropriete() const;
 		unsigned int getRang() const;
 
-		unsigned int rapportePlus() const;
-		unsigned int plusCher() const;
-		
+		Case & rapportePlus() const;
+		Case & plusCher() const;
+		string getNom() const;
+		void ajouterLettre(const char lettre);
 
 };
 

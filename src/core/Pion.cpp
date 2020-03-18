@@ -3,9 +3,10 @@
 Pion::Pion()
 {
 	srand(time(NULL));
-	karma = rand()%101;
+	karma = rand()%4-2;
 	coin = 500;
 	nbpropriete = 0;
+	propriete = new Case[NBCASE];
 	
 }
 
@@ -14,6 +15,15 @@ float Pion::getCoin() const
 	return coin;
 }
 
+string Pion::getNom() const
+{
+	return nom;
+} 
+
+void Pion::ajouterLettre(const char lettre)
+{
+	nom = nom+lettre;
+}
 
 unsigned int Pion::getKarma() const
 {
@@ -29,11 +39,11 @@ unsigned int Pion::getRang() const
 	return rang;
 }
 		
-unsigned int Pion::rapportePlus() const
+Case & Pion::rapportePlus() const
 {
-	return 0;
+	return propriete[0];
 }
-unsigned int Pion::plusCher() const
+Case & Pion::plusCher() const
 {
-	return 0;
+	return propriete[0];
 }
