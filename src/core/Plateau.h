@@ -3,8 +3,8 @@
 
 #include <string.h>
 #include "Case.h"
-#include "Joueur.h"
 #include "Ordi.h"
+#include "Joueur.h"
 
 //Taille du plateau
 const int TPLATEAU = 32;
@@ -36,12 +36,13 @@ public:
 	@param numCase : unsigned int
 	@return L'adresse d'une case
 	*/
-	Case & getCase(unsigned int numCase);
+	Case * getCase(unsigned int numCase);
 
 	/*
 	void reset();
 	*/
 
 };
+
 
 #endif

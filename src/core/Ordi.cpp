@@ -44,7 +44,7 @@ int Ordi::AIinvesti(const Case & entreprise) const
 	int dernierchoix = 0;
 	do{
 		if(entreprise.getInvestissement() == 0){
-			if(getKarma()>(50-risque/2)){
+			if(getKarma()>int(50-risque/2)){
 				if(entreprise.getPrixM()<getCoin()) dernierchoix = -1;
 			}
 			else{

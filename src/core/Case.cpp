@@ -5,9 +5,12 @@ Case::Case(){
 	type = '0';
 	investissement = 0;
 	prix = 0;
-	prixDeBase = 0;
+	loyer = 0;
+	prixInitial = 0;
 	prixM = 0;
 	prixB = 0;
+	prixDeVente = 0;
+	ad = false;
 }
 
 Case::~Case(){
@@ -31,6 +34,17 @@ unsigned int Case::getPrixB() const{
 	return prix;
 }
 
+unsigned int Case::getLoyer() const{
+	return loyer;
+}
+
+unsigned int Case::getPrixInitial() const{
+	return prixInitial;
+}
+
+unsigned int Case::getPrixDeVente() const{
+	return prixDeVente;
+}
 
 int Case::getInvestissement() const{
 	return investissement;
@@ -39,24 +53,36 @@ int Case::getInvestissement() const{
 char Case::getType() const{
 	return type;
 }
-//-------------------------------------Setters-------------------------------------------
-void Case::setOccupation(unsigned int occupant){
-	occupation = occupant;
+
+bool Case::getAd() const{
+	return ad;
 }
+//-------------------------------------Setters-------------------------------------------
+
 
 //-------------------------------------Méthodes------------------------------------------
 
 void Case::initCase(char categorie,unsigned int p){
-	prixDeBase = p;
-	prix = prixDeBase;
+	prixInitial = p;
+	prix = prixInitial;
 	type = categorie;
 }
 
-void Case::initPrixDeBase(){
-	prix = prixDeBase;
+void Case::initPrixInitial(){
+	prix = prixInitial;
 }
 
 void Case::investir(int i){
 	investissement = i;
 	//Modifie le prix en conséquence
+}
+
+void Case::estAcheter(unsigned int i){
+	occupation = i;
+	//TODO modifier les prix
+}
+
+void Case::advertising(unsigned int i){
+	ad = true;
+	//TODO modifier les prix
 }

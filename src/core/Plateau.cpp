@@ -46,11 +46,12 @@ Plateau::Plateau(){
 
 Plateau::~Plateau(){
 	//TODO
+	delete [] tabC;
 }
 
 //-------------------------------------Méthodes--------------------------------
-Case & Plateau::getCase(unsigned int numCase){
-	return tabC[numCase];
+Case * Plateau::getCase(unsigned int numCase){
+	return &tabC[numCase];
 }
 
 /*

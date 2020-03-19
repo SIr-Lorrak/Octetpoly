@@ -1,45 +1,71 @@
 #include "Pion.h"
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 Pion::Pion()
 {
-	pos = 0;
 	srand(time(NULL));
-	karma = rand()%101;
-	coin = 500;
+	karma = rand()%4-2;
 	nbpropriete = 0;
-	
+	rang = 0;
+	propriete = new Case*[MAXCASEHT];
+	pos = 0;
+	bitcoin = INITCOIN;
+	car = '*';
+	prisonnier = false;
 }
 
-unsigned int Pion::getPos() const
+//accesseur
+unsigned int Pion::getRang()const	{ return rang;}
+string Pion::getNom() const			{ return nom;} 
+unsigned int Pion::getPos() const 	{ return pos;}
+char Pion::getCar() const			{ return car;}
+bool Pion::getPrisonnier() const	{ return prisonnier;}
+float Pion::getCoin() const			{ return bitcoin;}
+int Pion::getKarma() const			{ return karma;}
+unsigned int Pion::getNbPropriete() const {return nbpropriete;}
+void Pion::setCar(const char c)		{ car = c;}
+
+void Pion::lanceDes()
 {
-	return pos;
+	srand(time(NULL));
+	d.D1 = rand()%6+1;
+	d.D2 = rand()%6+1;
 }
 
-float Pion::getCoin() const
+void Pion::avancer()
 {
-	return coin;
-}
-
-
-unsigned int Pion::getKarma() const
-{
-	return karma;
-}
-
-unsigned int Pion::getNbPropriete() const
-{
-	return nbpropriete;
-}
-unsigned int Pion::getRang() const
-{
-	return rang;
+	pos = (pos + d.D1 + d.D2)%MAXCASEP;
 }
 		
 unsigned int Pion::rapportePlus() const
 {
-	return 0;
+	int n = 0;
+	for(unsigned int i = 0; i<nbpropriete ; i++){
+		if(propriete[n]->getLoyer()<propriete[i]->getLoyer()) n=i;
+	}
+	return n;
 }
+
 unsigned int Pion::plusCher() const
 {
-	return 0;
+	int n = 0;
+	for(unsigned int i = 0; i<nbpropriete ; i++){
+		if(propriete[n]->getPrixInitial()<propriete[i]->getPrixInitial()) n=i;
+	}
+	return n;
+}
+
+void Pion::ajouterLettre(const string lettre)
+{
+	nom+=lettre;
+}
+
+
+//Destructeur
+Pion::~Pion(){
+	for(unsigned int i=0;i<nbpropriete;i++){
+		delete propriete[i];
+	}
+	delete [] propriete;
 }

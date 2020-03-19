@@ -7,10 +7,13 @@ private:
 	unsigned int occupation;
 	char type;
 	int investissement;
+	unsigned int loyer;
 	unsigned int prix;
-	unsigned int prixDeBase;
+	unsigned int prixInitial;
 	unsigned int prixM;
 	unsigned int prixB;
+	unsigned int prixDeVente;
+	bool ad;
 
 public:
 	//---------------------------------Constructeurs--------------------------------------
@@ -33,6 +36,21 @@ public:
 	@return occupation : unsigned int | 0 : Innocupé ; 1 : Joueur1 ; 2 : Joueur2 ; etc...
 	*/ 
 	unsigned int getOccupation() const;
+
+	/**
+	@brief Informe sur le prix de base de l'entreprise ou banque
+	@param none
+	@return prixDeBase : unsigned int 
+	*/
+	unsigned int getPrixInitial() const;
+
+	unsigned int getPrixDeVente() const;
+
+	/**
+	@brief 
+	@param
+	*/
+	unsigned int getLoyer() const;
 
 	/**
 	@brief Indique le prix de l'entreprise ou de la banque
@@ -70,17 +88,9 @@ public:
 	'C' : Chance ; 'I' : Impôt ; 'O' : Porte Ouverte ; 'A' : Publicité (Advertising)
 	*/ 
 	char getType() const;
+
+	bool getAd() const;
 	//----------------------------------Setters------------------------------------------
-	/**
-	@brief affecte une valeur au champs occupation
-	@param occupant : int
-	*/ 
-	void setOccupation(unsigned int occupant);
-	/**
-	@brief affecte une valeur au champs type
-	@param categorie : char
-	*/ 
-	void setType(char categorie);
 
 	//---------------------------------Methodes------------------------------------------
 	/**
@@ -94,13 +104,25 @@ public:
 	@brief Initialise le prix de base d'une entreprise ou d'une banque
 	@param none
 	*/ 
-	void initPrixDeBase();
+	void initPrixInitial();
 
 	/**
 	@brief Change l'investissment, le prix,le prixB, le prixM
 	@param i : int
 	*/ 
 	void investir(int i);
+
+	/**
+	@brief Affecte un propriètaire et change les prix
+	@param i : unsigned int
+	*/ 
+	void estAcheter(unsigned int i);
+
+	/**
+	@brief Indique que l'entreprise fait de la pub (Change les prix)
+	@param i : unsigned int
+	*/ 
+	void advertising(unsigned int i);
 
 };
 
