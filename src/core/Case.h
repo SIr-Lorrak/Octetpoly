@@ -96,7 +96,6 @@ public:
 
 	bool getAd() const;
 	//----------------------------------Setters------------------------------------------
-
 	//---------------------------------Methodes------------------------------------------
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie 
@@ -129,6 +128,7 @@ public:
 	*/ 
 	void advertising(unsigned int i);
 
+	void endAdvertising(unsigned int i);
 };
 
 #endif

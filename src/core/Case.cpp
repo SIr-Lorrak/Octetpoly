@@ -84,5 +84,14 @@ void Case::estAcheter(unsigned int i){
 
 void Case::advertising(unsigned int i){
 	ad = true;
-	//TODO modifier les prix
+	prix = prix*i;
+	prixDeVente = prixDeVente*i;
+	prixInitial = prixInitial*i;
+}
+
+void Case::endAdvertising(unsigned int i){
+	ad = false;
+	prix = prix/i;
+	prixDeVente = prixDeVente/i;
+	prixInitial = prixInitial/i;
 }
