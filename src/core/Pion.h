@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "Case.h"
+//#include "Carte.h"
 
 using namespace std;
 
@@ -13,133 +14,175 @@ const int MAXCASEP = 32; //Max case du plateau
 const int INITCOIN = 0; //A changer
 const int MAXCARTE = 20; //Max cartes du pion
 
+/**
+@brief Classe Pion
+**/
+struct Des 								///Les 2 Des du pion
+	{	
+		int D1;
+		int D2;
+	};
 
- 								
-struct Des{								///Les 2 Des du pion
-	unsigned int D1;
-	unsigned int D2;
-};
-				
 class Pion{
+	
 	private :
+
 		string nom;
 		int karma;
 		unsigned int rang;
 		float bitcoin;					///Argent du pion
 		unsigned int nbpropriete;
 		unsigned int pos;				///Position du pion
-		char car;	
-		Des d;					///Caractère du pion
-		bool prisonnier;
+		char car;						///Caractère du pion
+		Des d;							
+		unsigned prisonnier;
 		Case ** propriete;
 
 	public :
 
-	///-----------------------Constructeur/Destructeur--------------------------------------
-		/**
-		@brief Crée le Joueur (constructeur par défaut)
-		@param none
-		**/
-		Pion();
+///-----------------------Constructeur/Destructeur--------------------------------------
+	/**
+	@brief Crée le Joueur (constructeur par défaut)
+	@param none
+	**/
+	Pion();
 
-		/**
-		@brief Destructeur de la classe
-		@param none
-		**/
-		~Pion();
-
-	///---------------------------------Méthode-------------------------------------------
+	/**
+	@brief Destructeur de la classe
+	@param none
+	**/
+	~Pion();
 
 
-		/**
-		@brief
-		@param
-		*/
-		unsigned int getRang() const;
+///---------------------------------Getters-------------------------------------------	
+	/**
+	@brief Accesseur du nom du pion
+	@param none
+	**/
+	string getNom() const;
 
-		/**
-		@brief
-		@param
-		*/
-		string getNom() const;
+	/**
+	@brief Accesseur du karma du pion
+	@param none
+	**/
+	int getKarma() const;
 
-		/**
-		@brief
-		@param
-		*/
-		unsigned int getNbPropriete() const;
+	/**
+	@brief Accesseur du rang du pion
+	@param none
+	*/
+	unsigned int getRang() const;
 
-		/**
-		@brief Accesseur de la position du pion
-		@param none
-		**/
-		unsigned int getPos() const;
+	/**
+	@brief Accesseur de l'argent du pion
+	@param none
+	**/
+	float getCoin() const;
 
-		/**
-		@brief Accesseur du karma du pion
-		@param none
-		**/
-		int getKarma() const;
+	/**
+	@brief Accesseur du nombre de propriétés détenues par le joueur
+	@param none
+	*/
+	unsigned int getNbPropriete() const;
 
-		/**
-		@brief Accesseur de l'argent du pion
-		@param none
-		**/
-		float getCoin() const;
+	/**
+	@brief Accesseur de la position du pion
+	@param none
+	**/
+	unsigned int getPos() const;
 
-		/**
-		@brief Accesseur du caractère du pion
-		@param none
-		**/
-		char getCar() const;
+	/**
+	@brief Accesseur du caractère du pion
+	@param none
+	**/
+	char getCar() const;
 
-		/**
-		@brief Accesseur du booléen prisonnier qui définit si le pion est prisonnié ou non
-		@param none
-		**/
-		bool getPrisonnier() const;
+	/**
+	@brief Accesseur du booléen prisonnier qui définit si le pion est prisonnié ou non
+	@param none
+	**/
+	bool getPrisonnier() const;
 
-		/**
-		@brief Mutateur du caractère du pion
-		@param none
-		**/
-		void setCar(const char c);
+	/**
+	@brief Mutateur du caractère du pion
+	@param c : charactere
+	**/
 
-		/**
-		@brief Fonctdesdesion Avancer qui permet au Pion de lancer les dés afin de se déplacer
-		@param none
-		**/
-		void avancer();
 
-		/**
-		@brief
-		@param
-		*/
-		Case & maxCase() const;
+///-------------------------------------Setters-------------------------------------------
+	void setCar(const char c);
 
-		/**
-		@brief
-		@param
-		*/
-		unsigned int rapportePlus() const;
+	/**
+	@brief Mutateur du caractère du pion
+	@param argent : float
+	**/
+	void setCoin(const float argent);
 
-		/**
-		@brief
-		@param
-		*/
-		unsigned int plusCher() const;
 
-		/**
-		@brief
-		@param
-		*/
-		void ajouterLettre(const string lettre);
+///------------------------------------Méthodes------------------------------------------
 
-		/**
-		@brief
-		@param
-		*/
-		void lanceDes();
+	/**
+	@brief Procédure qui lance les dés du pion
+	@param none
+	*/
+	void lanceDes();
+
+	/**
+	@brief Procédure permettant de se déplacer
+	@param none
+	**/
+	void avancer();
+
+	/**
+	@brief
+	@param none
+	*/
+	unsigned int rapportePlus() const;
+
+	/**
+	@brief
+	@param none
+	*/
+	unsigned int plusCher() const;
+
+	/**
+	@brief Procédure qui ajoute une lettre au nom du pion
+	@param lettre : string
+	*/
+	void ajouterLettre(const string lettre);
+
+	/**
+	@brief Procédure qui efface une lettre au nom du pion
+	@param none
+	*/
+	void effacerLettre();
+
+	/**
+	@brief Procdédure qui permet au joueur d'acheter une banque ou une entreprise
+	@param c : pointeur sur case
+	*/
+	void acheter(Case * c);
+
+	void salaire();
+
+	/**
+	@brief Procdédure qui fait vendre des propriété au joueur
+	@param c : pointeur sur case
+	*/
+	void vendre();
+
+	/**
+	@brief Procdédure qui nous informe de notre patrimoineActif
+	@param none
+	@return la somme des prix de vente (banque + entreprise)
+	*/
+	float patrimoineActif();
+
+	/**
+	@brief Fonction qui fait la somme de la revente de tous les biens (entreprises et banques) du pion
+	@param none
+	*/
+	float ReventeToFaillite();
 
 };
 

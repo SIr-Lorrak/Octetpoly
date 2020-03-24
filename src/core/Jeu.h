@@ -24,6 +24,7 @@ private :
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];
 		unsigned int casePub; //Quelle case à de la publicité
+		float coinCourant;
 		bool konami[10]; //pour le konami code ^^vv<><>ba "entrée"
 		bool attendreNom;
 		bool attendreChoix;
@@ -127,7 +128,7 @@ public :
 	@brief Action possible en prison 
 	@param none
 	*/
-	void prison();
+	void prison(Case * c);
 
 	/**
 	@brief Tire une carte chance 
@@ -152,7 +153,19 @@ public :
 	@brief Détermine l'action possible sur la case
 	@param none
 	*/
-	void actionCase(unsigned int num);
+	void actionCase(unsigned int num, const string touche);
+
+	/**
+	@brief Echange d'argent entre joueur
+	@param payeur : unsigned int ; creancier : unsigned int, montant : unsigned int
+	*/
+	void paye(unsigned int payeur, unsigned int creancier, float montant);
+
+	/**
+	@brief Un ordi doit payer un loyer
+	@param c : pointeur sur Case ; float argent du joueur qui doit payer le loyer
+	*/
+	void payeLoyer(Case * c);
 };
 
 #endif

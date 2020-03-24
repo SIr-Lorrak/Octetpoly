@@ -134,53 +134,132 @@ Jeu::~Jeu(){
 //-------------------------------------Méthodes------------------------------------------
 
 void faillite(){
-	//TODO Enlever les propièté du joueur
+	//TODO Enlever les propiété du joueur
 	//TODO Le supprimer du tableau ordre
+}
+
+void Jeu::paye(unsigned int payeur, unsigned int creancier, float montant){
+	assert((payeur <= 4 || payeur > 0) && (creancier <= 4 || creancier > 0));
+	//Echange entre ordi
+	if(payeur > nbJoueur && payeur > creancier)
+	{
+		unsigned int coinP = tabO[payeur-1].getCoin();
+		unsigned int coinC = tabO[creancier-1].getCoin();
+		tabO[payeur-1].setCoin(coinP-montant);
+		tabO[creancier-1].setCoin(coinC-montant);
+	}
+	
+	//Le payeur est un joueur ; Le creancier est un ordi
+	else if(payeur <= nbJoueur && payeur > creancier)
+	{
+		unsigned int coinP = tabJ[payeur-1]->getCoin();
+		unsigned int coinC = tabO[creancier-1].getCoin();
+		tabJ[payeur-1]->setCoin(coinP-montant);
+		tabO[creancier-1].setCoin(coinC-montant);
+	}
+	
+	//Le payeur est un ordi ; Le creancier est un joueur
+	else if(payeur > nbJoueur && payeur <= creancier)
+	{
+		unsigned int coinP = tabO[payeur-1].getCoin();
+		unsigned int coinC = tabJ[creancier-1]->getCoin();
+		tabO[payeur-1].setCoin(coinP-montant);
+		tabJ[creancier-1]->setCoin(coinC-montant);	
+	}
+	//Echange entre joueur
+	else
+	{
+		unsigned int coinP = tabJ[payeur-1]->getCoin();
+		unsigned int coinC = tabJ[creancier-1]->getCoin();
+		tabJ[payeur-1]->setCoin(coinP-montant);
+		tabJ[creancier-1]->setCoin(coinC-montant);
+	}
+}
+
+void Jeu::payeLoyer(Case * c){
+//Le joueurCourant paye directement si il a assez d'argent 
+	if(coinCourant >= c->getLoyer())
+	{
+		paye(joueurCourant,c->getOccupation(),c->getLoyer());
+	}
+
+//C'est un ordi qui joue	
+	else if(tourOrdi)
+	{
+		//Le joueurCourant doit vendre pour payer le loyer
+		if((coinCourant + tabO[joueurCourant-1].patrimoineActif()) >= c->getLoyer())
+		{
+			paye(joueurCourant,c->getOccupation(),c->getLoyer());
+			while(tabO[joueurCourant-1].getCoin() < 0)
+			{
+				tabO[joueurCourant-1].vendre();
+			}
+		}
+		else
+		{
+			//faillite
+		}
+	}
+
+//C'est un joueur qui joue	
+	else
+	{
+		//Le joueurCourant doit vendre pour payer le loyer
+		if((coinCourant + tabJ[joueurCourant-1]->patrimoineActif()) >= c->getLoyer())
+		{
+			paye(joueurCourant,c->getOccupation(),c->getLoyer());
+			while(tabJ[joueurCourant-1]->getCoin() < 0)
+			{
+				tabJ[joueurCourant-1]->vendre();
+			}
+		}
+		else
+		{
+			//faillite
+		}
+	}
 }
 
 void Jeu::banque(Case * c){
 	if(tourOrdi)
 	{
+		//A quel joueur appartient la case
 		unsigned int occupant = c->getOccupation();
-		unsigned int coin = tabO[joueurCourant-1].getCoin();
+		//L'argent actuel du joueurCourant
+		unsigned int coinCourant = tabO[joueurCourant-1].getCoin();
+
 		if(occupant != joueurCourant)//Vérifie si ça n'appartient
 		{											 //pas au joueur
 			switch(occupant)//Différent cas de figure
 			{
-				case 0:
+				case 0://N'appartient à personne,le joueurCourant peut acheter la banque
+
+						//Est-ce que le joueurCourant a assez d'argent pour acheter
 						if(tabO[joueurCourant-1].AIacheteEntreprise(*c)
-							&& coin >= c->getPrixInitial())
+							&& coinCourant >= c->getPrixInitial())
 						{
-							c->estAcheter(joueurCourant);
-							//TODO enlever l'argent du joueur
+							tabO[joueurCourant-1].acheter(c);
 						}
 					break;
 
 				case 1:
-					if(coin >= c->getLoyer())
-					{
-						//TODO le joueur paye le joueur1
-					}
-					else if(true)
-					{
-
-					}
-					else
-					{
-
-					}
+					payeLoyer(c);
 					break;
 
 				case 2:
-					
+					payeLoyer(c);
 					break;
 
 				case 3:
-					
+					payeLoyer(c);
 					break;
 
 				case 4:
-					
+					payeLoyer(c);
+					break;
+
+				default:
+					//assert(false);
 					break;
 			}
 		}
@@ -188,25 +267,92 @@ void Jeu::banque(Case * c){
 }
 
 void Jeu::entreprise(Case * c){
-	/*
-	else 
+	//C'est un ordi qui joue
+	if(tourOrdi)
 	{
-		int investissement = tabO[joueurCourant-1].AIinvesti(*c);
-		if (investissement == -1 && coin >= c->getPrixM())
-		{
-				c->investir(investissement);
-				//TODO Enlever l'argent de l'ordi
+		//A quel joueur appartient la case
+		unsigned int occupant = c->getOccupation();
+		//L'argent actuel du joueurCourant
+		unsigned int coinCourant = tabO[joueurCourant-1].getCoin();
+
+		if(occupant != joueurCourant)//Vérifie si ça n'appartient
+		{											 //pas au joueur
+			switch(occupant)//Différent cas de figure
+			{
+				case 0://N'appartient à personne,le joueurCourant peut acheter la banque
+
+						//Est-ce que le joueurCourant a assez d'argent pour acheter
+						if(tabO[joueurCourant-1].AIacheteEntreprise(*c)
+							&& coinCourant >= c->getPrixInitial())
+						{
+							tabO[joueurCourant-1].acheter(c);
+
+							//Est-ce que le joueurCourant veux investir
+							int investi = tabO[joueurCourant-1].AIinvesti(*c);
+							if(investi == 1 && coinCourant >= c->getPrixB())
+							{
+								c->investir(1);
+								tabO[joueurCourant-1].setCoin(coinCourant - c->getPrixB());
+							}
+							else if (investi == -1 && coinCourant >= c->getPrixM())
+							{
+								c->investir(-1);
+								tabO[joueurCourant-1].setCoin(coinCourant - c->getPrixM());
+							}
+
+						}
+
+					break;
+
+				case 1:
+					payeLoyer(c);
+					break;
+
+				case 2:
+					payeLoyer(c);
+					break;
+
+				case 3:
+					payeLoyer(c);
+					break;
+
+				case 4:
+					payeLoyer(c);
+					break;
+
+				default:
+					//assert(false);
+					break;
+			}
 		}
 	}
+
+	
+	else 
+	{
+		//Est-ce que le joueurCourant veux investir
+		int investi = tabO[joueurCourant-1].AIinvesti(*c);
+		if(investi == 1 && coinCourant >= c->getPrixB())
+		{
+			c->investir(1);
+			tabO[joueurCourant-1].setCoin(coinCourant - c->getPrixB());
+		}
+		else if (investi == -1 && coinCourant >= c->getPrixM())
+		{
+			c->investir(-1);
+			tabO[joueurCourant-1].setCoin(coinCourant - c->getPrixM());
+		}
+
+	//C'est un joueur qui joue
 	else
 	{
 
-	}
-	*/
+	}		
+							}
 }
 
-void Jeu::prison(){
-	
+void Jeu::prison(Case * c){
+	//if (tabO[joueurCourant-1]) 
 }
 
 void Jeu::carteChance(){
@@ -214,8 +360,7 @@ void Jeu::carteChance(){
 }
 
 void Jeu::campagneDePub(Case * c){
-	unsigned int coin = tabO[joueurCourant-1].getCoin();
-	if(coin >= 50000)
+	if(coinCourant >= 50000)
 	{
 		bool deuxiemePub = c->getAd();
 		if (deuxiemePub)
@@ -237,15 +382,15 @@ void Jeu::porteOuverte(){
 
 
 //A mettre dans jeu 
-void Jeu::actionCase(unsigned int num){
-	Case c = *board.getCase(num);
-	switch(c.getType()){
+void Jeu::actionCase(unsigned int num, const string touche){
+	Case * c = board.getCase(num);
+	switch(c->getType()){
 		case 'E':
-			entreprise(&c);
+			entreprise(c);
 			break;
 
 		case 'B':
-			banque(&c);
+			banque(c);
 			break;
 
 		case 'C':
@@ -253,7 +398,7 @@ void Jeu::actionCase(unsigned int num){
 			break;
 
 		case 'A':
-			campagneDePub(&c);
+			campagneDePub(c);
 			break;
 
 		case 'O':
@@ -264,12 +409,8 @@ void Jeu::actionCase(unsigned int num){
 			//TODO 
 			break;
 
-		case 'D':
-			//TODO
-			break;
-
 		case 'P':
-			prison();
+			prison(c);
 			break;
 	}
 }

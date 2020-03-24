@@ -38,21 +38,6 @@ public:
 	unsigned int getOccupation() const;
 
 	/**
-	@brief Informe sur le prix de base de l'entreprise ou banque
-	@param none
-	@return prixDeBase : unsigned int 
-	*/
-	unsigned int getPrixInitial() const;
-
-	unsigned int getPrixDeVente() const;
-
-	/**
-	@brief 
-	@param
-	*/
-	unsigned int getLoyer() const;
-
-	/**
 	@brief Indique le prix de l'entreprise ou de la banque
 	@param none
 	@return prix : unsigned int
@@ -72,6 +57,26 @@ public:
 	@return prixB : unsigned int
 	*/ 
 	unsigned int getPrixB() const;
+
+	/**
+	@brief 
+	@param
+	*/
+	unsigned int getLoyer() const;
+
+	/**
+	@brief Informe sur le prix initial de l'entreprise ou banque
+	@param none
+	@return prixInitial : unsigned int 
+	*/
+	unsigned int getPrixInitial() const;
+
+	/**
+	@brief Informe sur le prix de vente de l'entreprise ou de la banque
+	@param none
+	@return prixDeVente : unsigned int 
+	*/
+	unsigned int getPrixDeVente() const;
 
 	/** 
 	@brief Indique l'investissement de l'entreprise
@@ -96,7 +101,7 @@ public:
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie 
 	(prix de base et type)
-	@param categorie : char, pa : unsigned : int, pdv : unsigned int
+	@param categorie : char ; prix : unsigned int
 	*/ 
 	void initCase(char categorie,unsigned int p);
 
