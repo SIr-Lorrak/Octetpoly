@@ -1,71 +1,108 @@
 #include "Pion.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
-#include "Case.h"
+#include <iostream>
+
+using namespace std;
+
 
 //Constructeur par défaut
 Pion::Pion(){
-	pos = 0;
-	karma = 0;
+	
+	srand(time(NULL));
+	karma = rand()%4-2;
+	rang = 0;
 	bitcoin = INITCOIN;
-	for (int i = 0; i < MAXCASEHT; i++)
-		{
-			proprietes[i] = 0;
-		}
-	c = '*';
+	nbpropriete = 0;
+	pos = 0;
+	car = '*';
 	prisonnier = false;
+	propriete = new Case*[MAXCASEHT];
 
 }
 
 
 //Accesseurs
-int Pion::getpos(){ return pos;}
-int Pion::getkarma(){ return karma;}
-float Pion::getbitcoin(){ return bitcoin;}
-//int Pion::getIndCaseAchetee(){} //TODO
-char Pion::getc(){ return c;}
-bool Pion::getprisonnier(){ return prisonnier;}
+string Pion::getNom() const					{ return nom;} 
+int Pion::getKarma() const					{ return karma;}
+unsigned int Pion::getRang() const			{ return rang;}
+float Pion::getBitcoin() const 				{ return bitcoin;}
+unsigned int Pion::getNbPropriete() const 	{ return nbpropriete;}
+unsigned int Pion::getPos() const 			{ return pos;}
+char Pion::getCar() const 					{ return car;}
+bool Pion::getPrisonnier() const 			{ return prisonnier;}
 
 
 //Mutateurs
-void Pion::setc(const char c1){ c = c1;}
+void Pion::setCar(const char c){ car = c;}
 
-//Fonction
-void Pion::Avancer(int pos, Des des)
+void Pion::setBitcoin(const float argent){ bitcoin = argent;}
+
+//Fonctions et Procédures
+
+void Pion::lanceDes()
 {
-	srand (time(NULL));      		//Initialisation de la fonction rand
-
-	des.D1 = rand() % 6 + 1;		//entier aléatoire entre 1 et 6 
-	des.D1 = rand() % 6 + 1;
-
-	pos = pos + des.D1 + des.D2;
-
-	if(pos > MAXCASEP)
-	{
-		pos = pos - MAXCASEP - 1;
-	}
-
+	srand(time(NULL));
+	d.D1 = rand()%6+1;
+	d.D2 = rand()%6+1;
 }
 
-void Pion::Prison()
+void Pion::avancer()
 {
+	cout << "Position de départ du pion : " << pos << endl;
 
-	nom = Case::getnom();
-	pos = Case::getindCase();
-
-	if(prisonnier == false && nom == "Prison")
-	{
-		prisonnier = true;
-	}
-
-	if(prisonnier == false && pos = "indice de la case prison : 8 ?")
-	{
-		prisonnier = true;
-	}
-
+	pos = (pos + d.D1 + d.D2)%MAXCASEP;
+	
+	cout << "Vous avez fait : " << d.D1 << " + " << d.D2 << endl << "Vous avancez donc de " << d.D1 + d.D2 << " cases !" << endl;
 }
 
+unsigned int Pion::rapportePlus() const
+{
+	int n = 0;
+	for(unsigned int i = 0; i < nbpropriete ; i++)
+	{
+		if(propriete[n]->getRapport()<propriete[i]->getRapport()) n=i;
+	}
+	return n;
+}
+
+unsigned int Pion::plusCher() const
+{
+	int n = 0;
+	for(unsigned int i = 0; i < nbpropriete ; i++)
+	{
+		if(propriete[n]->getPrixDeBase()<propriete[i]->getPrixDeBase()) n=i;
+	}
+	return n;
+}
+
+void Pion::ajouterLettre(const string lettre)
+{
+    if(nom.length()>=20)
+        nom+=lettre;
+}
+
+void Pion::effacerLettre()
+{
+    if(nom.length()>0)
+        nom = nom.substr(0, nom.size()-1);
+}
+
+float Pion::ReventeToFaillite()
+{
+	float res = 0;
+	for(int i = 0; i < nbpropriete; i++)
+	{
+		res += propriete[i]->getPrix();
+	}
+	
+	return res;
+}
 
 //Destructeur
-
-Pion::~Pion(){}
+Pion::~Pion(){
+	for(unsigned int i=0;i<nbpropriete;i++){
+		delete propriete[i];
+	}
+	delete [] propriete;
+}
