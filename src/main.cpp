@@ -8,6 +8,6 @@ using namespace std;
 int main(int argc,char ** argv)
 {
 	jeuTXT lala;
-	lala.runHacking();
+	lala.deroulementTXT();
 	return 0;
 }

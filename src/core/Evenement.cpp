@@ -8,127 +8,157 @@ using namespace std;
 
 
 
+
+//constructeur, permet d'initialiser n
+Evenement::Evenement(){
+
+	n = "rien";
+	
+}
+
+
+//permet de déclancher un événément lors d'un déplacement en fonction du karma 
+void Evenement::Declenchement(){
+
+	if((rand()%99)<10){
+
+		n = "hack";
+		tps = 0;
+		tempsD = clock();
+
+	}
+}
+
+
+//retourne n (nous de l'évenement en court)
+string Evenement::getn(){
+
+	return n;
+
+}
+
+
+//retourne tps (temps du jours sur l'évenement)
+float Evenement::gettps(){
+
+	return tps;
+
+}
+
+
+//retourne t (bool qui permet de savoir si on gagne ou perd de l'argent )
+bool Evenement::getT(){
+
+	return t;
+
+}
+
+
+//pemet de calculer le temps qu'a mit le joueur a faire l'évenement
+void Evenement::fini(){
+
+	tempsF = clock();
+	tps = (tempsF-tempsD)/CLOCKS_PER_SEC;
+
+	if (n == "hack"){
+
+		if(tps<=50){ 
+			t = true;
+		}
+
+		else{
+			t = false;
+		}
+
+		n = "rien";
+
+	}
+}
+
+
+//-------------------------------------------------------------
+
+
+//constructeur, initialise le premier, le nb sde saisie et l'affichage
 Hacking::Hacking(){
+
 	srand (time(NULL));
-	int alea = rand()%2;
+	int alea = rand()%8;
 	mot = tab_com[alea];
 	nbSaisie = 0;
-	validation = 2;
+	intAff = 2;
+
 }
 
 
-void Hacking::saisir(char N){
+//concate le caractere N au reste du mot
+void Hacking::saisir(string N){
 
 		motSaisie = motSaisie + N;
+
 }
 
 
+//permet de valider ou non le mot saisit par le joueur
 void Hacking::valider(){
+
 	if(motSaisie==mot){
+
 		motSuivant();
-		validation 0;
+		intAff = 3;
+
 	}
-	else
-		validation 1;
+
+	else{
+
+		motSaisie = "";
+		intAff = 4;
+
+	}
 }
 
 
+//permet de choisr le mot suivant
 void Hacking::motSuivant(){
+
 	srand (time(NULL));
-	int alea = rand()%2;
+	int alea = rand()%8;
 	mot = tab_com[alea];
 	nbSaisie++;
+	motSaisie = "";
+
 }
 
 
+//retourne le mot actuel
 string Hacking::getMot(){
+
 		return mot;
+
 }
 
 
+//retourne le mot tapé par l'utilisateur
 string Hacking::getMotSaisie(){
+
 	return motSaisie;
+
 }
 
+
+//retourne le nombre de mot validé
 unsigned int Hacking::getnbSaisie(){
+
 	return nbSaisie;
-}
-
-int Hacking::getValidation(){
-	return validation;
-}
-
-
-/*void hacking::hack(){
-	string a;
-	clock_t tempsD, tempsF;
-	tempsD = clock();
-	cout<<"hacking, remplit les commande dans le temps impartie"<<endl;
-	for(int i = 0;i<3;i++) {
-
-		cout<<tab_com[i]<<endl;
-		
-		while(entrer_term()!=tab_com[i]){
-
-			cout<<"erreur"<<endl<<tab_com[i]<<endl;
-
-			
-
-		}
-		if(i!=2){
-			cout<<"commande bonne, suivante:"<<endl;
-
-		}
-		
-	}
-	tempsF = clock();
-	tps = (tempsF-tempsD)/60.0;
 
 }
 
-string hacking::entrer_term(){
-	string commande;
-	getline(cin,commande);
-	return commande;
+
+//retourne un entier qui permet de choisir le bon affichage
+int Hacking::getIntAff(){
+
+	return intAff;
+	
 }
 
 
-string hacking::entrer(){
-	string commande;
-	string touche;
-	touche = fgetc(stdin);
-	 
-	while(touche!="enter"){
-		commande = commande+touche;
-		touche = fgetc(stdin);
-		
-
-	}
-	cout<<commande<<3<<endl;
-	return commande;
-
-}
-
-void hacking::gettps(){
-	cout<<tps<<endl;
-}
-
-
-
-
-void clicker::pub(){
-	nbclique = 0;
-	string touche = "a";
-	for(auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(2);std::chrono::system_clock::now() < runUntil;)
-	{
-		touche = fgetc(stdin);
-		cout<<touche<<2<<touche<<2<<touche<<2;
-		if(touche==" "){
-			cout<<touche<<1<<touche<<1<<touche<<1;
-			nbclique++;
-			touche = "a";
-		}
-	}
-	cout<<"fin"<<endl;
-
-}*/
