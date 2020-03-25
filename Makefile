@@ -4,16 +4,16 @@ debug = -g -Wall
 obj = obj
 bin = bin
 
-core = $(obj)/core/Pion.o $(obj)/core/Joueur.o $(obj)/core/Ordi.o $(obj)/core/Case.o $(obj)/core/Plateau.o $(obj)/core/Jeu.o
+core = $(obj)/core/Pion.o $(obj)/core/Joueur.o $(obj)/core/Ordi.o $(obj)/core/Case.o $(obj)/core/Plateau.o $(obj)/core/Jeu.o $(obj)/core/Evenement.o
 
 exe_Test = Octetpoly_Test
 src_Test = $(core) $(obj)/mainTest.o
 
 exe_TXT = Octetpoly_TXT
-src_TXT = $(core) $(obj)/TXT/mainTXT.o $(obj)/TXT/JeuTXT.o
+src_TXT = $(core) $(obj)/TXT/JeuTXT.o $(obj)/TXT/mainTXT.o
 
 exe_SDL = Octetpoly_SDL
-src_SDL = $(core) $(obj)/SDL/mainSDL.o $(obj)/SDL/JeuSDL.o
+src_SDL = $(core) $(obj)/SDL/JeuSDL.o $(obj)/SDL/mainSDL.o
 
 exe = $(bin)/$(exe_Test) $(bin)/$(exe_TXT) $(bin)/$(exe_SDL)
 

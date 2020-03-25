@@ -7,7 +7,7 @@ private:
 	unsigned int occupation;
 	char type;
 	int investissement;
-	unsigned int rapport;
+	unsigned int loyer;
 	unsigned int prix;
 	unsigned int prixDeBase;
 	unsigned int prixM;
@@ -45,7 +45,7 @@ public:
 	@brief
 	@param
 	*/
-	unsigned int getRapport() const;
+	unsigned int getLoyer() const;
 
 	/**
 	@brief Indique le prix de l'entreprise ou de la banque

@@ -42,7 +42,7 @@ unsigned int Pion::rapportePlus() const
 {
 	int n = 0;
 	for(unsigned int i = 0; i<nbpropriete ; i++){
-		if(propriete[n]->getRapport()<propriete[i]->getRapport()) n=i;
+		if(propriete[n]->getLoyer()<propriete[i]->getLoyer()) n=i;
 	}
 	return n;
 }
@@ -58,9 +58,15 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-	nom+=lettre;
+	if(nom.length()>=20)
+		nom+=lettre;
 }
 
+void Pion::effacerLettre()
+{
+	if(nom.length()>0)
+		nom = nom.substr(0, nom.size()-1);
+}
 
 //Destructeur
 Pion::~Pion(){

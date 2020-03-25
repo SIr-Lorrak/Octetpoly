@@ -3,6 +3,8 @@
 
 #include "Jeu.h"
 
+using namespace std;
+
 const string KONAMI_CODE[10] = {"^","^","v","v","<",">","<",">","b","a"};
 
 bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned int taille = 4){
@@ -13,11 +15,14 @@ bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned in
 	return true;
 }
 
+//-------------------------------------Constructeurs--------------------------------------
+
 Jeu::Jeu(){
 	srand(time(NULL));
 	attendreNom = false;
 	desLance = false;
 	avance = false;
+	tourOrdi = false;
 	confirmation = false;
 	nbJoueur = 0;
 	nbTour = 0;
@@ -64,7 +69,7 @@ void Jeu::konamiCode(const string touche)
 
 void Jeu::commencerPartie()
 {
-	o = new Ordi [4-nbJoueur];
+	tabO = new Ordi [4-nbJoueur];
 	nbTour = 1;
 	joueurCourant = ordre[0];
 }
@@ -72,7 +77,7 @@ void Jeu::commencerPartie()
 
 void Jeu::ajouterJoueur()
 {
-	j[nbJoueur] = new Joueur;
+	tabJ[nbJoueur] = new Joueur;
 	nbJoueur++;
 	attendreNom = true;
 }
@@ -80,14 +85,38 @@ void Jeu::ajouterJoueur()
 
 void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 {
-	j[n]->ajouterLettre(lettre);
+	tabJ[n]->ajouterLettre(lettre);
 }
 
 void Jeu::tourSuivant(){
-	//TODO
+	nbTour++;
+	joueurCourant = ordre[nbTour%5 - 1];
+	if(joueurCourant>nbJoueur) tourOrdi = true ;
+	else tourOrdi = false ;
 }
 
-void Jeu::actionClavier(const string touche)
+void Jeu::actionPartie(const string & touche)
+{
+	if(tourOrdi){
+
+	}
+	else{
+		if(!desLance){
+			if(touche == "\n"){
+				tabJ[joueurCourant]->lanceDes();
+				desLance = true;
+			}
+		}
+		else if(!avance){
+			if(touche == "\n"){
+				tabJ[joueurCourant]->avancer();
+			}
+		}
+	}
+}
+
+
+void Jeu::actionClavier(const string & touche)
 {
 	if(nbTour == 0){
 		if(!attendreNom&&nbJoueur<4){
@@ -107,28 +136,26 @@ void Jeu::actionClavier(const string touche)
 				attendreNom = false;
 			}
 			else if(touche != "\b"){// \b pour 'effacer'
-				j[nbJoueur]->ajouterLettre(touche);
+				tabJ[nbJoueur]->ajouterLettre(touche);
 			}
 		}
 	}
 	else{
 		konamiCode(touche);//pour le konami code
+		actionPartie(touche);
 	}
 	if(touche != "\n"){
 		confirmation = false;
 	}
 }
 
-//-------------------------------------Constructeurs--------------------------------------
-
 Jeu::~Jeu(){
-	delete [] o;
+	delete [] tabO;
 	for(unsigned int i=0; i<nbJoueur; i++){
-		delete j[i];
+		delete tabJ[i];
 	}
 }
 
-//-------------------------------------Méthodes------------------------------------------
 void Jeu::banque(){
 	
 }
@@ -157,7 +184,7 @@ void Jeu::porteOuverte(){
 //A mettre dans jeu 
 void Jeu::actionCase(unsigned int num){
 	//TODO enlever num pour le remplacer par tabJ[joueurCourant-1];
-	Case c = *p.getCase(num);
+	Case c = *board.getCase(num);
 	switch(c.getType()){
 		case 'E':
 			entreprise();
@@ -190,5 +217,71 @@ void Jeu::actionCase(unsigned int num){
 		case 'P':
 			prison();
 			break;
+		default :
+			bool Case_Invalide = false;
+			assert(Case_Invalide);
+			break;
 	}
+}
+
+using namespace std;
+
+
+
+//seteur permetant de mettre à jour l'évenement e
+void Jeu::sete(unsigned int n){
+
+	switch(n){
+
+		case 1:
+			e.Declenchement();
+			break;
+
+		case 2:
+			e.fini();
+			break;
+
+	}
+}
+
+
+//seteur permetant de mettre à jour hacking h
+void Jeu::seth(unsigned int n){
+	h.intAff = n-1;
+}
+
+
+// permet de retourner l'évenement e
+Evenement Jeu::gete(){
+
+	return e;
+
+}
+
+
+//permet de retourner hacking h
+Hacking Jeu::geth(){
+
+	return h;
+
+}
+
+
+//permet d'effectuer une action selon la touche appuyer
+void Jeu::actionMiniJeu(const string touche){
+
+	//si nous sommes dans l'évenement hacking
+	if (e.getn() =="hack"){
+
+		if (touche == "\n"){
+			h.valider();
+		}
+		else if(touche== "="){
+			h.effacerLettre();
+		}
+		else{
+			h.saisir(touche);
+		}
+	}
+
 }

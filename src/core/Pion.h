@@ -10,7 +10,7 @@ using namespace std;
 
 const int MAXCASEHT = 24; //Max case achetée
 const int MAXCASEP = 32; //Max case du plateau
-const int INITCOIN = 0; //A changer
+const int INITCOIN = 500; //A changer
 const int MAXCARTE = 20; //Max cartes du pion
 
 
@@ -115,12 +115,6 @@ class Pion{
 		@brief
 		@param
 		*/
-		Case & maxCase() const;
-
-		/**
-		@brief
-		@param
-		*/
 		unsigned int rapportePlus() const;
 
 		/**
@@ -134,6 +128,12 @@ class Pion{
 		@param
 		*/
 		void ajouterLettre(const string lettre);
+
+		/**
+		@brief
+		@param
+		*/
+		void effacerLettre();
 
 		/**
 		@brief
