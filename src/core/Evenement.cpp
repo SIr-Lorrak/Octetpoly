@@ -189,6 +189,17 @@ int Hacking::getIntAff(){
 }
 
 
+//permet de reset les données membres à la fin de l'évenement hacking
+void Hacking::resetHack(){
+	srand (time(NULL));
+	int alea = rand()%8;
+	mot = tab_com[alea];
+	nbSaisie = 0;
+	intAff = 2;
+
+}
+
+
 //-----------------------------------------------------------------------------
 
 
@@ -221,4 +232,11 @@ unsigned int clicker::getnbclique(){
 	return nbclique;
 }
 
+
+//permet de reset les données membres à la fin de l'évenement clicker
+void clicker::resetClicker(){
+
+	nbclique = 0;
+	tps_actuel = 0;
+}
 

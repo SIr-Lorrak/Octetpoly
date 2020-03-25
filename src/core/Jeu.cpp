@@ -34,6 +34,10 @@ void Jeu::seth(unsigned int n){
 		case 2:
 			h.intAff = 1;
 			break;
+
+		case 3:
+		h.resetHack();
+		break;
 	}
 }
 
@@ -81,5 +85,13 @@ void Jeu::actionClavier(const string touche){
 clicker Jeu::getc(){
 
 	return c;
+
+}
+
+
+//seteur permettant de mettre à jour clicker c
+void Jeu::setc(){
+
+	c.resetClicker();
 
 }

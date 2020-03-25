@@ -55,5 +55,10 @@ public:
 	*/
 	clicker getc();
 
+	/**
+	brief seteur permettant de mettre à jour clicker c
+	param none */
+	void setc();
+
 
 };

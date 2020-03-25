@@ -72,6 +72,7 @@ void jeuTXT::deroulementTXT(){
 
 				j.sete(2);
 				affichageHacking();
+				j.seth(3);
 				d = 1;
 			}
 		}
@@ -82,8 +83,9 @@ void jeuTXT::deroulementTXT(){
 			update();
 
 			if(j.getc().gettps_actuel()>10){
-				
+
 				j.sete(2);
+				j.setc();
 				d =1;
 			}
 		}
@@ -160,13 +162,11 @@ void jeuTXT::update(){
 
 	string touche;
 
-	if((kbhit())&&(rep)){
-		rep = false;
+	if(kbhit()){
 		touche = fgetc(stdin);
 		j.actionClavier(touche);
 
 	}
-	else{rep = true;}
 }
 
 

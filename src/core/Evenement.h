@@ -137,6 +137,12 @@ class Hacking{
 		@param none
 		*/
 		int getIntAff();
+
+		/**
+		brief permet de reset les vdonnées membres à la fin de l'évenement hacking
+		param none
+		*/
+		void resetHack();
 		 	
 };
 
@@ -175,6 +181,12 @@ class clicker {
 	param none
 	*/
 	unsigned int getnbclique();
+
+	/**
+	brief permet de reset les données membres à la fin de l'évenement clicker
+	param none
+	*/
+	void resetClicker();
 
 
 
