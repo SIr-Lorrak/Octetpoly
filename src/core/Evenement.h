@@ -20,6 +20,7 @@ class Evenement{
 		clock_t tempsD; //heure d edépart d'un évenement
 		clock_t tempsF; //heure de fin d'un évenement
 		float tps; //durée totale d el'évenement
+		int gain; //montant que vous aller gagner ou perdre
 
 	public :
 
@@ -57,7 +58,19 @@ class Evenement{
 		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
 		@param none
 		*/
-		void fini();
+		void fini(int clique);
+
+		/**
+		@brief retourne le gain à la fin de l'évenement
+		@param none
+		*/
+		int getgain();
+
+		/*
+		brief retourne le temps de départ
+		param none
+		*/
+		clock_t gettempsD();
 			
 };
 
@@ -127,14 +140,43 @@ class Hacking{
 		 	
 };
 
-
+/**
+brief classe qui gère l'évenement clicker
+*/
 class clicker {
 
 	private :
-	
+
+	unsigned int nbclique; // nombre d'appue sur la barre espace
+	float tps_actuel; //temps actuel pour le timer
 
 	public :
 	
+	/**
+	brief constructeur met le nombre de clique et le temps à 0
+	param none
+	*/
+	clicker();
+
+	/**
+	brief permet d'ajouter un clique au compteur
+	param clock_t tempsD(temps de départ)
+	*/
+	void ajoutClique(clock_t tempsD);
+
+	/**
+	brief retourne le temps actuel pour le timer
+	param none
+	*/
+	float gettps_actuel();
+
+	/**
+	brief retourne le nombre d'appuie 
+	param none
+	*/
+	unsigned int getnbclique();
+
+
 
 };
 

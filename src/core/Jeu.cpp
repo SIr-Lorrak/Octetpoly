@@ -15,7 +15,7 @@ void Jeu::sete(unsigned int n){
 			break;
 
 		case 2:
-			e.fini();
+			e.fini(getc().getnbclique());
 			break;
 
 	}
@@ -58,7 +58,7 @@ Hacking Jeu::geth(){
 void Jeu::actionClavier(const string touche){
 
 	//si nous sommes dans l'évenement hacking
-	if (e.getn() =="hack"){
+	if (e.getn() == "hack"){
 
 		if (touche == "\n"){
 			h.valider();
@@ -67,5 +67,19 @@ void Jeu::actionClavier(const string touche){
 			h.saisir(touche);
 		}
 	}
+
+	//si nous sommes dans l'évenement clicker
+	if(e.getn() == "clicker"){
+		if(touche == " "){
+			c.ajoutClique(gete().gettempsD());
+		}
+	}
+}
+
+
+//retourne clicker c
+clicker Jeu::getc(){
+
+	return c;
 
 }

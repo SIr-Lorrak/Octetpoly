@@ -16,6 +16,7 @@ class jeuTXT{
 private:
 
 		Jeu j;
+		bool rep;
 
 public:
 
@@ -42,5 +43,12 @@ public:
 	param none
 	*/
 	void update();
+
+
+	/**
+	brief permet d'afficher le clicker
+	parma none
+	*/
+	void affichageClicker();
 
 };

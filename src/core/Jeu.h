@@ -14,6 +14,7 @@ private:
 
 	Evenement e;
 	Hacking h;
+	clicker c;
 
 	
 public:
@@ -47,6 +48,12 @@ public:
 	param none
 	*/
 	void actionClavier(const string touche);
+
+	/**
+	brief retourne clicker c
+	param none
+	*/
+	clicker getc();
 
 
 };

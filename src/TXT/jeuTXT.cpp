@@ -32,6 +32,7 @@ jeuTXT::jeuTXT(){
 	#else
 	    system("clear");
 	#endif
+	    rep = true;
 }
 
 //permet de replacer le curseur en heut a gauche
@@ -63,15 +64,28 @@ void jeuTXT::deroulementTXT(){
 		if(j.gete().getn() == "hack"){
 
 			affichageHacking();
+		
+
+			update();
+
+			if(j.geth().getnbSaisie() == 4){
+
+				j.sete(2);
+				affichageHacking();
+				d = 1;
+			}
 		}
 
-		update();
+		if(j.gete().getn() == "clicker"){
 
-		if(j.geth().getnbSaisie() == 4){
+			affichageClicker();
+			update();
 
-			j.sete(2);
-			affichageHacking();
-			d = 1;
+			if(j.getc().gettps_actuel()>10){
+				
+				j.sete(2);
+				d =1;
+			}
 		}
 	}
 }
@@ -146,10 +160,30 @@ void jeuTXT::update(){
 
 	string touche;
 
-	if(kbhit()){
-
+	if((kbhit())&&(rep)){
+		rep = false;
 		touche = fgetc(stdin);
 		j.actionClavier(touche);
+
+	}
+	else{rep = true;}
+}
+
+
+//permet d'afficher le clicker
+void jeuTXT::affichageClicker(){
+
+	jeuClear();
+
+	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
+	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+
+	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
+
+	if (j.getc().gettps_actuel() >= 10){
+
+		cout<<"TERMINER!"<<endl;
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
 
 	}
 }
