@@ -177,61 +177,31 @@ void Jeu::paye(unsigned int payeur, unsigned int creancier, float montant){
 	}
 }
 
-void Jeu::payeLoyer(){
+void Jeu::payeLoyerOrdi(){
 	
-//C'est un ordi qui joue	
-	if(tourOrdi)
+	//La case où se trouve le joueurCourant
+	Case * c = board.getCase(tabO[joueurCourant-1].getPos());
+
+	//Le joueurCourant paye directement si il a assez d'argent 
+	if(coinCourant >= c->getLoyer())
 	{
-		//La case où se trouve le joueurCourant
-		Case * c = board.getCase(tabO[joueurCourant-1].getPos());
-
-		//Le joueurCourant paye directement si il a assez d'argent 
-		if(coinCourant >= c->getLoyer())
-		{
 		paye(joueurCourant,c->getOccupation(),c->getLoyer());
-		}
-
-		//Le joueurCourant doit vendre pour payer le loyer
-		if((coinCourant + tabO[joueurCourant-1].patrimoineActif()) >= c->getLoyer())
-		{
-			paye(joueurCourant,c->getOccupation(),c->getLoyer());
-			while(coinCourant < 0)
-			{
-				tabO[joueurCourant-1].vendre();
-			}
-		}
-		else
-		{
-			//faillite
-		}
 	}
 
-//C'est un joueur qui joue	
+	//Le joueurCourant doit vendre pour payer le loyer
+	if((coinCourant + tabO[joueurCourant-1].patrimoineActif()) >= c->getLoyer())
+	{
+		paye(joueurCourant,c->getOccupation(),c->getLoyer());
+		while(coinCourant < 0)
+		{
+			tabO[joueurCourant-1].vendre();
+		}
+	}
 	else
 	{
-		//La case où se trouve le joueurCourant
-		Case * c = board.getCase(tabJ[joueurCourant-1]->getPos());
-
-		//Le joueurCourant paye directement si il a assez d'argent 
-		if(coinCourant >= c->getLoyer())
-		{
-			paye(joueurCourant,c->getOccupation(),c->getLoyer());
-		}
-
-		//Le joueurCourant doit vendre pour payer le loyer
-		if((coinCourant + tabJ[joueurCourant-1]->patrimoineActif()) >= c->getLoyer())
-		{
-			paye(joueurCourant,c->getOccupation(),c->getLoyer());
-			while(tabJ[joueurCourant-1]->getCoin() < 0)
-			{
-				tabJ[joueurCourant-1]->vendre();
-			}
-		}
-		else
-		{
-			//faillite
-		}
+		//faillite
 	}
+	
 }
 
 void Jeu::investirEOrdi(){
@@ -291,25 +261,25 @@ void Jeu::actionBEOrdi(){
 				break;
 
 			case 1:
-				payeLoyer();
+				payeLoyerOrdi();
 				//On met à jour la variable coinCourant 
 				coinCourant = tabO[joueurCourant-1].getCoin();
 				break;
 
 			case 2:
-				payeLoyer();
+				payeLoyerOrdi();
 				//On met à jour la variable coinCourant 
 				coinCourant = tabO[joueurCourant-1].getCoin();
 				break;
 
 			case 3:
-				payeLoyer();
+				payeLoyerOrdi();
 				//On met à jour la variable coinCourant 
 				coinCourant = tabO[joueurCourant-1].getCoin();
 				break;
 
 			case 4:
-				payeLoyer();
+				payeLoyerOrdi();
 				//On met à jour la variable coinCourant 
 				coinCourant = tabO[joueurCourant-1].getCoin();
 				break;
@@ -327,7 +297,35 @@ void Jeu::actionBEOrdi(){
 	}
 }
 
-void Jeu::banque(){
+void Jeu::payeLoyerJoueur(const string touche){
+//C'est un joueur qui joue	
+	//La case où se trouve le joueurCourant
+	Case * c = board.getCase(tabJ[joueurCourant-1]->getPos());
+
+	//Le joueurCourant paye directement si il a assez d'argent 
+	if(coinCourant >= c->getLoyer())
+	{
+		paye(joueurCourant,c->getOccupation(),c->getLoyer());
+	}
+
+	//Le joueurCourant doit vendre pour payer le loyer
+	if((coinCourant + tabJ[joueurCourant-1]->patrimoineActif()) >= c->getLoyer())
+	{
+		paye(joueurCourant,c->getOccupation(),c->getLoyer());
+		while(tabJ[joueurCourant-1]->getCoin() < 0)
+		{
+			tabJ[joueurCourant-1]->vendre();
+		}
+	}
+	else
+	{
+		//faillite
+	}
+}
+
+
+//-------------------------------------Cases Du plateau-----------------------------------
+void Jeu::banque(const string touche){
 	if(tourOrdi)
 	{
 		actionBEOrdi();
@@ -338,7 +336,7 @@ void Jeu::banque(){
 	}
 }
 
-void Jeu::entreprise(){
+void Jeu::entreprise(const string touche){
 	//C'est un ordi qui joue
 	if(tourOrdi)
 	{
@@ -421,11 +419,11 @@ void Jeu::actionCase(const string touche){
 
 	switch(c->getType()){
 		case 'E':
-			entreprise();
+			entreprise(touche);
 			break;
 
 		case 'B':
-			banque();
+			banque(touche);
 			break;
 
 		case 'C':

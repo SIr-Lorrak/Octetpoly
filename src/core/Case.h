@@ -129,6 +129,8 @@ public:
 	void advertising(unsigned int i);
 
 	void endAdvertising(unsigned int i);
+
+	void reset();
 };
 
 #endif

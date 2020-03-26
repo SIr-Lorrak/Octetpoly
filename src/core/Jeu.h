@@ -117,13 +117,13 @@ public :
 	@brief Action possible sur l'entreprise 
 	@param none
 	*/
-	void entreprise();
+	void entreprise(const string touche);
 
 	/**
 	@brief Action possible sur la banque 
 	@param none
 	*/
-	void banque();
+	void banque(const string touche);
 
 	/**
 	@brief Action possible en prison 
@@ -166,11 +166,18 @@ public :
 	@brief Un ordi doit payer un loyer
 	@param c : pointeur sur Case ; float argent du joueur qui doit payer le loyer
 	*/
-	void payeLoyer();
 
+//-------------------------------------Fonctions propre aux ordis-------------------------------
+
+	void payeLoyerOrdi();
 	void investirEOrdi();
-
 	void actionBEOrdi();
+
+//-------------------------------------Fonctions propre aux joueurs-------------------------------
+
+	void payeLoyerJoueur(const string touche);
+	void investirEJoueur(const string touche);
+	void actionBEJoueur(const string touche);
 };
 
 #endif
