@@ -1,20 +1,27 @@
 #ifndef OCTET_CASE_H
 #define OCTET_CASE_H
 
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
 class Case{
 private:
 
-	unsigned int occupation;
-	char type;
-	int investissement;
-	unsigned int loyer;
-	unsigned int prix;
-	unsigned int prixInitial;
-	unsigned int prixM;
-	unsigned int prixB;
-	unsigned int prixDeVente;
-	bool ad;
+	string nom;
+	unsigned int occupation;//Qui occupe la case
+	char type; //Type une entreprise, une banque, un case chance,...
+	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
+	bool ad; //Indique si la case est en publicité
 
+	unsigned int loyer; //Prix à donner au joueur à qui appartient l'entreprise
+	unsigned int prix; //Prix d'achat
+	unsigned int prixInitial;
+	unsigned int prixM; //Prix pour un investissement illégale
+	unsigned int prixB; //Prix pour un investissement légal
+	unsigned int prixDeVente; //Prix de revente
+	
 public:
 	//---------------------------------Constructeurs--------------------------------------
 	/**
@@ -102,7 +109,7 @@ public:
 	(prix de base et type)
 	@param categorie : char ; prix : unsigned int
 	*/ 
-	void initCase(char categorie,unsigned int p);
+	void initCase(char categorie,unsigned int p,string nom);
 
 	/**
 	@brief Initialise le prix de base d'une entreprise ou d'une banque
@@ -128,8 +135,17 @@ public:
 	*/ 
 	void advertising(unsigned int i);
 
+
+	/**
+	@brief Indique que l'entreprise ne fait plus de pub (Change les prix)
+	@param i : unsigned int
+	*/ 
 	void endAdvertising(unsigned int i);
 
+	/**
+	@brief Renitialisation de la carte
+	@param none
+	*/ 
 	void reset();
 };
 

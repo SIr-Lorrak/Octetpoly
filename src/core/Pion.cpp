@@ -11,10 +11,10 @@ Pion::Pion(){
 	
 	srand(time(NULL));
 	karma = rand()%4-2;
-	rang = 0;
+	rang = 1;
 	bitcoin = INITCOIN;
 	nbpropriete = 0;
-	pos = 0;
+	pos = 1;
 	car = '*';
 	prisonnier = 0;
 	propriete = new Case*[MAXCASEHT];
@@ -87,26 +87,19 @@ void Pion::effacerLettre()
         nom = nom.substr(0, nom.size()-1);
 }
 
-float Pion::ReventeToFaillite()
-{
-	float res = 0;
-	for(unsigned int i = 0; i < nbpropriete; i++)
-	{
-		res += propriete[i]->getPrix();
-	}
-	
-	return res;
-}
-
 void Pion::vendre(){
 	//TODO
 }
 
+Pion * Pion::getPion(){
+  return this;
+}
+
 void Pion::acheter(Case * c){
-	c->estAcheter(rang);
+	c->estAcheter(rang); 
 	propriete[nbpropriete] = c;
 	nbpropriete++;
-	unsigned int prix = c->getPrixInitial();
+	unsigned int prix = c->getPrix();
 	bitcoin = bitcoin - prix;
 }
 
@@ -121,8 +114,8 @@ float Pion::patrimoineActif(){
 
 //-------------------------------------Destructeur---------------------------------------
 Pion::~Pion(){
-	for(unsigned int i=0;i<nbpropriete;i++){
-		delete propriete[i];
-	}
+	//for(unsigned int i=0;i<nbpropriete;i++){
+	//	delete propriete[i];
+	//}
 	delete [] propriete;
 }

@@ -1,7 +1,6 @@
 #ifndef OCTET_PLATEAU_H
 #define OCTET_PLATEAU_H
 
-#include <string.h>
 #include "Case.h"
 #include "Ordi.h"
 #include "Joueur.h"
@@ -37,10 +36,6 @@ public:
 	@return L'adresse d'une case
 	*/
 	Case * getCase(unsigned int numCase);
-
-	/*
-	void reset();
-	*/
 
 };
 

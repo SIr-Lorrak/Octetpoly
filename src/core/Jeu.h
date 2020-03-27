@@ -108,12 +108,6 @@ public :
 	~Jeu();
 
 	/**
-	@brief Appeler lors d'un paimement impossible causé par un manque de fond
-	@param none
-	*/
-	void faillite();
-
-	/**
 	@brief Action possible sur l'entreprise 
 	@param none
 	*/
@@ -141,7 +135,7 @@ public :
 	@brief Permet d'augmenter le loyer d'une entreprise
 	@param none
 	*/
-	void campagneDePub();
+	void campagneDePub(const string touche);
 
 	/**
 	@brief Permet de se déplacer sur une entreprises/banques 
@@ -163,21 +157,35 @@ public :
 	void paye(unsigned int payeur, unsigned int creancier, float montant);
 
 	/**
-	@brief Un ordi doit payer un loyer
-	@param c : pointeur sur Case ; float argent du joueur qui doit payer le loyer
+	@brief Fonction qui prends en paramètre la case sur laque le joueurCourant veux
+	mettre un pub
+	@param quelleCase : unsigned int
 	*/
+	void pub(unsigned int quelleCase);
 
-//-------------------------------------Fonctions propre aux ordis-------------------------------
+	Joueur * getJoueur(const unsigned int i) const;
 
-	void payeLoyerOrdi();
-	void investirEOrdi();
-	void actionBEOrdi();
+	Ordi * getOrdi(const unsigned int i) const;
 
-//-------------------------------------Fonctions propre aux joueurs-------------------------------
+	Pion * getPion(const unsigned int i) const;
 
-	void payeLoyerJoueur(const string touche);
+	/**
+	@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi
+	@param none
+	*/
+	void actionBE(const string touche);
+
+	/**
+	@brief Procédure qui gére le loyer à payer par un joueur
+	@param none
+	*/
+	void payeLoyerJoueur();
+
+	/**
+	@brief Procédure qui gère les investissement d'un joueur
+	@param none
+	*/
 	void investirEJoueur(const string touche);
-	void actionBEJoueur(const string touche);
 };
 
 #endif

@@ -2,16 +2,14 @@
 #define OCTET_PION_H
 
 #include <iostream>
-#include <string.h>
 
 #include "Case.h"
-//#include "Carte.h"
 
 using namespace std;
 
 const int MAXCASEHT = 24; //Max case achetée
 const int MAXCASEP = 32; //Max case du plateau
-const int INITCOIN = 0; //A changer
+const int INITCOIN = 500; //A changer
 const int MAXCARTE = 20; //Max cartes du pion
 
 /**
@@ -171,19 +169,14 @@ class Pion{
 	*/
 	void vendre();
 
+	Pion * getPion();
+
 	/**
 	@brief Procdédure qui nous informe de notre patrimoineActif
 	@param none
 	@return la somme des prix de vente (banque + entreprise)
 	*/
 	float patrimoineActif();
-
-	/**
-	@brief Fonction qui fait la somme de la revente de tous les biens (entreprises et banques) du pion
-	@param none
-	*/
-	float ReventeToFaillite();
-
 };
 
 #endif
