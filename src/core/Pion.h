@@ -10,17 +10,17 @@
 using namespace std;
 
 const int MAXCASEHT = 24; //Max case achetée
-const int MAXCASEP = 32; //Max case du plateau
-const int INITCOIN = 0; //A changer
-const int MAXCARTE = 20; //Max cartes du pion
+const int MAXCASEP = 32;  //Max case du plateau
+const int INITCOIN = 500; //Argent initial
+const int MAXCARTE = 20;  //Max cartes du pion
 
 /**
 @brief Classe Pion
 **/
 struct Des 								///Les 2 Des du pion
 	{	
-		int D1;
-		int D2;
+		unsigned int D1;
+		unsigned int D2;
 	};
 
 class Pion{
@@ -36,7 +36,9 @@ class Pion{
 		char car;						///Caractère du pion
 		Des d;							
 		bool prisonnier;
-		Case ** propriete;
+		Case ** propriete;				///Tableau de pointeur vers case de proprietes du pion
+		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
+
 
 	public :
 
@@ -77,7 +79,7 @@ class Pion{
 	@brief Accesseur de l'argent du pion
 	@param none
 	**/
-	float getBitcoin() const;
+	float getCoin() const;
 
 	/**
 	@brief Accesseur du nombre de propriétés détenues par le joueur
@@ -113,7 +115,13 @@ class Pion{
 	@brief Mutateur du caractère du pion
 	@param argent : float
 	**/
-	void setBitcoin(const float argent);
+	void setCoin(const float argent);
+
+	/**
+	@brief Mutateur du pion
+	@param argent : float
+	**/
+	Pion * getPion();
 
 	/**
 	@brief Procédure qui lance les dés du pion
@@ -125,7 +133,7 @@ class Pion{
 	@brief Procédure permettant de se déplacer
 	@param none
 	**/
-	void avancer();
+	void avance();
 
 	/**
 	@brief
@@ -156,6 +164,24 @@ class Pion{
 	@param none
 	*/
 	float ReventeToFaillite();
+
+	/**
+	@brief 
+	@param none
+	*/
+	void salaire();
+
+	/**
+	@brief 
+	@param none
+	*/
+	void vendrePropriete();
+
+	/**
+	@brief 
+	@param c : Un pointeur vers la case qui est achetée
+	*/
+	void achete(Case * c);
 
 
 };
