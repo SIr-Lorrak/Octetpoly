@@ -69,10 +69,15 @@ void Evenement::fini(){
 		else{
 			t = false;
 		}
-
 		n = "rien";
 
 	}
+}
+
+void Evenement::reset(){
+
+	n = "rien";
+
 }
 
 

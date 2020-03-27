@@ -3,8 +3,6 @@
 
 #include <string.h>
 #include "Case.h"
-#include "Ordi.h"
-#include "Joueur.h"
 
 //Taille du plateau
 const int TPLATEAU = 32;

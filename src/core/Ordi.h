@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "Pion.h"
+#include "Plateau.h"
 
 class Ordi : public Pion{
 	private : 
@@ -24,6 +25,8 @@ class Ordi : public Pion{
 		*/
 		Ordi(const unsigned int r);
 
+		
+
 		/**
 		@brief renvoie true si l'Ordi décide d'acheté la banque false sinon
 		@param une Case banque : la banque en question
@@ -39,7 +42,7 @@ class Ordi : public Pion{
 
 
 		/**
-		@brief renvoie in entier correspondant a l'investissement choisit (-1 dans l'illégal +1 dans le légal et 0 si rien n'est choisi)
+		@brief renvoie in entier correspondant a l'investissement choisit (-3 dans l'illégal +3 dans le légal et 0 si rien n'est choisi)
 		@param une Case entreprise : l'entreprise dans laquel il vas investir (ça doit être la case sur laquel il se tient)
 		*/
 		int AIinvesti(const Case & entreprise) const;
@@ -49,6 +52,9 @@ class Ordi : public Pion{
 		@param aucun
 		*/
 		unsigned int AIchampionat() const;
+
+
+		unsigned int AIporteOuverte(const Plateau & board)const;
 };
 
 #endif

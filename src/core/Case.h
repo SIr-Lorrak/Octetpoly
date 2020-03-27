@@ -1,9 +1,12 @@
 #ifndef OCTET_CASE_H
 #define OCTET_CASE_H
 
+#include <string>
+
 class Case{
 private:
 
+	std::string nom;
 	unsigned int occupation;
 	char type;
 	int investissement;

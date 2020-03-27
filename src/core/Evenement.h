@@ -54,10 +54,16 @@ class Evenement{
 		bool getT();
 
 		/**
-		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
+		@brief permet de calculer le temps qu'a mit le joueur a faire l'évenement
 		@param none
 		*/
 		void fini();
+
+		/**
+		@brief reset les données membres d' Evenement à la fin d'un mini jeu
+		@param none
+		*/
+		void reset();
 			
 };
 

@@ -22,17 +22,22 @@ class Jeu{
 		//Evenement e; //après implémantation des minis jeux.
 		Joueur * tabJ[4];
 		Ordi * tabO;
-		unsigned int nbJoueur;
-		unsigned int joueurCourant;
+
+		unsigned int nbJoueur;//donne le nombre de joueur réel
+		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
-		unsigned int ordre[4];
-		bool konami[10]; //pour le konami code ^^vv<><>ba "entrée"
-		bool attendreNom;
-		bool attendreChoix;
-		bool confirmation;
-		bool desLance;
-		bool avance;
-		bool tourOrdi;
+		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
+
+		bool konami[10]; //vérifie si une suite de 10 touches précise est entrer (a chaque bonne appuie on ajoute un true et a chaque maivais appuie on met tout a false)
+
+		bool attendreNom;//dans le menu démarrer, permet d'attendre que l'utilisateur est rentrer le nom du joueur
+		bool confirmation;//pour demander une confirmation lors des actions "importante"
+		bool desLance;//dit si le joueur courant a lancé ces dés (a réinitialiser à la fin de chaque tour)
+		bool avance;//dit si le joueur a avancer 
+		bool tourFini;
+		bool attendreAmplete;
+
+		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
 		Evenement e;
 		Hacking h;
@@ -53,9 +58,15 @@ class Jeu{
 
 		/**
 		@brief dans le menu de départ, ajoute un Joueur et donc retire un Ordi
-		@param aucun
+		@param none
 		*/
 		void ajouterJoueur();
+
+		/**
+		@brief dans le menu de départ, enleve un joueur
+		@param none
+		*/
+		void enleverJoueur();
 
 		/**
 		@brief dans le menu de départ ajoute une lettre au nom d'un Joueur
@@ -77,10 +88,31 @@ class Jeu{
 		void charger(const string & file);
 
 		/**
-		@brief
-		@param
+		@brief fait les actions durant la partie
+		@param un string : touche, la touche entrer par le joueur
 		*/
 		void actionPartie(const string & touche);
+
+		/**
+		@brief permet d'effectuer une action selon la touche appuyer
+		@param none
+		*/
+		void actionMiniJeu(const string touche);
+
+		/**
+		@brief permet de gerer les evenement de clavier dans le menu de départ
+		@param none
+		*/
+		void actionMenu(const string & touche);
+
+		/**
+		@brief Détermine l'action possible sur la case
+		@param none
+		*/
+		void actionCase(const string & touche);
+
+
+		void resetBool();
 		
 
 	public :
@@ -96,15 +128,51 @@ class Jeu{
 		*/
 		void getOrdre(unsigned int tab[4]) const;
 
+
 		/**
-		@brief 
-		@param
+		@brief renvoie le booléen demander
+		@param un string : type, il donne le nom du booléen demander 
+		*/
+		bool getBool(const string & type) const;
+
+		Case & getJCase(const unsigned int i) ;
+
+		/**
+		@brief renvoie ne nombre de joueur (non-ordi)
+		@param none
+		*/
+		unsigned int getNbJoueur()const;
+
+		/**
+		@brief renvoie le nombre de tour de la partie (0 si la partie n'a pas commence)
+		@param none
+		*/
+		unsigned int getNbTour()const;
+
+		/**
+		@brief renvoie un pointeur du joueur de rang i
+		@param un entier : i, le rang du joueur demander
+		*/
+		Joueur * getJoueur(const unsigned int i) const;
+
+		Ordi * getOrdi(const unsigned int i) const;
+
+		Pion * getPion(const unsigned int i) const;
+
+		unsigned int getJoueurCourant()const;
+
+
+		/**
+		@brief choisi l'action correspondante à la touche entrer par l'utilisateur
+		@param un string : touche, c'est la touche entrer par le joueur
 		*/
 		void actionClavier(const string & touche);
 
+		void actionOrdi();
+
 		/**
-		@brief
-		@param
+		@brief choisi l'action correspondante au coordonné du clique de l'utilisateur
+		@param deux float : x et y, les coordonnées de la souris
 		*/
 		void actionSouris(const float x,const float y);
 
@@ -114,7 +182,6 @@ class Jeu{
 		*/
 		void tourSuivant();
 
-		~Jeu();
 		/**
 		@brief Action possible sur l'entreprise 
 		@param none
@@ -153,15 +220,6 @@ class Jeu{
 		void porteOuverte();
 
 		/**
-		@brief Détermine l'action possible sur la case
-		@param none
-		*/
-		void actionCase(unsigned int num);
-
-
-
-
-		/**
 		brief seteur permetant de mettre à jour l'évenement e
 		param unsigned int n(valeurs qui differents selon ce que l'on veut mettre à jour) 
 		*/
@@ -184,12 +242,13 @@ class Jeu{
 		param none
 		*/
 		Hacking geth();
-		/**
-		brief permet d'effectuer une action selon la touche appuyer
-		param none
-		*/
-		void actionMiniJeu(const string touche);
 
+		/**
+		@brief destructeur de Jeu
+		@param none
+		*/
+		~Jeu();
+		
 
 };
 

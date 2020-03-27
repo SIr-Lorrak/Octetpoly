@@ -1,3 +1,6 @@
+#ifndef OCTET_JEUTXT_H
+#define OCTET_JEUTXT_H
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -9,39 +12,61 @@ using namespace std;
 
 
 /**
-brief classe qui gère le jeu en affichage TXT
+@brief classe qui gère le jeu en affichage TXT
 */
-class jeuTXT{
+class JeuTXT{
 
 private:
 
 		Jeu j;
-		bool rep;
+		bool action;
 
-public:
 
 	/**
-	brief constructeur, vide le terminal
-	param none
+	@brief permet l'affichage txt du menu de départ
+	@param none
 	*/
-	jeuTXT();
+	void affichageMenu();
 
 	/**
-	brief permet le deroulement de la partie
-	param none
+	@brief permet l'affichage txt du jeu
+	@param none
 	*/
-	void run();
+	void affichageJeu();
 
 	/**
-	brief permet l'affichage txt de l'évenement hacking
-	param none
+	@brief permet l'affichage txt de l'évenement hacking
+	@param none
 	*/
 	void affichageHacking();
 
 	/**
-	brief permet de mettre a jour les objets suite à l'appuie d'une touche
-	param none
+	@brief permet de mettre a jour les objets suite à l'appuie d'une touche
+	@param none
 	*/
-	void update();
+	bool update();
+
+	/**
+	@brief affiche le jeu dans un terminal
+	@param none
+	*/
+	void affichage();
+
+public:
+
+	/**
+	@brief constructeur, vide le terminal
+	@param none
+	*/
+	JeuTXT();
+
+	/**
+	@brief permet le deroulement de la partie
+	@param none
+	*/
+	void run();
+
 
 };
+
+#endif

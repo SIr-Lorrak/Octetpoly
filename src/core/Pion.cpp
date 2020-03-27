@@ -10,14 +10,23 @@ Pion::Pion()
 	rang = 0;
 	propriete = new Case*[MAXCASEHT];
 	pos = 0;
+	nom="";
 	bitcoin = INITCOIN;
 	car = '*';
 	prisonnier = false;
 }
 
 //accesseur
+Pion * Pion::getPion()		{
+	return this;
+}
+
+
+
+Des Pion::getDes()	const			{ return d;}
 unsigned int Pion::getRang()const	{ return rang;}
 string Pion::getNom() const			{ return nom;} 
+void Pion::setNom(const string & n){nom = n;}
 unsigned int Pion::getPos() const 	{ return pos;}
 char Pion::getCar() const			{ return car;}
 bool Pion::getPrisonnier() const	{ return prisonnier;}
@@ -25,6 +34,15 @@ float Pion::getCoin() const			{ return bitcoin;}
 int Pion::getKarma() const			{ return karma;}
 unsigned int Pion::getNbPropriete() const {return nbpropriete;}
 void Pion::setCar(const char c)		{ car = c;}
+
+bool Pion::estFaillite()const{
+	return bitcoin<0;
+}
+
+void Pion::nomAleatoire(){
+	//srand(time(NULL));
+	nom = "[bot] "+noms[rand()%20];
+}
 
 void Pion::lanceDes()
 {
@@ -58,7 +76,7 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-	if(nom.length()>=20)
+	if(nom.length()<=20)
 		nom+=lettre;
 }
 
@@ -70,8 +88,5 @@ void Pion::effacerLettre()
 
 //Destructeur
 Pion::~Pion(){
-	for(unsigned int i=0;i<nbpropriete;i++){
-		delete propriete[i];
-	}
 	delete [] propriete;
 }

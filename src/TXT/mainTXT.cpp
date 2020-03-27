@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc,char ** argv)
 {
-	jeuTXT j;
+	JeuTXT j;
 	j.run();
 	return 0;
 }

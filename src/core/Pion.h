@@ -14,6 +14,10 @@ const int INITCOIN = 500; //A changer
 const int MAXCARTE = 20; //Max cartes du pion
 
 
+const string noms[20] = {"Tom Pousse","Haaaamid","Pedro","Sabrina","SaBine","Jessica","Nathan","Aspifion","Mais il est fou lui enfin","M. Pronost le meilleur prof de la terre",
+						 "Bamboula","M. Pujo","Corrine","Alexandra","Jus d'huitre","Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Nabil"};
+
+
  								
 struct Des{								///Les 2 Des du pion
 	unsigned int D1;
@@ -25,7 +29,7 @@ class Pion{
 		string nom;
 		int karma;
 		unsigned int rang;
-		float bitcoin;					///Argent du pion
+		int bitcoin;					///Argent du pion
 		unsigned int nbpropriete;
 		unsigned int pos;				///Position du pion
 		char car;	
@@ -50,6 +54,9 @@ class Pion{
 
 	///---------------------------------Méthode-------------------------------------------
 
+		void nomAleatoire();
+
+		Pion * getPion();
 
 		/**
 		@brief
@@ -62,6 +69,8 @@ class Pion{
 		@param
 		*/
 		string getNom() const;
+
+		void setNom(const string & n);
 
 		/**
 		@brief
@@ -93,6 +102,9 @@ class Pion{
 		**/
 		char getCar() const;
 
+
+		Des getDes() const;
+
 		/**
 		@brief Accesseur du booléen prisonnier qui définit si le pion est prisonnié ou non
 		@param none
@@ -104,6 +116,8 @@ class Pion{
 		@param none
 		**/
 		void setCar(const char c);
+
+		bool estFaillite() const;
 
 		/**
 		@brief Fonctdesdesion Avancer qui permet au Pion de lancer les dés afin de se déplacer

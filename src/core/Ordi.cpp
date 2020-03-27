@@ -10,6 +10,8 @@ Ordi::Ordi()
 {
 	srand(time(NULL));
 	risque = rand() % 101;
+	unsigned int alea = rand()%20;
+	setNom("[bot] "+noms[alea]);
 }
 
 Ordi::Ordi(const unsigned int r)
@@ -51,7 +53,7 @@ int Ordi::AIinvesti(const Case & entreprise) const
 				if(entreprise.getPrixB()<getCoin()) dernierchoix = 1;
 			}
 		}
-		else if(entreprise.getInvestissement()*entreprise.getInvestissement()<8){
+		else if(entreprise.getInvestissement()*entreprise.getInvestissement()<16){
 			if(entreprise.getInvestissement()<0){
 				if(entreprise.getPrixM()<getCoin()) dernierchoix = -1;
 			}
