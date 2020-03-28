@@ -2,7 +2,7 @@ CC = g++
 debug = -g -Wall
 exe = bin/Octetpoly
 main = src/main.cpp
-objs = obj/main.o obj/core/Pion.o obj/core/Joueur.o obj/core/Ordi.o obj/core/Case.o obj/core/Jeu.o obj/core/Plateau.o obj/core/Evenement.o obj/TXT/jeuTXT.o
+objs = obj/main.o obj/core/Pion.o obj/core/Joueur.o obj/core/Ordi.o obj/core/Case.o obj/core/Jeu.o obj/core/Plateau.o obj/core/Evenement.o obj/TXT/jeuTXT.o obj/core/carte.o
 
 ifeq ($(OS),Windows_NT)
 	test = if not exist

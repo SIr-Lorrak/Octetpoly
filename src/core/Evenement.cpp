@@ -22,7 +22,7 @@ void Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%99)<10){
+	if((rand()%100)<10){
 
 		if((rand()%2)==0){n = "clicker";}
 
@@ -69,6 +69,7 @@ void Evenement::fini(int clique){
 
 		if(tps<=50){ 
 			t = true;
+			gain = -1000;
 		}
 
 		else{

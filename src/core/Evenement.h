@@ -71,6 +71,7 @@ class Evenement{
 		param none
 		*/
 		clock_t gettempsD();
+
 			
 };
 
@@ -139,7 +140,7 @@ class Hacking{
 		int getIntAff();
 
 		/**
-		brief permet de reset les vdonnées membres à la fin de l'évenement hacking
+		brief permet de reset les données membres à la fin de l'évenement hacking
 		param none
 		*/
 		void resetHack();
