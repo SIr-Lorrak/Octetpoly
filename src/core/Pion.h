@@ -14,6 +14,13 @@ const int MAXCASEP = 32;  ///Max case du plateau
 const int INITCOIN = 500; ///Argent initial
 const int MAXCARTE = 20;  ///Max cartes du pion
 
+
+const string noms[20] = {"Tom Pousse","Haaaamid","Pedro","Sabrina","SaBine",
+						 "Jessica","Nathan","Aspifion","Mais il est fou lui enfin","M. Pronost le meilleur prof de la terre",
+						 "Granolax","M. Pujo","Corrine","Alexandra","Jus d'huitre",
+						 "Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Nabil"};
+
+
 /**
 @brief Classe Pion
 **/
@@ -107,6 +114,14 @@ class Pion{
 	bool getPrisonnier() const;
 
 	/**
+	@brief Mutateur du pion
+	@param none
+	**/
+	Pion * getPion();
+
+	Des getDes() const;
+
+	/**
 	@brief Mutateur du caractère du pion
 	@param c : charactere
 	**/
@@ -118,11 +133,10 @@ class Pion{
 	**/
 	void setCoin(const float argent);
 
-	/**
-	@brief Mutateur du pion
-	@param none
-	**/
-	Pion * getPion();
+	void setNom(const string & n);
+
+
+	void nomAleatoire();
 
 	/**
 	@brief Procédure qui lance les dés du pion
@@ -134,7 +148,7 @@ class Pion{
 	@brief Procédure permettant au pion de se déplacer
 	@param none
 	**/
-	void avance();
+	void avancer();
 
 	/**
 	@brief	Fonction qui retourne l'indice de la case avec le plus gros loyer
@@ -166,6 +180,8 @@ class Pion{
 	*/
 	float ReventeToFaillite();
 
+	unsigned int patrimoineActif();
+
 	/**
 	@brief Procédure qui donne 20 bitcoins au pion lorsqu'il passe par la case départ
 	@param none
@@ -183,6 +199,8 @@ class Pion{
 	@param c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
 	*/
 	void achete(Case * c);
+
+	void investit(int i,Case * c);
 
 
 };

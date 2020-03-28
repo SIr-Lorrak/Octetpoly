@@ -144,9 +144,11 @@ void Jeu::konamiCode(const string touche)
 }
 
 bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
-	for(unsigned int i=0;i<n;i++){
-		if(o[i].getNom()==nom){
-			return true;
+	if(n!=0){
+		for(unsigned int i=0;i<n;i++){
+			if(o[i].getNom()==nom){
+				return true;
+			}
 		}
 	}
 	return false;
@@ -154,15 +156,19 @@ bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
 
 
 void Jeu::commencerPartie()
-{
+{	
+	
 	if(nbJoueur<4){
 		delete [] tabO;
 		tabO = new Ordi [4-nbJoueur];
-	}
-	for(unsigned int i = 1;i<4-nbJoueur;i++){
+	
 		do{
-			tabO[i].nomAleatoire();
-		}while(nomExiste(tabO[i].getNom(),tabO,i));
+			for(unsigned int i = 1;i<4-nbJoueur;i++){
+				do{
+					tabO[i].nomAleatoire();
+				}while(nomExiste(tabO[i].getNom(),tabO,i));
+			}
+		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
 	}
 	tourSuivant();
 }
@@ -235,7 +241,7 @@ void Jeu::actionPartie(const string & touche)
 			attendreAmplete = false;// a enlever plus tard
 		}
 	}
-	if(attendreAmplete){
+	else if(attendreAmplete){
 		actionCase(touche);
 	}
 	else if(!tourFini){
@@ -435,7 +441,7 @@ void Jeu::payeLoyerJoueur(){
 		paye(joueurCourant,c->getOccupation(),c->getLoyer());
 		while(getPion(joueurCourant)->getCoin() < 0)
 		{
-			getPion(joueurCourant)->vendre();
+			//getPion(joueurCourant)->vend(); on passe dans l'interface de vente
 		}
 	}
 	else
@@ -501,7 +507,7 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'C':
-			carteChance();
+			//carteChance();
 			break;
 
 		case 'A':
@@ -509,7 +515,7 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'O':
-			porteOuverte();
+			//porteOuverte();
 			break;
 
 		case 'I':

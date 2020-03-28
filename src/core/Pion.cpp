@@ -15,6 +15,7 @@ Pion::Pion(){
 
 	karma = rand()%4-2;
 	rang = 0;
+	nom="";
 	bitcoin = INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
@@ -28,7 +29,6 @@ Pion::Pion(){
 	}
 
 }
-
 
 ///---------------------------------------------------------Accesseurs-----------------------------------------------------------
 
@@ -60,18 +60,35 @@ Pion * Pion::getPion(){
   return this;
 }
 
+Des Pion::getDes() const{
+	return d;
+}
+
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
-void Pion::setCar(const char c){ car = c;}
+void Pion::setCar(const char c){
+	car = c;
+}
 
-void Pion::setCoin(const float argent){ bitcoin = argent;}
+void Pion::setNom(const string & n){
+	nom = n;
+}
+
+void Pion::setCoin(const float argent){
+	bitcoin = argent;
+}
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
+
+
+void Pion::nomAleatoire(){
+	//srand(time(NULL));
+	nom = "[bot] "+noms[rand()%20];
+}
 
 void Pion::lanceDes()
 {
 	//cout << "Le joueur lance les dés !" << endl;
-	srand(time(NULL));
 	d.D1 = rand()%6+1;
 	d.D2 = rand()%6+1;
 
@@ -102,7 +119,7 @@ void Pion::lanceDes()
 	}
 }
 
-void Pion::avance()
+void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
@@ -123,6 +140,7 @@ void Pion::avance()
 	}
 	
 }
+
 
 void Pion::salaire()
 {
@@ -145,15 +163,6 @@ void Pion::achete(Case * c)
 	nbpropriete++;
 
 	c->estAcheter(rang);
-}
-		
-unsigned int Pion::rapportePlus() const
-{
-	int n = 0;
-	for(unsigned int i = 0; i<nbpropriete ; i++){
-		if(propriete[n]->getLoyer()<propriete[i]->getLoyer()) n=i;
-	}
-	return n;
 }
 
 void Pion::vend(unsigned int indP, Case * c)
@@ -179,6 +188,15 @@ void Pion::vend(unsigned int indP, Case * c)
 }
 
 
+unsigned int Pion::patrimoineActif(){
+	unsigned int somme = 0;
+	for (unsigned int i = 0 ; i < nbpropriete ; i++)
+	{
+		somme = somme + propriete[i]->getPrixDeVente();
+	}
+	return somme;
+}	
+
 unsigned int Pion::rapportePlus() const
 {
 	int n = 0;
@@ -202,7 +220,7 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-    if(nom.length()>=20)
+    if(nom.length()<=20)
         nom+=lettre;
 }
 
@@ -213,16 +231,15 @@ void Pion::effacerLettre()
         nom = nom.substr(0, nom.size()-1);
 }
 
-
-float Pion::ReventeToFaillite()
-{
-	float res = 0;
-	for(unsigned int i = 0; i < nbpropriete; i++)
-	{
-		res += propriete[i]->getPrixDeVente();
+void Pion::investit(int i,Case * c){
+	assert(i != 0);
+	if(i==-1){
+		bitcoin -= c->getPrixM();
 	}
-	
-	return res;
+	else{
+		bitcoin -= c->getPrixB();
+	}
+	c->investir(i);
 }
 
 

@@ -162,7 +162,7 @@ void JeuTXT::affichageHacking(){
 }
 
 void affichePion(const Pion & p){
-	cout<<p.getNom()<<"   -"<<p.getCoin()<<"k $"<<endl;	
+	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
 }
 
 void JeuTXT::affichageJeu(){
