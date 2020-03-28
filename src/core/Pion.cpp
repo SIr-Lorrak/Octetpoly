@@ -166,7 +166,7 @@ void Pion::vend(unsigned int indP, Case * c)
 	propriete[nbpropriete] = NULL;
 	nbpropriete -= 1;
 
-	//c->estVendu();
+	c->reset();
 }
 
 
