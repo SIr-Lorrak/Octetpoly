@@ -8,40 +8,41 @@ Plateau::Plateau(){
 
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
-	tabC[0].initCase('D',0);
-	tabC[1].initCase('E',0);
-	tabC[2].initCase('E',0);
-	tabC[3].initCase('E',0);
-	tabC[4].initCase('B',0);
-	tabC[5].initCase('E',0);
-	tabC[6].initCase('E',0);
-	tabC[7].initCase('E',0);
-	tabC[8].initCase('P',0);
+	tabC[0].initCase('D',0,"Depart");
+	tabC[1].initCase('E',5,"Auchan");
+	tabC[2].initCase('E',10,"Aldi");
+	tabC[3].initCase('E',15,"Carrefour");
+	tabC[4].initCase('B',5,"Crédit agricole");
+	tabC[5].initCase('E',20,"Arkane Studio");
+	tabC[6].initCase('E',25,"Ankama");
+	tabC[7].initCase('E',30,"Ubisof");
+	tabC[8].initCase('P',15,"Prison");
 
-	tabC[9].initCase('E',0);
-	tabC[11].initCase('E',0);
-	tabC[12].initCase('E',0);
-	tabC[13].initCase('C',0);
-	tabC[14].initCase('E',0);
-	tabC[15].initCase('B',0);
-	tabC[16].initCase('E',0);
+	tabC[9].initCase('E',35,"Shell");
+	tabC[10].initCase('E',40,"Total");
+	tabC[11].initCase('E',45,"Exxon");
+	tabC[12].initCase('C',0,"Chance");
+	tabC[13].initCase('E',50,"Peugeot");
+	tabC[14].initCase('B',5,"BNB Paribas");
+	tabC[15].initCase('E',55,"Toyota");
 
-	tabC[17].initCase('A',0);
-	tabC[18].initCase('E',0);
-	tabC[19].initCase('B',0);
-	tabC[20].initCase('C',0);
-	tabC[21].initCase('E',0);
-	tabC[22].initCase('E',0);
-	tabC[23].initCase('E',0);
-	tabC[24].initCase('O',0);
+	tabC[16].initCase('A',15,"Campagne de pub");
+	tabC[17].initCase('E',60,"Bayer");
+	tabC[18].initCase('B',5,"HSBC");
+	tabC[19].initCase('E',65,"Sanofi");
+	tabC[20].initCase('C',0,"Chance");
+	tabC[21].initCase('E',70,"Nintendo");
+	tabC[22].initCase('E',75,"Sony");
+	tabC[23].initCase('E',80,"Microsoft");
+	tabC[24].initCase('O',15,"Porte Ouverte");
 
-	tabC[25].initCase('B',0);
-	tabC[26].initCase('E',0);
-	tabC[27].initCase('E',0);
-	tabC[28].initCase('C',0);
-	tabC[29].initCase('E',0);
-	tabC[30].initCase('I',0);
-	tabC[31].initCase('E',0);
+	tabC[25].initCase('B',5,"Bank of china");
+	tabC[26].initCase('E',85,"Samsung");
+	tabC[27].initCase('E',90,"Apple");
+	tabC[28].initCase('C',0,"Chance");
+	tabC[29].initCase('E',95,"Amazon");
+	tabC[30].initCase('I',0,"Impot");
+	tabC[31].initCase('E',100,"Google");
 }
 
 Plateau::~Plateau(){
@@ -53,10 +54,3 @@ Plateau::~Plateau(){
 Case * Plateau::getCase(unsigned int numCase){
 	return &tabC[numCase];
 }
-
-/*
-void Plateau::reset(){
-
-}
-*/
-

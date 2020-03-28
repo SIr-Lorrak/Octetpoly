@@ -18,6 +18,15 @@ bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned in
 
 //-------------------------------------Constructeurs--------------------------------------
 
+bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned int taille = 4){
+	if(taille == 0) return true;
+	for(unsigned int i=0;i<taille;i++){
+		if(tab[i]==n) return false;
+	}
+	return true;
+}
+
+//-------------------------------------Constructeurs---------------------------
 Jeu::Jeu(){
 	srand(time(NULL));
 
@@ -48,6 +57,11 @@ Jeu::Jeu(){
 	}
 }
 
+
+//-------------------------------------Méthodes--------------------------------
+void Jeu::getOrdre(unsigned int tab[4]) const
+{
+	for(int i =0; i<4 ; i++){ tab[i] = ordre[i];}
 
 void Jeu::getOrdre(unsigned int tab[4]) const
 {
@@ -104,6 +118,16 @@ unsigned int Jeu::getNbJoueur()const
 	return nbJoueur;
 }
 
+void Jeu::paye(unsigned int payeur, unsigned int creancier, float montant){
+	assert((payeur <= 4 || payeur > 0) && (creancier <= 4 || creancier > 0));
+	//Echange entre ordi
+	if(payeur > nbJoueur && creancier > nbJoueur)
+	{
+		unsigned int coinP = tabO[payeur-1].getCoin();
+		unsigned int coinC = tabO[creancier-1].getCoin();
+		tabO[payeur-1].setCoin(coinP-montant);
+		tabO[creancier-1].setCoin(coinC+montant);
+	}
 
 unsigned int Jeu::getNbTour() const
 {

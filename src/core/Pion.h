@@ -2,7 +2,6 @@
 #define OCTET_PION_H
 
 #include <iostream>
-#include <string.h>
 
 #include "Case.h"
 
@@ -25,7 +24,9 @@ struct Des{								///Les 2 Des du pion
 };
 				
 class Pion{
+	
 	private :
+
 		string nom;
 		int karma;
 		unsigned int rang;

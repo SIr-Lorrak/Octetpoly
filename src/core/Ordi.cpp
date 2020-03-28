@@ -20,6 +20,7 @@ Ordi::Ordi(const unsigned int r)
 	risque = r;
 }
 
+
 bool Ordi::AIacheteBanque(const Case & banque) const
 {
 	assert(banque.getOccupation() != getRang());
@@ -33,11 +34,13 @@ bool Ordi::AIacheteEntreprise(const Case & entreprise) const
 	return ((getCoin()>(1.1+(0.5-risque/200.0))*entreprise.getPrix())&&getNbPropriete()>=4)||((getCoin()>entreprise.getPrix())&&getNbPropriete()<4);
 }
 
+
 unsigned int Ordi::AIchampionat() const
 {
 	if(risque>50) return rapportePlus();//organise les championats sur la case rapportant le plus actuellement
 	else return plusCher();//organise les championats sur la case ayant le coût d'achat le plus cher
 }
+
 
 int Ordi::AIinvesti(const Case & entreprise) const
 {
