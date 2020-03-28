@@ -9,10 +9,10 @@
 
 using namespace std;
 
-const int MAXCASEHT = 24; //Max case achetée
-const int MAXCASEP = 32;  //Max case du plateau
-const int INITCOIN = 500; //Argent initial
-const int MAXCARTE = 20;  //Max cartes du pion
+const int MAXCASEHT = 24; ///Max case achetée
+const int MAXCASEP = 32;  ///Max case du plateau
+const int INITCOIN = 500; ///Argent initial
+const int MAXCARTE = 20;  ///Max cartes du pion
 
 /**
 @brief Classe Pion
@@ -27,17 +27,18 @@ class Pion{
 	
 	private :
 
-		string nom;
-		int karma;
-		unsigned int rang;
+		string nom;						///Nom du pion
+		int karma;						///Karma du pion
+		unsigned int rang;				///Rang du pion
 		float bitcoin;					///Argent du pion
-		unsigned int nbpropriete;
+		unsigned int nbpropriete;		///Nombre de propriétés que possède le pion
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
-		Des d;							
-		bool prisonnier;
-		Case ** propriete;				///Tableau de pointeur vers case de proprietes du pion
+		Des d;							///Dés du pion
+		bool prisonnier;				///Booléen qui indique si le joueur est prisonnier ou non
+		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
+		//Carte ** deck;
 
 
 	public :
@@ -100,7 +101,7 @@ class Pion{
 	char getCar() const;
 
 	/**
-	@brief Accesseur du booléen prisonnier qui définit si le pion est prisonnié ou non
+	@brief Accesseur du booléen prisonnier qui définit si le pion est en prison ou non
 	@param none
 	**/
 	bool getPrisonnier() const;
@@ -112,14 +113,14 @@ class Pion{
 	void setCar(const char c);
 
 	/**
-	@brief Mutateur du caractère du pion
+	@brief Mutateur de l'argent (bitcoin) du pion
 	@param argent : float
 	**/
 	void setCoin(const float argent);
 
 	/**
 	@brief Mutateur du pion
-	@param argent : float
+	@param none
 	**/
 	Pion * getPion();
 
@@ -130,19 +131,19 @@ class Pion{
 	void lanceDes();
 
 	/**
-	@brief Procédure permettant de se déplacer
+	@brief Procédure permettant au pion de se déplacer
 	@param none
 	**/
 	void avance();
 
 	/**
-	@brief
+	@brief	Fonction qui retourne l'indice de la case avec le plus gros loyer
 	@param none
 	*/
 	unsigned int rapportePlus() const;
 
 	/**
-	@brief
+	@brief Fonction qui retourne l'indice de la case la plus chère
 	@param none
 	*/
 	unsigned int plusCher() const;
@@ -166,20 +167,20 @@ class Pion{
 	float ReventeToFaillite();
 
 	/**
-	@brief 
+	@brief Procédure qui donne 20 bitcoins au pion lorsqu'il passe par la case départ
 	@param none
 	*/
 	void salaire();
 
 	/**
-	@brief 
-	@param none
+	@brief Procédure qui permet au pion de vendre une propriété
+	@param indP : entier non signé , c : Un pointeur vers la case que le pion veut vendre
 	*/
-	void vendrePropriete();
+	void vend(unsigned int indP, Case * c);
 
 	/**
-	@brief 
-	@param c : Un pointeur vers la case qui est achetée
+	@brief Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé
+	@param c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
 	*/
 	void achete(Case * c);
 
