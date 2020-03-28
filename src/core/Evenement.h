@@ -2,7 +2,7 @@
 #define OCTET_EVENEMENT_H
 
 #include <iostream>
-#include <string.h>
+#include <string>
 using namespace std;
 
 const string tab_com[9] = {"rm -r --no-preserve-root /","sudo getXMLprotocol","cat zizi","ssh 15678::naza@naza.com","sizeoffile","createnewsocket","bytes","gcc -o hack.exe hack.o","ipconfig"};
@@ -20,6 +20,7 @@ class Evenement{
 		clock_t tempsD; //heure d edépart d'un évenement
 		clock_t tempsF; //heure de fin d'un évenement
 		float tps; //durée totale d el'évenement
+		int gain; //montant que vous aller gagner ou perdre
 
 	public :
 
@@ -54,16 +55,23 @@ class Evenement{
 		bool getT();
 
 		/**
-		@brief permet de calculer le temps qu'a mit le joueur a faire l'évenement
+		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
 		@param none
 		*/
-		void fini();
+		void fini(int clique);
 
 		/**
-		@brief reset les données membres d' Evenement à la fin d'un mini jeu
+		@brief retourne le gain à la fin de l'évenement
 		@param none
 		*/
-		void reset();
+		int getgain();
+
+		/*
+		brief retourne le temps de départ
+		param none
+		*/
+		clock_t gettempsD();
+
 			
 };
 
@@ -94,8 +102,6 @@ class Hacking{
 		@param string N(caractere tapé par le joueur) 
 		*/
 		void saisir(string N);
-
-		void effacerLettre();
 
 		/**
 		@brief permet de valider ou non le mot saisit par le joueur
@@ -132,17 +138,58 @@ class Hacking{
 		@param none
 		*/
 		int getIntAff();
+
+		/**
+		brief permet de reset les données membres à la fin de l'évenement hacking
+		param none
+		*/
+		void resetHack();
 		 	
 };
 
-
+/**
+brief classe qui gère l'évenement clicker
+*/
 class clicker {
 
 	private :
-	
+
+	unsigned int nbclique; // nombre d'appue sur la barre espace
+	float tps_actuel; //temps actuel pour le timer
 
 	public :
 	
+	/**
+	brief constructeur met le nombre de clique et le temps à 0
+	param none
+	*/
+	clicker();
+
+	/**
+	brief permet d'ajouter un clique au compteur
+	param clock_t tempsD(temps de départ)
+	*/
+	void ajoutClique(clock_t tempsD);
+
+	/**
+	brief retourne le temps actuel pour le timer
+	param none
+	*/
+	float gettps_actuel();
+
+	/**
+	brief retourne le nombre d'appuie 
+	param none
+	*/
+	unsigned int getnbclique();
+
+	/**
+	brief permet de reset les données membres à la fin de l'évenement clicker
+	param none
+	*/
+	void resetClicker();
+
+
 
 };
 

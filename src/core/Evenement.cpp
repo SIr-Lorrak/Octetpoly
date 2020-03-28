@@ -20,9 +20,14 @@ Evenement::Evenement(){
 //permet de déclancher un événément lors d'un déplacement en fonction du karma 
 void Evenement::Declenchement(){
 
-	if((rand()%99)<10){
+	srand (time(NULL));
 
-		n = "hack";
+	if((rand()%100)<10){
+
+		if((rand()%2)==0){n = "clicker";}
+
+		else{n = "hack";}
+
 		tps = 0;
 		tempsD = clock();
 
@@ -55,7 +60,7 @@ bool Evenement::getT(){
 
 
 //pemet de calculer le temps qu'a mit le joueur a faire l'évenement
-void Evenement::fini(){
+void Evenement::fini(int clique){
 
 	tempsF = clock();
 	tps = (tempsF-tempsD)/CLOCKS_PER_SEC;
@@ -64,19 +69,37 @@ void Evenement::fini(){
 
 		if(tps<=50){ 
 			t = true;
+			gain = -1000;
 		}
 
 		else{
 			t = false;
 		}
-		n = "rien";
+
+		
+	}
+
+	if (n == "clicker"){
+
+		gain = 10*clique;
 
 	}
+	n = "rien";
 }
 
-void Evenement::reset(){
 
-	n = "rien";
+//retourne le gain à la fin de l'évenement
+int Evenement::getgain(){
+
+	return gain;
+
+}
+
+
+//retourne le temps de départ
+clock_t Evenement::gettempsD(){
+
+	return tempsD;
 
 }
 
@@ -96,17 +119,11 @@ Hacking::Hacking(){
 }
 
 
-//concatene le caractere N au reste du mot
+//concate le caractere N au reste du mot
 void Hacking::saisir(string N){
 
 		motSaisie = motSaisie + N;
 
-}
-
-void Hacking::effacerLettre()
-{
-	if(motSaisie.length()>0)
-		motSaisie = motSaisie.substr(0, motSaisie.size()-1);
 }
 
 
@@ -172,4 +189,55 @@ int Hacking::getIntAff(){
 	
 }
 
+
+//permet de reset les données membres à la fin de l'évenement hacking
+void Hacking::resetHack(){
+	srand (time(NULL));
+	int alea = rand()%8;
+	mot = tab_com[alea];
+	nbSaisie = 0;
+	intAff = 2;
+
+}
+
+
+//-----------------------------------------------------------------------------
+
+
+//constructeur met le nombre de clique et le temps à 0
+clicker::clicker(){
+	nbclique = 0;
+	tps_actuel = 0;
+}
+
+
+//permet d'ajouter un clique au compteur
+void clicker::ajoutClique(clock_t tempsD){
+	clock_t temps = clock();
+	tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
+	if(tps_actuel < 10){
+		nbclique++;
+	}
+
+}
+
+
+//retourne le temps actuel pour le timer
+float clicker::gettps_actuel(){
+	return tps_actuel;
+}
+
+
+//retourne le nombre d'appuie 
+unsigned int clicker::getnbclique(){
+	return nbclique;
+}
+
+
+//permet de reset les données membres à la fin de l'évenement clicker
+void clicker::resetClicker(){
+
+	nbclique = 0;
+	tps_actuel = 0;
+}
 
