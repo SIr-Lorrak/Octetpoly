@@ -139,6 +139,7 @@ void JeuTXT::affichageHacking(){
 
 		else{
 			cout<<"Vous avez PERDU en "<<j.gete().gettps()<<" seconde";Endl();
+			cout<<"On vous a volé "<<j.gete().getgain()*-1<<"$ !"<<endl;
 		}
 
 	}
@@ -168,12 +169,10 @@ void JeuTXT::affichageHacking(){
 				j.seth(2);
 				break;
 		}
-		if(cas <3){
-			cout<<j.geth().getMot();Endl();
-			cout<<">"<<j.geth().getMotSaisie();
-			curseur();
-			Endl();
-		}
+		cout<<j.geth().getMot();Endl();
+		cout<<">"<<j.geth().getMotSaisie();
+		curseur();
+		Endl();
 	}
 }
 
@@ -334,8 +333,8 @@ void JeuTXT::run(){
 	int quit = false;
 	
 	while(!quit){
-		affichage();
 		quit = update();
+		affichage();
 
 		/*if(j.geth().getnbSaisie() == 4){
 			j.sete(2);

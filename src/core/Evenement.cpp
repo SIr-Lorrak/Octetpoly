@@ -25,7 +25,7 @@ void Evenement::Declenchement(){
 
 	if((rand()%100)<102){
 
-		if((rand()%2)==0){n = "clicker";}
+		if((rand()%2)==0){n = "hack";}
 
 		else{n = "hack";}
 
@@ -70,11 +70,11 @@ void Evenement::fini(int clique){
 
 		if(tps<=50){ 
 			t = true;
-			gain = -50;
 		}
 
 		else{
 			t = false;
+			gain = -50;
 		}
 
 		
