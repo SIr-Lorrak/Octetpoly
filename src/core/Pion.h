@@ -156,6 +156,16 @@ class Pion{
 		*/
 		void lanceDes();
 
+		void investit(int i,Case * c);
+
+
+		/**
+		@brief Procdédure qui nous informe de notre patrimoineActif
+		@param none
+		@return la somme des prix de vente (banque + entreprise)
+		*/
+		float patrimoineActif();
+
 };
 
 #endif

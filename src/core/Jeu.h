@@ -27,6 +27,8 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
+		unsigned int casePub;
+		float coeffAd;
 
 		bool konami[10]; //vérifie si une suite de 10 touches précise est entrer (a chaque bonne appuie on ajoute un true et a chaque maivais appuie on met tout a false)
 
@@ -104,6 +106,43 @@ class Jeu{
 		@param none
 		*/
 		void actionMenu(const string & touche);
+
+		/**
+		@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi
+		@param none
+		*/
+		void actionBE(const string touche);
+
+		/**
+		@brief Procédure qui gère les investissement d'un joueur
+		@param none
+		*/
+		void investirEJoueur(const string touche);
+			
+		/**
+		@brief Echange d'argent entre joueur
+		@param payeur : unsigned int ; creancier : unsigned int, montant : unsigned int
+		*/
+		void paye(unsigned int payeur, unsigned int creancier, float montant);
+
+		/**
+		@brief Procédure qui gére le loyer à payer par un joueur
+		@param none
+		*/
+		void payeLoyerJoueur();
+
+		/**
+		@brief Permet d'augmenter le loyer d'une entreprise
+		@param none
+		*/
+		void campagneDePub(const string touche);
+
+		/**
+		@brief Fonction qui prends en paramètre la case sur laque le joueurCourant veux
+		mettre un pub
+		@param quelleCase : unsigned int
+		*/
+		void pub(unsigned int quelleCase);
 
 		/**
 		@brief Détermine l'action possible sur la case

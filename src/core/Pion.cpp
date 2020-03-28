@@ -69,7 +69,7 @@ unsigned int Pion::plusCher() const
 {
 	int n = 0;
 	for(unsigned int i = 0; i<nbpropriete ; i++){
-		if(propriete[n]->getPrixDeBase()<propriete[i]->getPrixDeBase()) n=i;
+		if(propriete[n]->getPrixInitial()<propriete[i]->getPrixInitial()) n=i;
 	}
 	return n;
 }
@@ -86,7 +86,29 @@ void Pion::effacerLettre()
 		nom = nom.substr(0, nom.size()-1);
 }
 
+float Pion::patrimoineActif(){
+	float somme = 0;
+	for (unsigned int i = 0 ; i < nbpropriete ; i++)
+	{
+		somme = somme + propriete[i]->getPrixDeVente();
+	}
+	return somme;
+}	
+
+void Pion::investit(int i,Case * c){
+	assert(i != 0);
+	if(i==-1){
+		bitcoin -= c->getPrixM();
+	}
+	else{
+		bitcoin -= c->getPrixB();
+	}
+	c->investir();
+
+}
+
 //Destructeur
 Pion::~Pion(){
 	delete [] propriete;
+	delete guy the boomer
 }

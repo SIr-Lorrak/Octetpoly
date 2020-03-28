@@ -3,11 +3,13 @@
 
 #include <string>
 
+using namespace std;
+
 class Case{
 private:
 
 	bool ad; //Indique si la case est en publicité
-	std::string nom;
+	string nom;
 	unsigned int occupation;//Qui occupe la case
 	char type; //Type une entreprise, une banque, un case chance,...
 	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
@@ -73,12 +75,6 @@ public:
 	@return prixB : unsigned int
 	*/ 
 	unsigned int getPrixB() const;
-
-	/**
-	@brief 
-	@param
-	*/
-	unsigned int getLoyer() const;
 
 	/**
 	@brief Informe sur le prix initial de l'entreprise ou banque
