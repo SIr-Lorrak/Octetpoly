@@ -335,75 +335,13 @@ void Jeu::actionOrdi(){
 	}*/
 }
 
-void Jeu::banque(){
-	
-}
 
-void Jeu::entreprise(){
-	
-}
-
-void Jeu::prison(){
-	
-}
-
-void Jeu::carteChance(){
-	
-}
-
-void Jeu::campagneDePub(){
-	
-}
-
-void Jeu::porteOuverte(){
-	
-}
 
 
 //A mettre dans jeu 
 void Jeu::actionCase(const string & touche){
-	//TODO enlever num pour le remplacer par tabJ[joueurCourant-1];
-	Case c = *board.getCase(2);
-	switch(c.getType()){
-		case 'E':
-			entreprise();
-			break;
-
-		case 'B':
-			banque();
-			break;
-
-		case 'C':
-			carteChance();
-			break;
-
-		case 'A':
-			campagneDePub();
-			break;
-
-		case 'O':
-			porteOuverte();
-			break;
-
-		case 'I':
-			//TODO
-			break;
-
-		case 'D':
-			//TODO
-			break;
-
-		case 'P':
-			prison();
-			break;
-		default :
-			bool Case_Invalide = false;
-			assert(Case_Invalide);
-			break;
-	}
+	
 }
-
-using namespace std;
 
 
 

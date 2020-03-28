@@ -183,24 +183,6 @@ class Jeu{
 		void tourSuivant();
 
 		/**
-		@brief Action possible sur l'entreprise 
-		@param none
-		*/
-		void entreprise();
-
-		/**
-		@brief Action possible sur la banque 
-		@param none
-		*/
-		void banque();
-
-		/**
-		@brief Action possible en prison 
-		@param none
-		*/
-		void prison();
-
-		/**
 		@brief Tire une carte chance 
 		@param none	
 		*/
