@@ -34,6 +34,9 @@ private:
 	*/
 	void affichageJeu();
 
+
+	void affichageClicker();
+
 	/**
 	@brief permet l'affichage txt de l'évenement hacking
 	@param none

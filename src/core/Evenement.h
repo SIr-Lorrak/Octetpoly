@@ -54,11 +54,14 @@ class Evenement{
 		*/
 		bool getT();
 
+		void reset();
+
+
 		/**
 		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
 		@param none
 		*/
-		void fini(int clique);
+		void fini(int clique = 0);
 
 		/**
 		@brief retourne le gain à la fin de l'évenement
@@ -66,11 +69,17 @@ class Evenement{
 		*/
 		int getgain();
 
-		/*
-		brief retourne le temps de départ
-		param none
+		/**
+		@brief retourne le temps de départ
+		@param none
 		*/
 		clock_t gettempsD();
+
+		/**
+		@brief retourne le temps de fin (0 si le jeu est encore en cour)
+		@param none
+		*/
+		clock_t getTempsF() const;
 
 			
 };
@@ -86,6 +95,7 @@ class Hacking{
 		string mot; //mot à saisir
 		unsigned int nbSaisie; //nombre de mot valider
 		string motSaisie; //mot actuellement taper par le joueur
+		bool fin;//dit si le jeu est fini 
 	
 	public :
 
@@ -102,6 +112,12 @@ class Hacking{
 		@param string N(caractere tapé par le joueur) 
 		*/
 		void saisir(string N);
+
+		/**
+		@brief enlève le dernier caractère de motSaisie
+		@param none
+		*/
+		void effacerLettre();
 
 		/**
 		@brief permet de valider ou non le mot saisit par le joueur
@@ -138,6 +154,12 @@ class Hacking{
 		@param none
 		*/
 		int getIntAff();
+
+		/**
+		@brief retourne le booléen qui dit si le hacking 
+		@param none
+		*/
+		bool getFin() const;
 
 		/**
 		brief permet de reset les données membres à la fin de l'évenement hacking

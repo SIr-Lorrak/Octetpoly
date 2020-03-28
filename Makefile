@@ -4,7 +4,7 @@ debug = -g -Wall
 obj = obj
 bin = bin
 
-core =  $(obj)/core/Case.o $(obj)/core/Joueur.o $(obj)/core/Ordi.o $(obj)/core/Plateau.o $(obj)/core/Jeu.o $(obj)/core/Evenement.o $(obj)/core/Pion.o
+core =  $(obj)/core/Case.o $(obj)/core/Joueur.o $(obj)/core/Ordi.o $(obj)/core/Plateau.o $(obj)/core/Jeu.o $(obj)/core/Evenement.o $(obj)/core/Pion.o $(obj)/core/Carte.o
 
 exe_Test = Octetpoly_Test
 src_Test = $(core) $(obj)/mainTest.o

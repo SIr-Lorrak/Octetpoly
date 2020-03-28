@@ -108,46 +108,30 @@ void affichageDes(unsigned int a, unsigned int b){
 }
 
 
+//permet d'afficher le clicker
+/*void JeuTXT::affichageClicker(){
+
+	jeuClear();
+
+	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
+	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+
+	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
+
+	if (j.getc().gettps_actuel() >= 10){
+
+		cout<<"TERMINER!"<<endl;
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
+
+	}
+}*/
+
 //permet l'affichage txt de l'évenement hacking
 void JeuTXT::affichageHacking(){
 
-	unsigned int cas = j.geth().getIntAff();
+	unsigned int cas = j.geth().getIntAff();//affichage de la fin
 
-	switch(cas){
-		case 2 : // premier affiche, quand le hack commence
-			cout<<"Vous devez tapez la commande suivante pour gagné : ";
-			break;
-
-		case 0: // affiche quand le mot tapé précédement est correcte
-			cout<<"commande validé!";Endl();
-			cout<<"Commande suivante : ";
-			break;
-
-		case 1: // affichage quand le mot tapé précédement est incorrecte
-			cout<<"commande non validé!";Endl();
-			cout<<"re-tapez la commande : ";
-			break;
-
-		case 3: // enleve l'affichage précédent avant l'affichage suivant
-			clear();
-			j.seth(1);
-			break;
-
-		case 4:	// enleve l'affichage précédent avant l'affichage de la fin
-			clear();
-			j.seth(2);
-			break;
-	}
-	if(cas <3){
-		cout<<j.geth().getMot();Endl();
-		cout<<">"<<j.geth().getMotSaisie();
-		curseur();
-		Endl();
-	}
-
-	//affichage de la fin
-	if(j.geth().getnbSaisie()==4)
-
+	if(j.geth().getFin())
 	{
 		if(j.gete().getT() == true){
 			cout<<"Vous avez GAGNE en "<<j.gete().gettps()<<" seconde";Endl();
@@ -158,7 +142,39 @@ void JeuTXT::affichageHacking(){
 		}
 
 	}
+	else{
+		switch(cas){
+			case 2 : // premier affiche, quand le hack commence
+				cout<<"Vous devez tapez la commande suivante pour gagné : ";
+				break;
 
+			case 0: // affiche quand le mot tapé précédement est correcte
+				cout<<"commande validé!";Endl();
+				cout<<"Commande suivante : ";
+				break;
+
+			case 1: // affichage quand le mot tapé précédement est incorrecte
+				cout<<"commande non validé!";Endl();
+				cout<<"re-tapez la commande : ";
+				break;
+
+			case 3: // enleve l'affichage précédent avant l'affichage suivant
+				clear();
+				j.seth(1);
+				break;
+
+			case 4:	// enleve l'affichage précédent avant l'affichage de la fin
+				clear();
+				j.seth(2);
+				break;
+		}
+		if(cas <3){
+			cout<<j.geth().getMot();Endl();
+			cout<<">"<<j.geth().getMotSaisie();
+			curseur();
+			Endl();
+		}
+	}
 }
 
 void affichePion(const Pion & p){
@@ -265,6 +281,9 @@ void JeuTXT::affichage(){
 	else if(j.gete().getn() == "hack"){//le mini Jeu Hacking est en court
 		affichageHacking();
 	}
+	else if(j.gete().getn()== "clicker"){
+		//affichageClicker();
+	}
 
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();
@@ -318,9 +337,9 @@ void JeuTXT::run(){
 		affichage();
 		quit = update();
 
-		if(j.geth().getnbSaisie() == 4){
+		/*if(j.geth().getnbSaisie() == 4){
 			j.sete(2);
-		}
+		}*/
 	}
 
 	restoreTerm();

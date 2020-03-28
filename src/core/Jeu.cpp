@@ -601,18 +601,30 @@ void Jeu::actionMiniJeu(const string touche){
 
 	//si nous sommes dans l'évenement hacking
 	if (e.getn() =="hack"){
-
-		if (touche == "\n"){
-			h.valider();
-		}
-		else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){
-			h.effacerLettre();
+		if(!h.getFin()){
+			if (touche == "\n"){
+				h.valider();
+			}
+			else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){
+				h.effacerLettre();
+			}
+			else{
+				h.saisir(touche);
+			}
 		}
 		else{
-			h.saisir(touche);
+
+			if (touche == "\n"){
+				e.reset();
+				h.resetHack();
+			}
+		}
+		if(h.getFin()){
+			if(e.getTempsF()==0){
+				e.fini();
+			}
 		}
 	}
-
 }
 
 Jeu::~Jeu(){
@@ -621,7 +633,7 @@ Jeu::~Jeu(){
 		delete tabJ[i];
 	}
 }
-#include <iostream>
+/*#include <iostream>
 #include <string>
 using namespace std;
 
@@ -717,4 +729,4 @@ void Jeu::setc(){
 
 	c.resetClicker();
 
-}
+}*/

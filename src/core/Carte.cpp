@@ -1,4 +1,4 @@
-#include "carte.h"
+#include "Carte.h"
 
 //retourne le gain
 int Carte::getgain(){

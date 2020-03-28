@@ -13,6 +13,7 @@ using namespace std;
 Evenement::Evenement(){
 
 	n = "rien";
+	tempsF=0;
 	
 }
 
@@ -22,7 +23,7 @@ void Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<10){
+	if((rand()%100)<102){
 
 		if((rand()%2)==0){n = "clicker";}
 
@@ -69,7 +70,7 @@ void Evenement::fini(int clique){
 
 		if(tps<=50){ 
 			t = true;
-			gain = -1000;
+			gain = -50;
 		}
 
 		else{
@@ -81,12 +82,15 @@ void Evenement::fini(int clique){
 
 	if (n == "clicker"){
 
-		gain = 10*clique;
+		gain = 3*clique;
 
 	}
-	n = "rien";
 }
 
+void Evenement::reset(){
+	n = "rien";
+	tempsF=0;
+}
 
 //retourne le gain à la fin de l'évenement
 int Evenement::getgain(){
@@ -103,6 +107,10 @@ clock_t Evenement::gettempsD(){
 
 }
 
+clock_t Evenement::getTempsF() const{
+	return tempsF;
+}
+
 
 //-------------------------------------------------------------
 
@@ -115,6 +123,7 @@ Hacking::Hacking(){
 	mot = tab_com[alea];
 	nbSaisie = 0;
 	intAff = 2;
+	fin = false;
 
 }
 
@@ -124,6 +133,12 @@ void Hacking::saisir(string N){
 
 		motSaisie = motSaisie + N;
 
+}
+
+void Hacking::effacerLettre()
+{
+    if(motSaisie.length()>0)
+        motSaisie = motSaisie.substr(0, motSaisie.size()-1);
 }
 
 
@@ -142,6 +157,9 @@ void Hacking::valider(){
 		motSaisie = "";
 		intAff = 4;
 
+	}
+	if(nbSaisie==4){
+		fin = true;
 	}
 }
 
@@ -164,7 +182,6 @@ string Hacking::getMot(){
 		return mot;
 
 }
-
 
 //retourne le mot tapé par l'utilisateur
 string Hacking::getMotSaisie(){
@@ -189,15 +206,19 @@ int Hacking::getIntAff(){
 	
 }
 
+bool Hacking::getFin() const{
+	return fin;
+}
 
 //permet de reset les données membres à la fin de l'évenement hacking
 void Hacking::resetHack(){
 	srand (time(NULL));
 	int alea = rand()%8;
 	mot = tab_com[alea];
+	motSaisie="";
 	nbSaisie = 0;
 	intAff = 2;
-
+	fin = false;
 }
 
 
