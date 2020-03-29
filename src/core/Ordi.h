@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "Pion.h"
+#include "Plateau.h"
 
 class Ordi : public Pion{
 	private : 
@@ -23,6 +24,8 @@ class Ordi : public Pion{
 		@param un entier r : représentant la constante de risque de l'Ordi
 		*/
 		Ordi(const unsigned int r);
+
+		
 
 		/**
 		@brief renvoie true si l'Ordi décide d'acheté la banque false sinon
@@ -49,6 +52,9 @@ class Ordi : public Pion{
 		@param aucun
 		*/
 		unsigned int AIchampionat() const;
+
+
+		unsigned int AIporteOuverte(const Plateau & board)const;
 };
 
 #endif

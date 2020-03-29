@@ -2,8 +2,6 @@
 #define OCTET_PLATEAU_H
 
 #include "Case.h"
-#include "Ordi.h"
-#include "Joueur.h"
 
 //Taille du plateau
 const int TPLATEAU = 32;

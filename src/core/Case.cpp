@@ -42,7 +42,6 @@ unsigned int Case::getPrixB() const{
 	return prixB;
 }
 
-
 unsigned int Case::getLoyer() const{
 	return loyer;
 }

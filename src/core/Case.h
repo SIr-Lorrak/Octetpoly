@@ -1,19 +1,18 @@
 #ifndef OCTET_CASE_H
 #define OCTET_CASE_H
 
-#include <iostream>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
 class Case{
 private:
 
+	bool ad; //Indique si la case est en publicité
 	string nom;
 	unsigned int occupation;//Qui occupe la case
 	char type; //Type une entreprise, une banque, un case chance,...
 	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
-	bool ad; //Indique si la case est en publicité
 
 	unsigned int loyer; //Prix à donner au joueur à qui appartient l'entreprise
 	unsigned int prix; //Prix d'achat
@@ -45,6 +44,18 @@ public:
 	unsigned int getOccupation() const;
 
 	/**
+	@brief
+	@param
+	*/
+	unsigned int getPrixDeBase() const;
+
+	/**
+	@brief
+	@param
+	*/
+	unsigned int getLoyer() const;
+
+	/**
 	@brief Indique le prix de l'entreprise ou de la banque
 	@param none
 	@return prix : unsigned int
@@ -64,12 +75,6 @@ public:
 	@return prixB : unsigned int
 	*/ 
 	unsigned int getPrixB() const;
-
-	/**
-	@brief 
-	@param
-	*/
-	unsigned int getLoyer() const;
 
 	/**
 	@brief Informe sur le prix initial de l'entreprise ou banque
