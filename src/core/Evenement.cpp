@@ -23,7 +23,7 @@ bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<5){
+	if((rand()%100)<30){
 
 		if((rand()%2)==0){n = "hack";}
 
@@ -232,14 +232,14 @@ void Hacking::resetHack(){
 
 
 //constructeur met le nombre de clique et le temps à 0
-clicker::clicker(){
+Clicker::Clicker(){
 	nbclique = 0;
 	tps_actuel = 0;
 }
 
 
 //permet d'ajouter un clique au compteur
-void clicker::ajoutClique(clock_t tempsD){
+void Clicker::ajoutClique(clock_t tempsD){
 	clock_t temps = clock();
 	tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
 	if(tps_actuel < 10){
@@ -250,19 +250,19 @@ void clicker::ajoutClique(clock_t tempsD){
 
 
 //retourne le temps actuel pour le timer
-float clicker::gettps_actuel(){
+float Clicker::gettps_actuel(){
 	return tps_actuel;
 }
 
 
 //retourne le nombre d'appuie 
-unsigned int clicker::getnbclique(){
+unsigned int Clicker::getnbclique(){
 	return nbclique;
 }
 
 
-//permet de reset les données membres à la fin de l'évenement clicker
-void clicker::resetClicker(){
+//permet de reset les données membres à la fin de l'évenement Clicker
+void Clicker::resetClicker(){
 
 	nbclique = 0;
 	tps_actuel = 0;

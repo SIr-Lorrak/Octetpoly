@@ -107,25 +107,6 @@ void affichageDes(unsigned int a, unsigned int b){
 	cout<<"  ¯¯¯     ¯¯¯   "<<endl;
 }
 
-
-//permet d'afficher le clicker
-/*void JeuTXT::affichageClicker(){
-
-	jeuClear();
-
-	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
-	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
-
-	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
-
-	if (j.getc().gettps_actuel() >= 10){
-
-		cout<<"TERMINER!"<<endl;
-		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
-
-	}
-}*/
-
 //permet l'affichage txt de l'évenement hacking
 void JeuTXT::affichageHacking(){
 
@@ -188,7 +169,28 @@ void JeuTXT::affichageHacking(){
 	}
 }
 
+//permet d'afficher le clicker
+void JeuTXT::affichageClicker(){
+
+	jeuClear();
+
+	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
+	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+
+	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
+
+	if (j.getc().gettps_actuel() >= 10){
+
+		cout<<"TERMINER!"<<endl;
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
+
+	}
+}
+
 void affichePion(const Pion & p){
+	if(p.getNom()==""){
+		cout<<"<anonyme>";
+	}
 	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
 }
 
@@ -206,12 +208,20 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'P':
 			cout<<"bienvenue en Prison !"<<endl;
+			if(!j.getBool("desLance")){
+				cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+			}
 			break;
 		case 'I':
 			cout<<"faut payer ses impots monsieur !"<<endl;
 			break;
 		case 'C':
-			cout<<"piochez une carte chance !"<<endl;
+			if(j.getCarte()==NULL){
+				cout<<"piochez une carte chance !"<<endl;
+			}
+			else{
+				cout<<"votre carte : "<<endl<<j.getCarte()->getTitre()<<endl<<j.getCarte()->getTexte()<<endl;
+			}
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
@@ -259,6 +269,7 @@ void JeuTXT::affichageCase(const Case & c){
 
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
+	
 	Pion joueurCourant;
 	joueurCourant = *j.getPion(j.getJoueurCourant());
 	unsigned int pos = joueurCourant.getPos();
@@ -378,7 +389,7 @@ bool JeuTXT::update(){
 			j.actionClavier(touche);
 		}
 		
-		if(touche=="\e"){
+		if(touche=="\e"){//on peut arreter la partie avec echape peut importe le a qui est le tour pour l'instant aucune sauvegarde n'est faite
 			return true;
 		}
 	}
@@ -404,18 +415,14 @@ bool JeuTXT::update(){
 // ATTENTION CETTE PARTIE EST A CHANGER ET ADAPTER AVEC LE DEROULEMENT DE LA PERTIE !!
 void JeuTXT::run(){
 
-	setTerm();
+	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
 
 	int quit = false;
 	
 	while(!quit){
-		quit = update();
+		quit = update(); 
 		affichage();
-
-		/*if(j.geth().getnbSaisie() == 4){
-			j.sete(2);
-		}*/
 	}
 
-	restoreTerm();
+	restoreTerm(); //on restore le terminal comme avant et on le clear.
 }

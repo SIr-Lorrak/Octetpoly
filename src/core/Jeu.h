@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "Plateau.h"
+#include "Carte.h"
 #include "Ordi.h"
 #include "Joueur.h"
 #include "Evenement.h"
@@ -27,8 +28,9 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
-		unsigned int casePub;
 		float coeffAd;
+
+		Carte * chance;
 
 		bool konami[10]; //vérifie si une suite de 10 touches précise est entrer (a chaque bonne appuie on ajoute un true et a chaque maivais appuie on met tout a false)
 
@@ -44,6 +46,7 @@ class Jeu{
 
 		Evenement e;
 		Hacking h;
+		Clicker c;
 		
 //-------------------------------------Méthodes------------------------------------------
 
@@ -201,6 +204,7 @@ class Jeu{
 
 		unsigned int getJoueurCourant()const;
 
+		Carte * getCarte()const;
 
 		/**
 		@brief choisi l'action correspondante à la touche entrer par l'utilisateur
@@ -226,7 +230,7 @@ class Jeu{
 		@brief Tire une carte chance 
 		@param none	
 		*/
-		void carteChance();
+		void carteChance(const string & touche);
 
 		/**
 		@brief Permet d'augmenter le loyer d'une entreprise
@@ -260,10 +264,23 @@ class Jeu{
 		Evenement gete();
 
 		/**
-		brief permet de retourner hacking h
-		param none
+		@brief permet de retourner le mini jeu hacking h
+		@param none
 		*/
 		Hacking geth();
+
+
+		/**
+		@brief permet de retourner le mini jeu Clicker c
+		@param none
+		*/
+		Clicker getc();
+
+		/**
+		@brief permet de reset le clicker
+		@param none
+		*/
+		void setc();
 
 		/**
 		@brief destructeur de Jeu

@@ -33,15 +33,15 @@ Jeu::Jeu(){
 	attendreAmplete = true;
 	actionObligatoire = true;
 	tourFini = false;
+	chance = NULL;
 
 	tourOrdi = false;
 
 	nbJoueur = 0;
 	nbTour = 0;
-	casePub = 0;
 	coeffAd = 1.0;
 
-	tabO = new Ordi[0];
+	tabO = NULL;
 	unsigned int alea;
 	alea = 0;
 	for(unsigned int i=0;i<4;i++){
@@ -87,12 +87,14 @@ bool Jeu::getBool(const string & type) const
 
 Joueur * Jeu::getJoueur(const unsigned int i) const
 {
+	assert(tabJ[i-1]!=NULL);
 	assert(nbJoueur>=i);
 	return tabJ[i-1];
 }
 
 Ordi * Jeu::getOrdi(const unsigned int i) const
 {
+	assert(tabO!=NULL);
 	assert(nbJoueur<i);
 	return &tabO[i-nbJoueur-1];
 }
@@ -122,6 +124,11 @@ unsigned int Jeu::getNbTour() const
 unsigned int Jeu::getJoueurCourant()const
 {
 	return joueurCourant;
+}
+
+Carte * Jeu::getCarte()const
+{
+	return chance;
 }
 
 void Jeu::sauver(const string & file) const
@@ -388,7 +395,6 @@ void Jeu::actionBE(const string touche){
 		if(occupant != 0 && actionObligatoire){// La case appartient a une autre personne
 			if(touche == "\n"){
 				payeLoyerJoueur();
-				actionObligatoire = false;//on doit payer -> action obligatoire 
 			}
 		}
 
@@ -457,6 +463,7 @@ void Jeu::paye(unsigned int payeur, unsigned int creancier, float montant){
 		tabJ[payeur-1]->setCoin(coinP-montant);
 		tabJ[creancier-1]->setCoin(coinC+montant);
 	}
+	//pour guillaume => faut vraiment changer cette fonction en utilisant getPion
 }
 
 
@@ -471,25 +478,28 @@ void Jeu::payeLoyerJoueur(){
 	if(coinCourant >= c->getLoyer())
 	{
 		paye(joueurCourant,c->getOccupation(),c->getLoyer());
+		actionObligatoire = false;//si le pion paye alors c'est bon il a fait ces actions obligatoires
 	}
 
 	//Le joueurCourant doit vendre pour payer le loyer
 	else if((coinCourant + getPion(joueurCourant)->patrimoineActif()) >= c->getLoyer())
 	{
-		paye(joueurCourant,c->getOccupation(),c->getLoyer());
-		while(getPion(joueurCourant)->getCoin() < 0)
+		//on passe dans l'interface de vente (c'est a dire on passe le booléen vend a true et c'est tout)
+		/*while(getPion(joueurCourant)->getCoin() < 0)//pour guillaume => /!\ pas de while ici car code d'execute déjà dans une boucle infinie on fera un if
 		{
 			//getPion(joueurCourant)->vend(); on passe dans l'interface de vente
-		}
+		}*/
 	}
 	else
 	{
-		//faillite
+		//en faillite le pion donne le reste de son argent au pion qu'il doit payer
+		//puis on appele une fonction Pion::faitFaillite() qui mettra l'argent du pion a -1
+		//tourSuivant(); //si le pion fait faillite on passe au tour d'après
 	}
 }
 
 void Jeu::pub(unsigned int quelleCase){
-	if (quelleCase == casePub)
+	/*if (quelleCase == casePub)
 	{
 		coeffAd++;
 		Case * championnat = board.getCase(casePub);
@@ -515,7 +525,9 @@ void Jeu::pub(unsigned int quelleCase){
 			Case * championnat = board.getCase(quelleCase);
 			championnat->advertising(coeffAd);
 		}		
-	} 
+	} */
+	//pour guillaume => casePub devrait être un booléen dans case les calcules de prix doivent d'ailleur se dérouler dans case (fonction Case::organisePub())
+	//je te recommande de regarder la fonction actionBE que j'ai juste un tout petit peu modifié pour qu'elle est le bon comportement.
 }
 
 void Jeu::campagneDePub(const string touche){
@@ -527,7 +539,50 @@ void Jeu::campagneDePub(const string touche){
 		pub(Case);
 		getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());	
 	}
-	
+	//pour guillaume ne pas oublier que le joueur doit appuyer sur une touche d'abord pour dire si'il veut mettre une pub SI IL PEUT
+	// puis après ouvrir un menu qui lui montre ses propriété pour qu'il choisisse où la mettre
+	//ça doit donc ce dérouler en deux temps (utilise le booléen choix)
+}
+
+void Jeu::carteChance(const string & touche){
+	Pion * joueur = getPion(joueurCourant); 
+	int id_Case;
+	int gain;
+	bool casePlus3;
+	attendreAmplete = false; //le joueur ne fera pas d'amplete sur une carte chance.
+	if(chance == NULL){//si une la carte n'a pas encore été tirée.{
+		if(touche == "\n")//le joueur pioche une carte avec entrer 
+		{
+			chance = new Carte;
+			chance->randomCarte();
+		}
+	}
+	else{//si la carte est déjà tirée
+
+		id_Case = chance->getid_case();
+		gain = chance->getgain();
+		casePlus3 = chance->getcasePlus3();
+		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
+			joueur->setCoin(joueur->getCoin() + gain);//le gain peut aussi être une perte.
+			if(id_Case == 0)
+			{
+				joueur->setPos(0);
+				joueur->salaire();
+			}
+			else if(casePlus3)
+			{
+				joueur->setPos(joueur->getPos() + 3);
+				if(joueur->getPos() > 31)
+				{
+					joueur->setPos(joueur->getPos() - 32);
+				}
+			}
+			//n'oublie pas que si le joueur n'a pas l'argent pour payer il doit vendre donc passer dans l'interface de vente (je m'occuperais de l'interface de vente)
+			actionObligatoire = false; //si le joueur a pu payer il a fini ses action obligatoire	
+			delete chance;//puis on delete la carte chance
+			chance = NULL;//<-- très important
+		}
+	}
 }
 
 void Jeu::actionCase(const string & touche){
@@ -545,15 +600,13 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'C':
-			//carteChance();
-			attendreAmplete= false;
-			actionObligatoire = false;
+			carteChance(touche);
 			break;
 
 		case 'A':
 			attendreAmplete= false;
 			actionObligatoire = false;
-			campagneDePub(touche);
+			//campagneDePub(touche);
 			break;
 
 		case 'O':
@@ -569,11 +622,48 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'P':
-			//prison();
+			//prison(); la prison est gèré differement car elle est là seul case qui agit avant le début du tour 
 			break;
 	}
 }
 
+//permet d'effectuer une action selon la touche appuyer
+void Jeu::actionMiniJeu(const string touche){
+
+	//si nous sommes dans l'évenement hacking
+	if (e.getn() =="hack"){
+		if(!h.getFin()){
+			if (touche == "\n"){
+				h.valider();
+			}
+			else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){
+				h.effacerLettre();
+			}
+			else{
+				h.saisir(touche);
+			}
+		}
+		else{
+
+			if (touche == "\n"){
+				e.reset();
+				h.resetHack();
+				//TODO : faire les gains / pertes avant de passer au tour suivant.
+				tourSuivant();
+			}
+		}
+		if(h.getFin()){
+			if(e.getTempsF()==0){
+				e.fini();
+			}
+		}
+	}
+	if(e.getn() == "clicker"){
+		if(touche == " "){
+			c.ajoutClique(gete().gettempsD());
+		}
+	}
+}
 
 void Jeu::actionClavier(const string & touche)
 {
@@ -644,131 +734,8 @@ Hacking Jeu::geth(){
 
 }
 
-
-//permet d'effectuer une action selon la touche appuyer
-void Jeu::actionMiniJeu(const string touche){
-
-	//si nous sommes dans l'évenement hacking
-	if (e.getn() =="hack"){
-		if(!h.getFin()){
-			if (touche == "\n"){
-				h.valider();
-			}
-			else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){
-				h.effacerLettre();
-			}
-			else{
-				h.saisir(touche);
-			}
-		}
-		else{
-
-			if (touche == "\n"){
-				e.reset();
-				h.resetHack();
-				//TODO : faire les gains / pertes avant de passer au tour suivant.
-				tourSuivant();
-			}
-		}
-		if(h.getFin()){
-			if(e.getTempsF()==0){
-				e.fini();
-			}
-		}
-	}
-}
-
-Jeu::~Jeu(){
-	delete [] tabO;
-	for(unsigned int i=0; i<nbJoueur; i++){
-		delete tabJ[i];
-	}
-}
-/*#include <iostream>
-#include <string>
-using namespace std;
-
-#include "Jeu.h"
-
-
-//seteur permetant de mettre à jour l'évenement e
-void Jeu::sete(unsigned int n){
-
-	switch(n){
-
-		case 1:
-			e.Declenchement();
-			break;
-
-		case 2:
-			e.fini(getc().getnbclique());
-			break;
-
-	}
-}
-
-
-//seteur permetant de mettre à jour hacking h
-void Jeu::seth(unsigned int n){
-
-	switch(n){
-
-		case 1:
-			h.intAff = 0;
-			break;
-
-		case 2:
-			h.intAff = 1;
-			break;
-
-		case 3:
-		h.resetHack();
-		break;
-	}
-}
-
-
-// permet de retourner l'évenement e
-Evenement Jeu::gete(){
-
-	return e;
-
-}
-
-
-//permet de retourner hacking h
-Hacking Jeu::geth(){
-
-	return h;
-
-}
-
-
-//permet d'effectuer une action selon la touche appuyer
-void Jeu::actionClavier(const string touche){
-
-	//si nous sommes dans l'évenement hacking
-	if (e.getn() == "hack"){
-
-		if (touche == "\n"){
-			h.valider();
-		}
-		else{
-			h.saisir(touche);
-		}
-	}
-
-	//si nous sommes dans l'évenement clicker
-	if(e.getn() == "clicker"){
-		if(touche == " "){
-			c.ajoutClique(gete().gettempsD());
-		}
-	}
-}
-
-
 //retourne clicker c
-clicker Jeu::getc(){
+Clicker Jeu::getc(){
 
 	return c;
 
@@ -780,4 +747,14 @@ void Jeu::setc(){
 
 	c.resetClicker();
 
-}*/
+}
+
+
+Jeu::~Jeu(){
+	if(tabO!=NULL){
+		delete [] tabO;
+	}
+	for(unsigned int i=0; i<nbJoueur; i++){
+		delete tabJ[i];
+	}
+}

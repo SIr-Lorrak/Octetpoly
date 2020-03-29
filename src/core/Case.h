@@ -117,7 +117,7 @@ public:
 	(prix de base et type)
 	@param categorie : char ; prix : unsigned int
 	*/ 
-	void initCase(char categorie,unsigned int p,string nom);
+	void initCase(char categorie,unsigned int p,string n);
 
 	/**
 	@brief Initialise le prix de base d'une entreprise ou d'une banque

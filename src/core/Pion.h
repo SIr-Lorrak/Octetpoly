@@ -2,7 +2,7 @@
 #define OCTET_PION_H
 
 #include <iostream>
-#include <string.h>
+#include <string>
 
 #include "Case.h"
 //#include "Carte.h"
@@ -137,6 +137,7 @@ class Pion{
 
 	void setRang(const unsigned int r);
 
+	void setPos(const unsigned int p);
 
 	void nomAleatoire();
 
