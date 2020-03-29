@@ -38,6 +38,7 @@ class Jeu{
 		bool avance;//dit si le joueur a avancer 
 		bool tourFini;
 		bool attendreAmplete;
+		bool actionObligatoire;
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
@@ -148,7 +149,7 @@ class Jeu{
 		@brief Détermine l'action possible sur la case
 		@param none
 		*/
-		void actionCase(const string & touche);
+		void actionCase(const string & touche = "");
 
 
 		void resetBool();

@@ -31,10 +31,10 @@ class Evenement{
 		Evenement();
 
 		/**
-		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma 
+		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma renvoie true si une un mini jeu est lancé
 		@param none
 		*/
-		void Declenchement();
+		bool Declenchement();
 
 		/**
 		@brief retourne n (nous de l'évenement en court)
@@ -96,6 +96,7 @@ class Hacking{
 		unsigned int nbSaisie; //nombre de mot valider
 		string motSaisie; //mot actuellement taper par le joueur
 		bool fin;//dit si le jeu est fini 
+		unsigned int nbMot; //nombre de mot a saisir pour finir
 	
 	public :
 
@@ -148,6 +149,8 @@ class Hacking{
 		@param none
 		*/
 		unsigned int getnbSaisie();
+
+		unsigned int getnbMot();
 
 		/**
 		@brief retourne un entier qui permet de choisir le bon affichage

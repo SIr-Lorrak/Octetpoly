@@ -23,6 +23,11 @@ Case::~Case(){
 }
 
 //-------------------------------------Getters-------------------------------------------
+
+string Case::getNom() const{
+	return nom;
+}
+
 unsigned int Case::getOccupation() const{
 	return occupation;
 }

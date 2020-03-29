@@ -31,6 +31,7 @@ Jeu::Jeu(){
 	avance = false;
 	confirmation = false;
 	attendreAmplete = true;
+	actionObligatoire = true;
 	tourFini = false;
 
 	tourOrdi = false;
@@ -49,6 +50,7 @@ Jeu::Jeu(){
 		}while(!estPasDans(alea,ordre,i));
 		ordre[i] = alea;
 	}
+	joueurCourant = ordre[3];
 }
 
 
@@ -75,6 +77,10 @@ bool Jeu::getBool(const string & type) const
 		return desLance;
 	else if(type=="tourOrdi")
 		return tourOrdi;
+	else if(type=="attendreAmplete")
+		return attendreAmplete;
+	else if(type=="actionObligatoire")
+		return actionObligatoire;
 	else
 		assert(false);
 }
@@ -166,7 +172,7 @@ void Jeu::commencerPartie()
 			for(unsigned int i = 1;i<4-nbJoueur;i++){
 				do{
 					tabO[i].nomAleatoire();
-				}while(nomExiste(tabO[i].getNom(),tabO,i));
+				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
 			}
 		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
 	}
@@ -177,6 +183,7 @@ void Jeu::commencerPartie()
 void Jeu::ajouterJoueur()
 {
 	tabJ[nbJoueur] = new Joueur;
+	tabJ[nbJoueur]->setRang(nbJoueur+1);
 	nbJoueur++;
 	attendreNom = true;
 }
@@ -205,12 +212,14 @@ void Jeu::resetBool()
 	confirmation = false;
 	attendreAmplete = true;
 	tourFini = false;
+	actionObligatoire = true;
 }
 
 void Jeu::tourSuivant(){
 	nbTour++;
 	unsigned int i=0;
 	while(joueurCourant!=ordre[i]){
+		cout<<"lol";
 		i++;
 	}
 
@@ -228,34 +237,55 @@ void Jeu::actionPartie(const string & touche)
 	/*if(p->getPrisonnier()){
 
 	}*/
-	if(!desLance){
-		if(touche == "\n"){
-			p->lanceDes();
-			desLance = true;
-		}
-	}
-	else if(!avance){
-		if(touche == "\n"){
-			p->avancer();
-			avance = true;
-			attendreAmplete = false;// a enlever plus tard
-		}
-	}
-	else if(attendreAmplete){
-		actionCase(touche);
-	}
-	else if(!tourFini){
-		if(tourOrdi){
-			tourFini = true;
+	if(p->getPrisonnier()){
+		if(avance||desLance){
+			if(touche == "\n"){
+				tourFini = true;
+			}
 		}
 		else{
-			if(touche=="\n"){
-				tourFini = true;
-				e.Declenchement();
+			if(touche == "1"){
+				p->lanceDes();
+				desLance = true;
 			}
 		}
 	}
-	else{
+	if(!p->getPrisonnier()){
+		if(!desLance){
+			if(touche == "\n"){
+				p->lanceDes();
+				desLance = true;
+			}
+		}
+		else if(!avance){
+			if(touche == "\n"){
+				p->avancer();
+				avance = true;
+			}
+		}
+		else if(attendreAmplete||actionObligatoire){//tant que les action obligatoire et les amplète non pas été faite sur une case alors on attend
+			actionCase(touche);
+		}
+		else if(!tourFini){
+			if(p->getDes().D1==p->getDes().D2){
+				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
+			}
+			else{
+				if(tourOrdi){//si le tour n'a pas été reset alors on ne fini pas le tour
+					tourFini = true;
+				}
+				
+				else{
+					if(touche=="\n"){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
+						if(!e.Declenchement()){
+							tourFini = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	if(tourFini){
 		tourSuivant();
 	}
 }
@@ -264,31 +294,31 @@ void Jeu::actionPartie(const string & touche)
 void Jeu::actionMenu(const string & touche)
 {
 	if(!attendreNom&&nbJoueur<4){
-		if(!confirmation){
+		if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
 			if(touche == "+"){
 				ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
 			}
 
 			if(touche == "-"&&nbJoueur>0){
-				enleverJoueur();
+				enleverJoueur();//enleve le dernier joueur ajouté
 			}
 		}
 
 		if(touche == "\n"||((touche=="o"||touche=="O")&&confirmation)){
 			if(confirmation){
-				commencerPartie();
+				commencerPartie();//si c'est confirmé on commence la partie
 				confirmation=false;
 			}
 
-			confirmation = true;
+			confirmation = true;//on demande confirmation
 		}
 
 		if(touche=="n"||touche=="N"){
-			confirmation=false;
+			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
 		}
 	}
 
-	else if(attendreNom){
+	else if(attendreNom){//un joueur ajouter na pas encore de nom
 		if(touche == "\n"){// \n c'est pour 'entrer' ou 'retour'
 			attendreNom = false;//2 entrer valide le nom du joueur
 		}
@@ -327,13 +357,17 @@ void Jeu::investirEJoueur(const string touche){
 	//Est-ce que le joueurCourant a assez d'argent
 	if(touche == "+" && p->getCoin() >= c->getPrixB())
 	{
-		p->investit(1,c);
+		p->investit(1,c);//si oui il investit
 	}
 
 	//Est-ce que le joueurCourant a assez d'argent
 	else if (touche == "-" && p->getCoin() >= c->getPrixM())
 	{
-		p->investit(-1,c);
+		p->investit(-1,c);//si oui il investit
+	}
+
+	else if (touche == "\n"){
+		attendreAmplete = false;
 	}
 }
 
@@ -350,35 +384,39 @@ void Jeu::actionBE(const string touche){
 
 //Vérifie si la case n'appartient pas au JOUEUR
 	if(occupant != joueurCourant)
-	{											 
-		if(occupant == 0)//Différent cas de figure
-		{
-			//N'appartient à personne,le JOUEUR peut acheter la banque
-			//Est-ce que le JOUEUR veut acheter
-			//Et est-ce qu'il a assez d'argent pour
-			if((touche == "o" ||touche == "O" || touche == "enter") && coinCourant >= c->getPrixInitial())
-			{
-				getPion(joueurCourant)->achete(c);
-						
-				//Investissement uniquement possible pour une entreprise
-				if(c->getType() == 'E')
-				{
-					investirEJoueur(touche);
-					coinCourant = getPion(joueurCourant)->getCoin();
-				}
+	{	
+		if(occupant != 0 && actionObligatoire){// La case appartient a une autre personne
+			if(touche == "\n"){
+				payeLoyerJoueur();
+				actionObligatoire = false;//on doit payer -> action obligatoire 
 			}
 		}
 
-		else{
-				payeLoyerJoueur();
-				//On met à jour la variable coinCourant 
-				coinCourant = getPion(joueurCourant)->getCoin();
+		else//La case n'appartient a personne
+		{
+			actionObligatoire = false;//le joueur na pas de loyer a payer
+			//N'appartient à personne,le JOUEUR peut acheter la banque ou l'entreprise
+			//Est-ce que le JOUEUR veut acheter
+			//Et est-ce qu'il a assez d'argent pour
+			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrixInitial())
+			{
+				getPion(joueurCourant)->achete(c);
+				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
+					attendreAmplete = false;
+				}
+						
+			}
+			else{
+				attendreAmplete = false;//si le joueur n'achete pas alors il a fini.
+			}
 		}
 	}
-//La case appartient au JOUEUR	
-//Si c'est une entreprise, il pourra peut-être investir
-	else if (c->getType() == 'E')
+
+	//La case appartient au JOUEUR	
+	//Si c'est une entreprise, il pourra peut-être investir
+	else if (c->getType() == 'E'&&attendreAmplete)
 	{
+		actionObligatoire = false;// le joueur n'a pas de loyer a payer
 		investirEJoueur(touche);
 	}
 }
@@ -508,17 +546,25 @@ void Jeu::actionCase(const string & touche){
 
 		case 'C':
 			//carteChance();
+			attendreAmplete= false;
+			actionObligatoire = false;
 			break;
 
 		case 'A':
+			attendreAmplete= false;
+			actionObligatoire = false;
 			campagneDePub(touche);
 			break;
 
 		case 'O':
+			attendreAmplete= false;
+			actionObligatoire = false;
 			//porteOuverte();
 			break;
 
 		case 'I':
+			attendreAmplete= false;
+			actionObligatoire = false;
 			//TODO 
 			break;
 
@@ -545,6 +591,9 @@ void Jeu::actionClavier(const string & touche)
 }
 
 void Jeu::actionOrdi(){
+	if(!desLance&&getPion(joueurCourant)->getPrisonnier()){
+		actionClavier("1");
+	}
 	actionClavier("\n");
 	//Ordi o = *getOrdi(joueurCourant);
 	/*if(avance){
@@ -617,6 +666,8 @@ void Jeu::actionMiniJeu(const string touche){
 			if (touche == "\n"){
 				e.reset();
 				h.resetHack();
+				//TODO : faire les gains / pertes avant de passer au tour suivant.
+				tourSuivant();
 			}
 		}
 		if(h.getFin()){

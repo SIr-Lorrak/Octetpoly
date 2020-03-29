@@ -135,6 +135,8 @@ class Pion{
 
 	void setNom(const string & n);
 
+	void setRang(const unsigned int r);
+
 
 	void nomAleatoire();
 

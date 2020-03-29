@@ -19,11 +19,11 @@ Evenement::Evenement(){
 
 
 //permet de déclancher un événément lors d'un déplacement en fonction du karma 
-void Evenement::Declenchement(){
+bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<102){
+	if((rand()%100)<5){
 
 		if((rand()%2)==0){n = "hack";}
 
@@ -33,6 +33,7 @@ void Evenement::Declenchement(){
 		tempsD = clock();
 
 	}
+	return n != "rien";
 }
 
 
@@ -124,6 +125,7 @@ Hacking::Hacking(){
 	nbSaisie = 0;
 	intAff = 2;
 	fin = false;
+	nbMot = 4;
 
 }
 
@@ -158,7 +160,7 @@ void Hacking::valider(){
 		intAff = 4;
 
 	}
-	if(nbSaisie==4){
+	if(nbSaisie>=nbMot){
 		fin = true;
 	}
 }
@@ -196,6 +198,10 @@ unsigned int Hacking::getnbSaisie(){
 
 	return nbSaisie;
 
+}
+
+unsigned int Hacking::getnbMot(){
+	return nbMot;
 }
 
 

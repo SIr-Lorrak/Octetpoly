@@ -35,6 +35,9 @@ public:
 	*/
 	~Case();
 
+	string getNom() const;
+
+
 	//----------------------------------Getters------------------------------------------
 	/**
 	@brief Indique à qui appartient l'entreprise ou la banque
