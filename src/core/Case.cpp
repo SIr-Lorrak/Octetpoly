@@ -9,6 +9,7 @@ Case::Case(){
 	type = '0';
 	investissement = 0;
 	ad = false;
+	nom="";
 
 	prix = 0;
 	loyer = 0;
@@ -82,7 +83,7 @@ bool Case::getAd() const{
 
 //-------------------------------------Méthodes------------------------------------------
 
-void Case::initCase(char categorie,unsigned int p,string nom){
+void Case::initCase(char categorie,unsigned int p,string n){
 	prixInitial = p;
 	prix = prixInitial;
 	type = categorie;
@@ -90,6 +91,7 @@ void Case::initCase(char categorie,unsigned int p,string nom){
 	prixM = 1;
 	prixB = 1;
 	loyer = prixInitial;
+	nom = n;
 }
 
 

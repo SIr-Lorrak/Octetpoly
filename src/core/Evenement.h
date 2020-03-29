@@ -175,7 +175,7 @@ class Hacking{
 /**
 brief classe qui gère l'évenement clicker
 */
-class clicker {
+class Clicker {
 
 	private :
 
@@ -188,7 +188,7 @@ class clicker {
 	brief constructeur met le nombre de clique et le temps à 0
 	param none
 	*/
-	clicker();
+	Clicker();
 
 	/**
 	brief permet d'ajouter un clique au compteur

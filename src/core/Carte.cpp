@@ -1,27 +1,34 @@
 #include "Carte.h"
 
 //retourne le gain
-int Carte::getgain(){
+int Carte::getgain() const{
 	return gain;
 
 }
 
 
 //retourne l'id de la case
-int Carte::getid_case(){
+int Carte::getid_case() const{
 	return id_case;
 }
 
 //retourne l'id de la carte
-int Carte::getid_carte(){
+int Carte::getid_carte() const{
 	return id_carte;
 }
 
 //retourne un bool
-bool Carte::getcasePlus3(){
+bool Carte::getcasePlus3() const{
 	return casePlus3;
 }
 
+string Carte::getTitre() const{
+	return tab_carte[0][id_carte];
+}
+
+string Carte::getTexte() const{
+	return tab_carte[1][id_carte];
+}
 
 //pioche une carte au hasard
 void Carte::randomCarte(){

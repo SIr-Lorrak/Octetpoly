@@ -82,6 +82,10 @@ void Pion::setRang(const unsigned int r){
 	rang = r;
 }
 
+void Pion::setPos(const unsigned int p){
+	pos = p;
+}
+
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
 
 

@@ -4,7 +4,7 @@
 #include "Pion.h"
 
 class Joueur : public Pion{
-
+	
 };
 
 #endif
