@@ -404,7 +404,7 @@ void Jeu::actionBE(const string touche){
 			//N'appartient à personne,le JOUEUR peut acheter la banque ou l'entreprise
 			//Est-ce que le JOUEUR veut acheter
 			//Et est-ce qu'il a assez d'argent pour
-			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrixInitial())
+			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrix())
 			{
 				getPion(joueurCourant)->achete(c);
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
