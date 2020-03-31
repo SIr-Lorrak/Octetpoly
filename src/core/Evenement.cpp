@@ -19,11 +19,11 @@ Evenement::Evenement(){
 
 
 //permet de déclancher un événément lors d'un déplacement en fonction du karma 
-void Evenement::Declenchement(){
+bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<102){
+	if((rand()%100)<0){
 
 		if((rand()%2)==0){n = "hack";}
 
@@ -33,6 +33,7 @@ void Evenement::Declenchement(){
 		tempsD = clock();
 
 	}
+	return n != "rien";
 }
 
 
@@ -124,6 +125,7 @@ Hacking::Hacking(){
 	nbSaisie = 0;
 	intAff = 2;
 	fin = false;
+	nbMot = 4;
 
 }
 
@@ -158,7 +160,7 @@ void Hacking::valider(){
 		intAff = 4;
 
 	}
-	if(nbSaisie==4){
+	if(nbSaisie>=nbMot){
 		fin = true;
 	}
 }
@@ -198,6 +200,10 @@ unsigned int Hacking::getnbSaisie(){
 
 }
 
+unsigned int Hacking::getnbMot(){
+	return nbMot;
+}
+
 
 //retourne un entier qui permet de choisir le bon affichage
 int Hacking::getIntAff(){
@@ -226,14 +232,14 @@ void Hacking::resetHack(){
 
 
 //constructeur met le nombre de clique et le temps à 0
-clicker::clicker(){
+Clicker::Clicker(){
 	nbclique = 0;
 	tps_actuel = 0;
 }
 
 
 //permet d'ajouter un clique au compteur
-void clicker::ajoutClique(clock_t tempsD){
+void Clicker::ajoutClique(clock_t tempsD){
 	clock_t temps = clock();
 	tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
 	if(tps_actuel < 10){
@@ -244,19 +250,19 @@ void clicker::ajoutClique(clock_t tempsD){
 
 
 //retourne le temps actuel pour le timer
-float clicker::gettps_actuel(){
+float Clicker::gettps_actuel(){
 	return tps_actuel;
 }
 
 
 //retourne le nombre d'appuie 
-unsigned int clicker::getnbclique(){
+unsigned int Clicker::getnbclique(){
 	return nbclique;
 }
 
 
-//permet de reset les données membres à la fin de l'évenement clicker
-void clicker::resetClicker(){
+//permet de reset les données membres à la fin de l'évenement Clicker
+void Clicker::resetClicker(){
 
 	nbclique = 0;
 	tps_actuel = 0;

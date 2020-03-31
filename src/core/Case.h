@@ -2,6 +2,7 @@
 #define OCTET_CASE_H
 
 #include <string>
+#include <assert.h>
 
 using namespace std;
 
@@ -15,11 +16,19 @@ private:
 	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
 
 	unsigned int loyer; //Prix à donner au joueur à qui appartient l'entreprise
+	unsigned int loyerInitial;
+
 	unsigned int prix; //Prix d'achat
 	unsigned int prixInitial;
+
 	unsigned int prixM; //Prix pour un investissement illégale
+	unsigned int prixMInitial;
+
 	unsigned int prixB; //Prix pour un investissement légal
+	unsigned int prixBInitial;
+
 	unsigned int prixDeVente; //Prix de revente
+	unsigned int prixDeVenteInitial;
 	
 public:
 	//---------------------------------Constructeurs--------------------------------------
@@ -34,6 +43,9 @@ public:
 	@param none
 	*/
 	~Case();
+
+	string getNom() const;
+
 
 	//----------------------------------Getters------------------------------------------
 	/**
@@ -111,10 +123,10 @@ public:
 	//---------------------------------Methodes------------------------------------------
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie 
-	(prix de base et type)
-	@param categorie : char ; prix : unsigned int
+	(prix de base,type,nom de la case,etc)
+	@param char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l
 	*/ 
-	void initCase(char categorie,unsigned int p,string nom);
+	void initCase(char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l);
 
 	/**
 	@brief Initialise le prix de base d'une entreprise ou d'une banque
@@ -123,7 +135,7 @@ public:
 	void initPrixInitial();
 
 	/**
-	@brief Change l'investissment, le prix,le prixB, le prixM
+	@brief Change l'investissment, le prix,le loyer,le prix de vente,le prixB, le prixM
 	@param i : int
 	*/ 
 	void investir(int i);
@@ -148,10 +160,24 @@ public:
 	void endAdvertising(unsigned int i);
 
 	/**
-	@brief Renitialisation de la carte
+	@brief Renitialisation de la case
 	@param none
 	*/ 
 	void reset();
+
+//-------------------------------------TEST REGRESSION-----------------------------------
+
+	/**
+	@brief Permet d'afficher toutes les données membre de la classe
+	@param none
+	*/
+	void affichageRegression();
+
+	/**
+	@brief Teste toutes les fonctions de la classe
+	@param none
+	*/
+	void testRegressionCase();
 };
 
 #endif

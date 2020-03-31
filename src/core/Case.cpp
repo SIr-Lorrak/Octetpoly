@@ -9,13 +9,22 @@ Case::Case(){
 	type = '0';
 	investissement = 0;
 	ad = false;
+	nom="";
 
 	prix = 0;
-	loyer = 0;
 	prixInitial = 0;
+
+	loyer = 0;
+	loyerInitial = 0;
+
 	prixM = 0;
+	prixMInitial = 0;
+
 	prixB = 0;
+	prixBInitial = 0;
+
 	prixDeVente = 0;
+	prixDeVenteInitial = 0;
 }
 
 Case::~Case(){
@@ -23,6 +32,11 @@ Case::~Case(){
 }
 
 //-------------------------------------Getters-------------------------------------------
+
+string Case::getNom() const{
+	return nom;
+}
+
 unsigned int Case::getOccupation() const{
 	return occupation;
 }
@@ -77,123 +91,119 @@ bool Case::getAd() const{
 
 //-------------------------------------Méthodes------------------------------------------
 
-void Case::initCase(char categorie,unsigned int p,string nom){
+void Case::initCase(char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l){
+	nom = n;
+	type = categorie;
+
 	prixInitial = p;
 	prix = prixInitial;
-	type = categorie;
-	prixDeVente = prixInitial;
-	prixM = 1;
-	prixB = 1;
-	loyer = prixInitial;
+	
+	prixDeVenteInitial = pV;
+	prixDeVente = prixDeVenteInitial;
+
+	prixMInitial = pM;
+	prixM = prixMInitial;
+
+	prixBInitial = pB;
+	prixB = prixBInitial;
+
+	loyerInitial = l;
+	loyer = loyerInitial;
+
 }
 
 
 void Case::initPrixInitial(){
 	prix = prixInitial;
+	prixDeVente = prixDeVenteInitial;
+	prixM = prixMInitial;
+	prixB = prixBInitial;
+	loyer = loyerInitial; 
 }
 
 
 void Case::investir(int i){
+	assert(i != 0);
 	//Vérifie si l'entreprise n'a pas changé de politique
-	//Ici on passe d'une politique tourné dans le légal 
-	//Vers une politique orienté dans l'illégale
-
-	if(investissement > 0 && i == -1)
+	if((investissement > 0 && i == -1) || (investissement < 0 && i == 1))
 	{
-		//On divise les prix par (investissment+1)
-		prixDeVente = prixDeVente/(investissement+1);
-		prix = prix/(investissement+1);
-		loyer = loyer/(investissement+1);
-		investissement = -1;
-		prixB = 1;
+		initPrixInitial();
+		investissement = 0;
 	}
 
-	//Vérifie si l'entreprise n'a pas changé de politique
-	//Ici on passe d'une politique tourné dans le illégal 
-	//Vers une politique orienté dansle légale
-	else if(investissement < 0 && i == 1)
-	{
-		//On divise les prix par (investissment*2)
-		prixDeVente = prixDeVente/(investissement*2);
-		prix = prix/(investissement*2);
-		loyer = loyer/(investissement*2);
-		investissement = 1;
-		prixM = 1;
-	}
-
-	else if(i == -1)
+	if(i == -1)
 	{
 		investissement--;
-		prixM = prixM*2;
+		prixM = prixM*1.2;
 	}
 
-	else if(i == 1)
+	else 
 	{
 		investissement++;
-		prixB = prixB*2;
+		prixB = prixB*1.3;
 	}
 
 	//Investissement > 0 : on opte pour une politique légal
 	//Investissement < 0 : on opte pour une politique illégal
 	switch(investissement){
 		case 1:
-			loyer = loyer*2;
-			prix = prix*2;
-			prixDeVente = prixDeVente*2;
+			loyer = loyer*1.2;
+			prix = prix*1.2;
+			prixDeVente = prixDeVente*1.2;
 			break;
 
 		case 2:
-			loyer = loyer*3;
-			prix = prix*3;
-			prixDeVente = prixDeVente*3;
+			loyer = loyer*1.3;
+			prix = prix*1.3;
+			prixDeVente = prixDeVente*1.3;
 			break;
 
 		case 3:
-			loyer = loyer*4;
-			prix = prix*4;
-			prixDeVente = prixDeVente*4;
+			loyer = loyer*1.4;
+			prix = prix*1.4;
+			prixDeVente = prixDeVente*1.4;
 			break;
 
 		case 4:
-			loyer = loyer*5;
-			prix = prix*5;
-			prixDeVente = prixDeVente*5;
+			loyer = loyer*1.5;
+			prix = prix*1.5;
+			prixDeVente = prixDeVente*1.5;
 			break;
 
 		case 5:
-			loyer = loyer*6;
-			prix = prix*6;
-			prixDeVente = prixDeVente*6;
+			loyer = loyer*1.6;
+			prix = prix*1.6;
+			prixDeVente = prixDeVente*1.6;
 			break;
 
 		case -1:
-			loyer = loyer*2;
-			prix = prix*2;
-			prixDeVente = prixDeVente*2;
+			loyer = loyer*1.2;
+			prix = prix*1.2;
+			prixDeVente = prixDeVente*1.2;
 			break;
 
 		case -2:
-			loyer = loyer*4;
-			prix = prix*4;
-			prixDeVente = prixDeVente*4;
+			loyer = loyer*1.4;
+			prix = prix*1.4;
+			prixDeVente = prixDeVente*1.4;
 			break;
 
 		case -3:
-			loyer = loyer*6;
-			prix = prix*6;
-			prixDeVente = prixDeVente*6;
+			loyer = loyer*1.6;
+			prix = prix*1.6;
+			prixDeVente = prixDeVente*1.6;
 			break;
 
 		case -4:
-			loyer = loyer*8;
-			prix = prix*8;
-			prixDeVente = prixDeVente*8;
+			loyer = loyer*1.8;
+			prix = prix*1.8;
+			prixDeVente = prixDeVente*1.8;
 			break;
 
 		case -5:
-			loyer = loyer*10;
-			prix = prix*10;
-			prixDeVente = prixDeVente*10;
+			loyer = loyer*2;
+			prix = prix*2;
+			prixDeVente = prixDeVente*2;
 			break;
 	}
 }
@@ -223,10 +233,70 @@ void Case::reset(){
 	ad = false;
 
 	//On renitialise les prix
-	prix = prixInitial;
-	loyer = prixInitial;
-	prixDeVente = prixInitial;
-	prixM = 1;
-	prixB = 1;
+	initPrixInitial();
+}
+
+//-------------------------------------TEST REGRESSION-----------------------------------
+
+void Case::affichageRegression(){
+	cout << endl << "Affichage : ........" << endl;
+	cout << "ad : " << ad << endl; 
+	cout << "nom : " << nom << endl;
+	cout << "occupation : " << occupation << endl;
+	cout << "type : " << type << endl; ; 
+	cout << "investissement : " << investissement << endl; 
+
+	cout << "loyer : " << loyer << endl; 
+	cout << "loyerInitial : " << loyerInitial << endl;
+
+	cout << "prix :" << prix << endl; 
+	cout << "prixInitial : " << prixInitial << endl;
+
+	cout << "prixM : " << prixM << endl; 
+	cout << "prixMInitial : " << prixMInitial << endl;
+
+	cout << "prixB : " << prixB << endl; 
+	cout << "prixBInitial : " << prixBInitial << endl;
+
+	cout << "prixDeVente : " << prixDeVente << endl ;
+	cout << "prixDeVenteInitial : " << prixDeVenteInitial << endl;
+}
+
+void Case::testRegressionCase(){
+	cout << endl << endl;
+	cout << "Appel initCase() : ....." << endl;
+	initCase('E',35,"testEntreprise",1,7,42,69);
+	affichageRegression();
+
+	cout << endl << "Appel estAcheter() : ....." << endl;
+	estAcheter(2);
+	affichageRegression();
+
+	cout << endl << "Investissement +2" << endl; 
+	investir(1);
+	investir(1);
+	affichageRegression();
+
+	cout << endl << "Investissement -2" << endl;
+	investir(-1);
+	investir(-1);
+	affichageRegression();
+
+	cout << endl << " Appel advertising() :....." << endl;
+	advertising(2);
+	affichageRegression();
+
+	cout << endl << " Appel endAdvertising() :....." << endl;
+	endAdvertising(2);
+	affichageRegression();
+
+	cout << endl << " Appel initPrixInitial() :....." << endl;
+	initPrixInitial();
+	affichageRegression();
+
+	cout << endl << "Appel Reset() :....." << endl;
+	reset();
+	affichageRegression();
+
 
 }

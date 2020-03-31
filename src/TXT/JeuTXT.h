@@ -28,6 +28,8 @@ private:
 	*/
 	void affichageMenu();
 
+	void affichageCase(const Case & c);
+
 	/**
 	@brief permet l'affichage txt du jeu
 	@param none

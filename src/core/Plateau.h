@@ -2,6 +2,9 @@
 #define OCTET_PLATEAU_H
 
 #include "Case.h"
+#include <iostream>
+
+using namespace std;
 
 //Taille du plateau
 const int TPLATEAU = 32;
@@ -34,6 +37,20 @@ public:
 	@return L'adresse d'une case
 	*/
 	Case * getCase(unsigned int numCase);
+
+//-------------------------------------TEST REGRESSION-----------------------------------
+
+	/**
+	@brief Permet d'afficher toutes les données membre de la classe
+	@param none
+	*/
+	void affichageRegression();
+
+	/**
+	@brief Teste toutes les fonctions de la classe
+	@param none
+	*/
+	void testRegressionPlateau();
 
 };
 

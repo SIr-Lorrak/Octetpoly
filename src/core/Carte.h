@@ -26,25 +26,37 @@ class Carte {
 		@brief retourne le gain0
 		@param none
 		*/
-		int getgain();
+		int getgain() const;
 
 		/**
 		@brief retourne l'id de la case
 		@param none
 		*/
-		int getid_case();
+		int getid_case() const;
 
 		/**
 		@brief retourne l'id de la carte
 		@param none
 		*/
-		int getid_carte();
+		int getid_carte() const;
+
+		/**
+		@brief retourne le titre de la case
+		@param none
+		*/
+		string getTitre() const;
+
+		/**
+		@brief retourne le Texte de la case
+		@param none
+		*/
+		string getTexte() const;
 
 		/** 
 		@brief retourne un bool
 		@param none
 		*/
-		bool getcasePlus3();
+		bool getcasePlus3() const;
 
 		/**
 		@brief pioche une carte au hasard

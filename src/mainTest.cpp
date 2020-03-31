@@ -16,5 +16,8 @@ int main(int argc,char ** argv)
 
 	cout<<"test\ntest"<<endl;
 
+	Plateau board;
+	board.testRegressionPlateau();
+
 	return 0;
 }

@@ -107,34 +107,25 @@ void affichageDes(unsigned int a, unsigned int b){
 	cout<<"  ¯¯¯     ¯¯¯   "<<endl;
 }
 
-
-//permet d'afficher le clicker
-/*void JeuTXT::affichageClicker(){
-
-	jeuClear();
-
-	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
-	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
-
-	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
-
-	if (j.getc().gettps_actuel() >= 10){
-
-		cout<<"TERMINER!"<<endl;
-		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
-
-	}
-}*/
-
 //permet l'affichage txt de l'évenement hacking
 void JeuTXT::affichageHacking(){
 
 	unsigned int cas = j.geth().getIntAff();//affichage de la fin
-
+	cout<<"progression : [";
+	for(unsigned int i=0;i<j.geth().getnbMot();i++){
+		if(i<j.geth().getnbSaisie()){
+			cout<<"#";
+		}
+		else{
+			cout<<" ";
+		}
+	}
+	cout<<"]";Endl();
 	if(j.geth().getFin())
 	{
 		if(j.gete().getT() == true){
 			cout<<"Vous avez GAGNE en "<<j.gete().gettps()<<" seconde";Endl();
+			cout<<"les hacker n'on pas eu le temps de vous voler";
 		}
 
 		else{
@@ -144,6 +135,8 @@ void JeuTXT::affichageHacking(){
 
 	}
 	else{
+		cout<<"timer : "<<(clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC);
+		Endl();
 		switch(cas){
 			case 2 : // premier affiche, quand le hack commence
 				cout<<"Vous devez tapez la commande suivante pour gagné : ";
@@ -176,21 +169,115 @@ void JeuTXT::affichageHacking(){
 	}
 }
 
+//permet d'afficher le clicker
+void JeuTXT::affichageClicker(){
+
+	jeuClear();
+
+	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
+	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+
+	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
+
+	if (j.getc().gettps_actuel() >= 10){
+
+		cout<<"TERMINER!"<<endl;
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
+
+	}
+}
+
 void affichePion(const Pion & p){
+	if(p.getNom()==""){
+		cout<<"<anonyme>";
+	}
 	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
+}
+
+void JeuTXT::affichageCase(const Case & c){
+	Pion p = *j.getPion(j.getJoueurCourant());
+	switch(c.getType()){
+		case 'E':
+			cout<<"vous ètes sur l'entreprise : "<<c.getNom()<<endl;
+			break;
+		case 'B':
+			cout<<"vous ètes sur la banque : "<<c.getNom()<<endl;
+			break;
+		case 'D':
+			cout<<"CASE DÉPART !"<<endl;
+			break;
+		case 'P':
+			cout<<"bienvenue en Prison !"<<endl;
+			if(!j.getBool("desLance")){
+				cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+			}
+			break;
+		case 'I':
+			cout<<"faut payer ses impots monsieur !"<<endl;
+			break;
+		case 'C':
+			if(j.getCarte()==NULL){
+				cout<<"piochez une carte chance !"<<endl;
+			}
+			else{
+				cout<<"votre carte : "<<endl<<j.getCarte()->getTitre()<<endl<<j.getCarte()->getTexte()<<endl;
+			}
+			break;
+		case 'A':
+			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
+			break;
+		case 'O':
+			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
+			break;
+		default:
+			assert(false);
+			break;
+	}
+	if(c.getType()=='E'||c.getType()=='B'){
+		cout<<"loyer : "<<c.getLoyer()<<endl;
+		cout<<"Prix : "<<c.getPrix()<<endl;
+		cout<<"Propriétaire : ";
+		if(c.getOccupation()==0){
+			cout<<"personne"<<endl;
+		}
+		else{
+			cout<<j.getPion(c.getOccupation())->getNom()<<endl;
+			if(c.getType()=='E'){
+				cout<<"investissement : "<<c.getInvestissement()<<endl;
+			}
+		}
+		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p.getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+			cout<<"vous devez payer le loyer au joueur "<<c.getOccupation()<<" !"<<endl;
+		}
+		if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
+			if(c.getOccupation() == j.getJoueurCourant()){
+				cout<<"+ pour investir dans le légal, - pour investir dans l'illégal."<<endl
+				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
+			}
+
+			else if(p.getCoin()>=c.getPrix()){
+				if(c.getOccupation()==0){
+					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
+				}
+				else if (!j.getBool("actionObligatoire")){
+					cout<<"voulez vous exproprier cette case (o/n) ?"<<endl;
+				}
+			}
+		}
+	}
 }
 
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
+	
 	Pion joueurCourant;
 	joueurCourant = *j.getPion(j.getJoueurCourant());
 	unsigned int pos = joueurCourant.getPos();
-	cout<<"vous êtes sur la case : "<<pos<<endl;
+	Case c = j.getJCase(pos);
 
-	if(j.getJCase(pos).getType()=='E'||j.getJCase(pos).getType()=='B'){
-		cout<<"loyer : "<<j.getJCase(pos).getLoyer()<<endl;
-		cout<<"Prix : "<<j.getJCase(pos).getPrix()<<endl;
-	}
+	cout<<"case : "<<pos<<endl;
+
+	affichageCase(c);
 
 	if(j.getBool("desLance")){
 		affichageDes(joueurCourant.getDes().D1,joueurCourant.getDes().D2);
@@ -302,13 +389,13 @@ bool JeuTXT::update(){
 			j.actionClavier(touche);
 		}
 		
-		if(touche=="\e"){
+		if(touche=="\e"){//on peut arreter la partie avec echape peut importe le a qui est le tour pour l'instant aucune sauvegarde n'est faite
 			return true;
 		}
 	}
 
 	if(j.getBool("tourOrdi")){
-		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%151<75){
+		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%401<200){
 			if(action){
 				clear();
 				action = false;
@@ -328,18 +415,14 @@ bool JeuTXT::update(){
 // ATTENTION CETTE PARTIE EST A CHANGER ET ADAPTER AVEC LE DEROULEMENT DE LA PERTIE !!
 void JeuTXT::run(){
 
-	setTerm();
+	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
 
 	int quit = false;
 	
 	while(!quit){
-		quit = update();
+		quit = update(); 
 		affichage();
-
-		/*if(j.geth().getnbSaisie() == 4){
-			j.sete(2);
-		}*/
 	}
 
-	restoreTerm();
+	restoreTerm(); //on restore le terminal comme avant et on le clear.
 }

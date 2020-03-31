@@ -78,6 +78,10 @@ void Pion::setCoin(const float argent){
 	bitcoin = argent;
 }
 
+void Pion::setRang(const unsigned int r){
+	rang = r;
+}
+
 void Pion::setPos(const unsigned int p){
 	pos = p;
 }
@@ -99,6 +103,9 @@ void Pion::lanceDes()
 	if(d.D1 == d.D2)
 	{
 		unsigned int i = 0;
+		if(prisonnier == true){
+			prisonnier = false;
+		}
 
 		while(doubles[i] == true)
 		{
@@ -250,8 +257,5 @@ void Pion::investit(int i,Case * c){
 ///----------------------------------------------------------------Destructeur--------------------------------------------------------------
 
 Pion::~Pion(){
-	for(unsigned int i=0;i<nbpropriete;i++){
-		delete propriete[i];
-	}
-	delete [] propriete;
+	//delete [] propriete;
 }
