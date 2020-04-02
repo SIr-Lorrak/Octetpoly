@@ -15,6 +15,7 @@ Pion::Pion(){
 
 	karma = rand()%4-2;
 	rang = 0;
+	nom="";
 	bitcoin = INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
@@ -29,55 +30,90 @@ Pion::Pion(){
 
 }
 
-
 ///---------------------------------------------------------Accesseurs-----------------------------------------------------------
 
-string Pion::getNom() const					
-{ return nom;} 
+string Pion::getNom() const{
+ return nom;
+} 
 
-int Pion::getKarma() const					
-{ return karma;}
+int Pion::getKarma() const{
+ return karma;
+}
 
-unsigned int Pion::getRang() const			
-{ return rang;}
+unsigned int Pion::getRang() const{
+ return rang;
+}
 
-float Pion::getCoin() const 				
-{ return bitcoin;}
+float Pion::getCoin() const{
+ return bitcoin;
+}
 
-unsigned int Pion::getNbPropriete() const 	
-{ return nbpropriete;}
+unsigned int Pion::getNbPropriete() const{
+ return nbpropriete;
+}
 
-unsigned int Pion::getPos() const 			
-{ return pos;}
+unsigned int Pion::getPos() const{
+ return pos;
+}
 
-char Pion::getCar() const 					
-{ return car;}
+char Pion::getCar() const{
+ return car;
+}
 
-bool Pion::getPrisonnier() const 			
-{ return prisonnier;}
+bool Pion::getPrisonnier() const{
+ return prisonnier;
+}
 
 Pion * Pion::getPion(){
   return this;
 }
 
+Des Pion::getDes() const{
+	return d;
+}
+
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
-void Pion::setCar(const char c){ car = c;}
+void Pion::setCar(const char c){
+	car = c;
+}
 
-void Pion::setCoin(const float argent){ bitcoin = argent;}
+void Pion::setNom(const string & n){
+	nom = n;
+}
+
+void Pion::setCoin(const float argent){
+	bitcoin = argent;
+}
+
+void Pion::setRang(const unsigned int r){
+	rang = r;
+}
+
+void Pion::setPos(const unsigned int p){
+	pos = p;
+}
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
+
+
+void Pion::nomAleatoire(){
+	//srand(time(NULL));
+	nom = "[bot] "+noms[rand()%20];
+}
 
 void Pion::lanceDes()
 {
 	//cout << "Le joueur lance les dés !" << endl;
-	srand(time(NULL));
 	d.D1 = rand()%6+1;
 	d.D2 = rand()%6+1;
 
 	if(d.D1 == d.D2)
 	{
 		unsigned int i = 0;
+		if(prisonnier == true){
+			prisonnier = false;
+		}
 
 		while(doubles[i] == true)
 		{
@@ -102,7 +138,7 @@ void Pion::lanceDes()
 	}
 }
 
-void Pion::avance()
+void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
@@ -124,6 +160,7 @@ void Pion::avance()
 	
 }
 
+
 void Pion::salaire()
 {
 	float argentCD = 20;
@@ -138,7 +175,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin > c->getPrix());
+	assert(bitcoin >= c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;
@@ -170,6 +207,15 @@ void Pion::vend(unsigned int indP, Case * c)
 }
 
 
+unsigned int Pion::patrimoineActif(){
+	unsigned int somme = 0;
+	for (unsigned int i = 0 ; i < nbpropriete ; i++)
+	{
+		somme = somme + propriete[i]->getPrixDeVente();
+	}
+	return somme;
+}	
+
 unsigned int Pion::rapportePlus() const
 {
 	int n = 0;
@@ -193,7 +239,7 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-    if(nom.length()>=20)
+    if(nom.length()<=20)
         nom+=lettre;
 }
 
@@ -204,24 +250,48 @@ void Pion::effacerLettre()
         nom = nom.substr(0, nom.size()-1);
 }
 
+void Pion::investit(int i,Case * c){
 
-float Pion::ReventeToFaillite()
+	assert(i != 0);
+
+	if(i==-1){
+		bitcoin -= c->getPrixM();
+		karma -= 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma < 100)
+		{
+			karma += 1;
+		}
+	}
+	else{
+		bitcoin -= c->getPrixB();
+		karma += 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma > 100)
+		{
+			karma -= 1;
+		}
+	}
+
+	c->investir(i);
+}
+
+void Pion::EstEnFaillite()
 {
-	float res = 0;
 	for(unsigned int i = 0; i < nbpropriete; i++)
 	{
-		res += propriete[i]->getPrixDeVente();
+		propriete[i]->reset();
+		propriete[i] = NULL;
 	}
-	
-	return res;
+	nbpropriete = 0;
+	bitcoin = -1;
 }
 
 
 ///----------------------------------------------------------------Destructeur--------------------------------------------------------------
 
 Pion::~Pion(){
-	for(unsigned int i=0;i<nbpropriete;i++){
-		delete propriete[i];
-	}
-	delete [] propriete;
+	//delete [] propriete;
 }

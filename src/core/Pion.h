@@ -2,7 +2,7 @@
 #define OCTET_PION_H
 
 #include <iostream>
-#include <string.h>
+#include <string>
 
 #include "Case.h"
 //#include "Carte.h"
@@ -13,6 +13,13 @@ const int MAXCASEHT = 24; ///Max case achetée
 const int MAXCASEP = 32;  ///Max case du plateau
 const int INITCOIN = 500; ///Argent initial
 const int MAXCARTE = 20;  ///Max cartes du pion
+
+
+const string noms[20] = {"Tom Pousse","Haaaamid","Pedro","Sabrina","SaBine",
+						 "Jessica","Nathan","Aspifion","Mais il est fou lui enfin","M. Pronost le meilleur prof de la terre",
+						 "Granolax","M. Pujo","Corrine","Alexandra","Jus d'huitre",
+						 "Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Nabil"};
+
 
 /**
 @brief Classe Pion
@@ -35,7 +42,7 @@ class Pion{
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
 		Des d;							///Dés du pion
-		bool prisonnier;				///Booléen qui indique si le joueur est prisonnier ou non
+		bool prisonnier;				///Booléen qui indique si le pion est prisonnier ou non
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
@@ -107,6 +114,14 @@ class Pion{
 	bool getPrisonnier() const;
 
 	/**
+	@brief Mutateur du pion
+	@param none
+	**/
+	Pion * getPion();
+
+	Des getDes() const;
+
+	/**
 	@brief Mutateur du caractère du pion
 	@param c : charactere
 	**/
@@ -118,11 +133,13 @@ class Pion{
 	**/
 	void setCoin(const float argent);
 
-	/**
-	@brief Mutateur du pion
-	@param none
-	**/
-	Pion * getPion();
+	void setNom(const string & n);
+
+	void setRang(const unsigned int r);
+
+	void setPos(const unsigned int p);
+
+	void nomAleatoire();
 
 	/**
 	@brief Procédure qui lance les dés du pion
@@ -134,7 +151,7 @@ class Pion{
 	@brief Procédure permettant au pion de se déplacer
 	@param none
 	**/
-	void avance();
+	void avancer();
 
 	/**
 	@brief	Fonction qui retourne l'indice de la case avec le plus gros loyer
@@ -166,6 +183,8 @@ class Pion{
 	*/
 	float ReventeToFaillite();
 
+	unsigned int patrimoineActif();
+
 	/**
 	@brief Procédure qui donne 20 bitcoins au pion lorsqu'il passe par la case départ
 	@param none
@@ -183,6 +202,18 @@ class Pion{
 	@param c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
 	*/
 	void achete(Case * c);
+
+	/**
+	@brief Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case
+	@param i : l'entier qui nous dit si le joueur investit dans l'illégal ou non,	c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
+	*/
+	void investit(int i,Case * c);
+
+	/**
+	@brief Procédure qui reset
+	@param none
+	*/
+	void EstEnFaillite();
 
 
 };
