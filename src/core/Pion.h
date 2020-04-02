@@ -18,7 +18,7 @@ const int MAXCARTE = 20;  ///Max cartes du pion
 const string noms[20] = {"Tom Pousse","Haaaamid","Pedro","Sabrina","SaBine",
 						 "Jessica","Nathan","Aspifion","Mais il est fou lui enfin","M. Pronost le meilleur prof de la terre",
 						 "Granolax","M. Pujo","Corrine","Alexandra","Jus d'huitre",
-						 "Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Nabil"};
+						 "Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Lindux"};
 
 
 /**

@@ -191,7 +191,7 @@ void affichePion(const Pion & p){
 	if(p.getNom()==""){
 		cout<<"<anonyme>";
 	}
-	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
+	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;
 }
 
 void JeuTXT::affichageCase(const Case & c){
@@ -241,7 +241,7 @@ void JeuTXT::affichageCase(const Case & c){
 			cout<<"personne"<<endl;
 		}
 		else{
-			cout<<j.getPion(c.getOccupation())->getNom()<<endl;
+			cout<<c.getOccupation()<<". "<<j.getPion(c.getOccupation())->getNom()<<endl;
 			if(c.getType()=='E'){
 				cout<<"investissement : "<<c.getInvestissement()<<endl;
 			}
@@ -269,9 +269,10 @@ void JeuTXT::affichageCase(const Case & c){
 
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
-	
-	Pion joueurCourant;
-	joueurCourant = *j.getPion(j.getJoueurCourant());
+	if(j.getBool("tourOrdi")){
+		cout<<"[bot]"<<endl;
+	}
+	Pion joueurCourant = *j.getPion(j.getJoueurCourant());
 	unsigned int pos = joueurCourant.getPos();
 	Case c = j.getJCase(pos);
 
@@ -283,7 +284,7 @@ void JeuTXT::affichageJeu(){
 		affichageDes(joueurCourant.getDes().D1,joueurCourant.getDes().D2);
 	}
 
-	else{
+	else if(!joueurCourant.getPrisonnier()){
 		cout<<"Lancez les dés avec \"entrer\"!"<<endl;
 	}
 
@@ -291,9 +292,7 @@ void JeuTXT::affichageJeu(){
 		cout<<"vous avez avancé..."<<endl;
 	}
 
-	if(j.getBool("tourOrdi")){
-		cout<<"[bot]"<<endl;
-	}
+	
 
 	cout<<"###-----------liste des Joueurs-----------###"<<endl;
 
@@ -377,7 +376,7 @@ void JeuTXT::affichage(){
 }
 
 //permet de mettre a jour les objets suite à l'appuie d'une touche
-bool JeuTXT::update(){
+void JeuTXT::update(){
 
 	string touche;
 
@@ -387,10 +386,6 @@ bool JeuTXT::update(){
 			clear();
 
 			j.actionClavier(touche);
-		}
-		
-		if(touche=="\e"){//on peut arreter la partie avec echape peut importe le a qui est le tour pour l'instant aucune sauvegarde n'est faite
-			return true;
 		}
 	}
 
@@ -407,7 +402,6 @@ bool JeuTXT::update(){
 			action = true;
 		}
 	}
-	return false;
 }
 	
 
@@ -416,11 +410,9 @@ bool JeuTXT::update(){
 void JeuTXT::run(){
 
 	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
-
-	int quit = false;
 	
-	while(!quit){
-		quit = update(); 
+	while(!j.getBool("quitter")){
+		update(); 
 		affichage();
 	}
 

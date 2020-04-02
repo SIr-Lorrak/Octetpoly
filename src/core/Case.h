@@ -15,11 +15,13 @@ private:
 	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
 
 	unsigned int loyer; //Prix à donner au joueur à qui appartient l'entreprise
+	unsigned int loyerInitial;
 	unsigned int prix; //Prix d'achat
 	unsigned int prixInitial;
 	unsigned int prixM; //Prix pour un investissement illégale
 	unsigned int prixB; //Prix pour un investissement légal
 	unsigned int prixDeVente; //Prix de revente
+	unsigned int prixDeVenteInitial;
 	
 public:
 	//---------------------------------Constructeurs--------------------------------------

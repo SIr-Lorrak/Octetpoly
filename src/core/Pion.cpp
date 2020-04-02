@@ -167,7 +167,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin > c->getPrix());
+	assert(bitcoin >= c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;

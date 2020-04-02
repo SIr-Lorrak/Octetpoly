@@ -105,7 +105,7 @@ void Case::investir(int i){
 	//Ici on passe d'une politique tourné dans le légal 
 	//Vers une politique orienté dans l'illégale
 
-	if(investissement > 0 && i == -1)
+	if((investissement > 0 && i == -1)||(investissement <0 && i==1))
 	{
 		//On divise les prix par (investissment+1)
 		prixDeVente = prixDeVente/(investissement+1);
@@ -128,13 +128,13 @@ void Case::investir(int i){
 		prixM = 1;
 	}
 
-	else if(i == -1)
+	if(i == -1)
 	{
 		investissement--;
 		prixM = prixM*2;
 	}
 
-	else if(i == 1)
+	else
 	{
 		investissement++;
 		prixB = prixB*2;

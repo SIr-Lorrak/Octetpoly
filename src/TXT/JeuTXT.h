@@ -49,7 +49,7 @@ private:
 	@brief permet de mettre a jour les objets suite à l'appuie d'une touche
 	@param none
 	*/
-	bool update();
+	void update();
 
 	/**
 	@brief affiche le jeu dans un terminal

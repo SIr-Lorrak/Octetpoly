@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <string.h>
+#include <string>
 
 #include "Plateau.h"
 #include "Carte.h"
@@ -37,12 +37,18 @@ class Jeu{
 		bool attendreNom;//dans le menu démarrer, permet d'attendre que l'utilisateur est rentrer le nom du joueur
 		bool confirmation;//pour demander une confirmation lors des actions "importante"
 		bool desLance;//dit si le joueur courant a lancé ces dés (a réinitialiser à la fin de chaque tour)
-		bool avance;//dit si le joueur a avancer 
-		bool tourFini;
+		bool avance;//dit si le joueur a avancer
 		bool attendreAmplete;
+		bool vend;//dit si le joueur courant est en train de vendre (interface de vente)
 		bool actionObligatoire;
+		bool nouvellePartie;//dans le menu de départ dit si l'utilisateur a choisi de faire une nouvelle partie (ou de charger une partie)
+		bool invalidSave;//permet d'afficher quand le joueur a choisi une sauvegarde corompu ou vide
+
+		bool pause;//met en pause le jeu
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
+
+		bool quitter;
 
 		Evenement e;
 		Hacking h;
@@ -91,7 +97,7 @@ class Jeu{
 		@brief charge le jeu depuis un fichier
 		@param un string : le nom/path du fichier
 		*/
-		void charger(const string & file);
+		bool charger(const string & file);
 
 		/**
 		@brief fait les actions durant la partie
@@ -110,6 +116,18 @@ class Jeu{
 		@param none
 		*/
 		void actionMenu(const string & touche);
+
+		/**
+		@brief gere les actions du joueur lorsqu'il est en interface de vente
+		@param un string : touche, la touche rentrée par le joueur
+		*/
+		void actionVente(const string & touche);
+
+		/**
+		@param gere les actions du joueur lorsque c'est la pause
+		@param un string : touche, la touche rentrée par le joueur
+		*/
+		void actionPause(const string & touche);
 
 		/**
 		@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi

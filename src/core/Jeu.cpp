@@ -22,8 +22,6 @@ bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned in
 Jeu::Jeu(){
 	srand(time(NULL));
 
-
-
 	konamiCode("");
 
 	attendreNom = false;
@@ -31,9 +29,13 @@ Jeu::Jeu(){
 	avance = false;
 	confirmation = false;
 	attendreAmplete = true;
+	vend = false;
 	actionObligatoire = true;
-	tourFini = false;
+	nouvellePartie = false;
 	chance = NULL;
+	quitter = false;
+
+	pause = false;
 
 	tourOrdi = false;
 
@@ -81,6 +83,8 @@ bool Jeu::getBool(const string & type) const
 		return attendreAmplete;
 	else if(type=="actionObligatoire")
 		return actionObligatoire;
+	else if(type=="quitter")
+		return quitter;
 	else
 		assert(false);
 }
@@ -131,23 +135,64 @@ Carte * Jeu::getCarte()const
 	return chance;
 }
 
+//transforme une chaine de caractère avec des espaces en remplacent les expaces par des underscores _
+string SpaceToUnderscore(const string & nom){
+	return "prout_prout";
+}
+
+//transforme une chaine de caractère sans espace en remplacent les underscores _ par des espaces
+string UnderscoreToSpace(const string & nom){
+	return "prout prout";
+}
+
 void Jeu::sauver(const string & file) const
 {
 	ofstream fichier(file.c_str());
 	assert(fichier.is_open());
 	//TODO
-	
+	fichier<<"OCTETPOLY666"<<endl<<nbJoueur<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		fichier<<ordre[i]<<" ";
+	}
+	fichier<<endl<<joueurCourant<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		fichier<<SpaceToUnderscore(getPion(i)->getNom())<<" ";//nom des Joueurs
+	}
+	fichier<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		fichier<<getPion(i)->getPos()<<" ";//position des Joueurs
+	}
+	fichier<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		fichier<<getPion(i)->getCoin()<<" ";//argents des Joueurs
+	}
+	fichier<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		fichier<<getPion(i)->getKarma()<<" ";
+	}
+	fichier<<endl;
+	for(unsigned int i = 0;i<4;i++){
+		if(getPion(i)->getPrisonnier()){
+			fichier<<"1 ";
+		}
+		else{
+			fichier<<"0 ";
+		}
+	}
+	fichier<<endl;
 	fichier.close();
 }
 
 
-void Jeu::charger(const string & file)
+bool Jeu::charger(const string & file)
 {
 	ifstream fichier(file.c_str());
 	assert(fichier.is_open());
 	//TODO
 	
+
 	fichier.close();
+	return true;
 }
 
 
@@ -218,8 +263,8 @@ void Jeu::resetBool()
 	avance = false;
 	confirmation = false;
 	attendreAmplete = true;
-	tourFini = false;
 	actionObligatoire = true;
+	vend = false;
 }
 
 void Jeu::tourSuivant(){
@@ -247,7 +292,7 @@ void Jeu::actionPartie(const string & touche)
 	if(p->getPrisonnier()){
 		if(avance||desLance){
 			if(touche == "\n"){
-				tourFini = true;
+				tourSuivant();
 			}
 		}
 		else{
@@ -271,87 +316,120 @@ void Jeu::actionPartie(const string & touche)
 			}
 		}
 		else if(attendreAmplete||actionObligatoire){//tant que les action obligatoire et les amplète non pas été faite sur une case alors on attend
-			actionCase(touche);
+			if(vend){
+				actionVente(touche);
+			}
+			else{
+				actionCase(touche);
+			}
 		}
-		else if(!tourFini){
+		else{
 			if(p->getDes().D1==p->getDes().D2){
 				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
 			}
 			else{
 				if(tourOrdi){//si le tour n'a pas été reset alors on ne fini pas le tour
-					tourFini = true;
+					tourSuivant();
 				}
 				
 				else{
 					if(touche=="\n"){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
 						if(!e.Declenchement()){
-							tourFini = true;
+							tourSuivant();
 						}
 					}
 				}
 			}
 		}
 	}
-	if(tourFini){
-		tourSuivant();
-	}
 }
 
 
 void Jeu::actionMenu(const string & touche)
-{
-	if(!attendreNom&&nbJoueur<4){
-		if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
-			if(touche == "+"){
-				ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
+{	if(nouvellePartie){
+		if(!attendreNom&&nbJoueur<4){
+			if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
+				if(touche == "+"){
+					ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
+				}
+
+				if(touche == "-"&&nbJoueur>0){
+					enleverJoueur();//enleve le dernier joueur ajouté
+				}
 			}
 
-			if(touche == "-"&&nbJoueur>0){
-				enleverJoueur();//enleve le dernier joueur ajouté
+			if(touche == "\n"||((touche=="o"||touche=="O")&&confirmation)){
+				if(confirmation){
+					commencerPartie();//si c'est confirmé on commence la partie
+					confirmation=false;
+				}
+
+				confirmation = true;//on demande confirmation
+			}
+
+			if(touche=="n"||touche=="N"){
+				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
 			}
 		}
 
-		if(touche == "\n"||((touche=="o"||touche=="O")&&confirmation)){
-			if(confirmation){
-				commencerPartie();//si c'est confirmé on commence la partie
-				confirmation=false;
+		else if(attendreNom){//un joueur ajouter na pas encore de nom
+			if(touche == "\n"){// \n c'est pour 'entrer' ou 'retour'
+				attendreNom = false;//2 entrer valide le nom du joueur
 			}
 
-			confirmation = true;//on demande confirmation
+			else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){// = pour 'effacer'
+				tabJ[nbJoueur-1]->effacerLettre();
+			}
+
+			else{
+				ajouterLettre(nbJoueur-1,touche);//ajoute la lettre rentrer dans le nom du joueur
+			}
 		}
 
-		if(touche=="n"||touche=="N"){
-			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
+		if(nbJoueur==4&&!attendreNom){
+			if((touche=="o"||touche=="O"||touche=="\n")&&confirmation){
+				confirmation = false;
+				commencerPartie();
+			}
+
+			if(!confirmation) confirmation = true;
+
+			else if(touche=="n"||touche=="N"||touche=="-"){
+				confirmation = false;
+				enleverJoueur();
+			}
+
+		}
+		if(touche=="\e"){
+			nouvellePartie=false;//passe dans le menu précédent
 		}
 	}
-
-	else if(attendreNom){//un joueur ajouter na pas encore de nom
-		if(touche == "\n"){// \n c'est pour 'entrer' ou 'retour'
-			attendreNom = false;//2 entrer valide le nom du joueur
+	else{
+		if(!attendreNom){
+			if(touche=="1"){//première option : le joueur veut faire une nouvelle partie
+				nouvellePartie = true;
+			}
+			else if(touche=="2"){//deuxième option : le joueur veut charger une partie existante
+				attendreNom = true;//on attend le choix du nom de la sauvegarde
+			}
 		}
-
-		else if(touche[0]==127||touche[0]==8||touche[0]=='\b'){// = pour 'effacer'
-			tabJ[nbJoueur-1]->effacerLettre();
-		}
-
 		else{
-			ajouterLettre(nbJoueur-1,touche);//ajoute la lettre rentrer dans le nom du joueur
+			if(touche =="1"||touche == "2"||touche =="3"){
+				if(charger("data/sauvegarde/"+touche+".save")){
+					nbTour++;
+					invalidSave = false;
+				}
+				else{
+					invalidSave = true;
+				}
+			}
+			if(touche=="\e"){
+				attendreNom = false;//passe dans le menu précédent
+			}
 		}
-	}
-
-	if(nbJoueur==4&&!attendreNom){
-		if((touche=="o"||touche=="O"||touche=="\n")&&confirmation){
-			confirmation = false;
-			commencerPartie();
+		if(touche=="\e"){
+			quitter = true;//echap sur le menu d'origine quitte le jeu.
 		}
-
-		if(!confirmation) confirmation = true;
-
-		else if(touche=="n"||touche=="N"||touche=="-"){
-			confirmation = false;
-			enleverJoueur();
-		}
-
 	}
 }
 
@@ -387,7 +465,6 @@ void Jeu::actionBE(const string touche){
 	unsigned int occupant = c->getOccupation();
 
 	//L'argent actuel du JOUEUR
-	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 
 //Vérifie si la case n'appartient pas au JOUEUR
 	if(occupant != joueurCourant)
@@ -404,7 +481,10 @@ void Jeu::actionBE(const string touche){
 			//N'appartient à personne,le JOUEUR peut acheter la banque ou l'entreprise
 			//Est-ce que le JOUEUR veut acheter
 			//Et est-ce qu'il a assez d'argent pour
-			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrix())
+			if(getPion(joueurCourant)->getCoin()<c->getPrix()){
+				attendreAmplete = false;
+			}
+			if((touche == "o" ||touche == "O") && attendreAmplete)
 			{
 				getPion(joueurCourant)->achete(c);
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
@@ -648,7 +728,7 @@ void Jeu::actionMiniJeu(const string touche){
 			if (touche == "\n"){
 				e.reset();
 				h.resetHack();
-				//TODO : faire les gains / pertes avant de passer au tour suivant.
+				//TODO : faire les gains / pertes avant de passer au tour suivant /si le joueur.
 				tourSuivant();
 			}
 		}
@@ -665,12 +745,22 @@ void Jeu::actionMiniJeu(const string touche){
 	}
 }
 
+void Jeu::actionPause(const string & touche){
+	return;
+}
+
+void Jeu::actionVente(const string & touche){
+	return;
+}
+
 void Jeu::actionClavier(const string & touche)
 {
 	if(nbTour == 0){
 		actionMenu(touche);
 	}
-
+	else if(pause){
+		actionPause(touche);
+	}
 	else if(e.getn()=="rien"){
 		konamiCode(touche);//pour le konami code
 		actionPartie(touche);
