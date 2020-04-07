@@ -31,10 +31,10 @@ class Evenement{
 		Evenement();
 
 		/**
-		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma 
+		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma renvoie true si une un mini jeu est lancé
 		@param none
 		*/
-		void Declenchement();
+		bool Declenchement();
 
 		/**
 		@brief retourne n (nous de l'évenement en court)
@@ -54,11 +54,14 @@ class Evenement{
 		*/
 		bool getT();
 
+		void reset();
+
+
 		/**
 		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
 		@param none
 		*/
-		void fini(int clique);
+		void fini(int clique = 0);
 
 		/**
 		@brief retourne le gain à la fin de l'évenement
@@ -66,11 +69,17 @@ class Evenement{
 		*/
 		int getgain();
 
-		/*
-		brief retourne le temps de départ
-		param none
+		/**
+		@brief retourne le temps de départ
+		@param none
 		*/
 		clock_t gettempsD();
+
+		/**
+		@brief retourne le temps de fin (0 si le jeu est encore en cour)
+		@param none
+		*/
+		clock_t getTempsF() const;
 
 			
 };
@@ -86,6 +95,8 @@ class Hacking{
 		string mot; //mot à saisir
 		unsigned int nbSaisie; //nombre de mot valider
 		string motSaisie; //mot actuellement taper par le joueur
+		bool fin;//dit si le jeu est fini 
+		unsigned int nbMot; //nombre de mot a saisir pour finir
 	
 	public :
 
@@ -102,6 +113,12 @@ class Hacking{
 		@param string N(caractere tapé par le joueur) 
 		*/
 		void saisir(string N);
+
+		/**
+		@brief enlève le dernier caractère de motSaisie
+		@param none
+		*/
+		void effacerLettre();
 
 		/**
 		@brief permet de valider ou non le mot saisit par le joueur
@@ -133,11 +150,19 @@ class Hacking{
 		*/
 		unsigned int getnbSaisie();
 
+		unsigned int getnbMot();
+
 		/**
 		@brief retourne un entier qui permet de choisir le bon affichage
 		@param none
 		*/
 		int getIntAff();
+
+		/**
+		@brief retourne le booléen qui dit si le hacking 
+		@param none
+		*/
+		bool getFin() const;
 
 		/**
 		brief permet de reset les données membres à la fin de l'évenement hacking
@@ -150,10 +175,11 @@ class Hacking{
 /**
 brief classe qui gère l'évenement clicker
 */
-class clicker {
+class Clicker {
 
 	private :
 
+	bool Fin;
 	unsigned int nbclique; // nombre d'appue sur la barre espace
 	float tps_actuel; //temps actuel pour le timer
 
@@ -163,13 +189,25 @@ class clicker {
 	brief constructeur met le nombre de clique et le temps à 0
 	param none
 	*/
-	clicker();
+	Clicker();
+
+	/**
+	@brief permet le gestion du temps et la fin du mini jeu
+	@param clock_t tempsD(temps de départ)
+	*/
+	void gestionTps(clock_t tempsD);
 
 	/**
 	brief permet d'ajouter un clique au compteur
-	param clock_t tempsD(temps de départ)
+	@param none
 	*/
-	void ajoutClique(clock_t tempsD);
+	void ajoutClique();
+
+	/**
+	@brief retourne le bool fin
+	@param none
+	*/
+	bool getFin() const;
 
 	/**
 	brief retourne le temps actuel pour le timer

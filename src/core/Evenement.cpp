@@ -13,25 +13,27 @@ using namespace std;
 Evenement::Evenement(){
 
 	n = "rien";
+	tempsF=0;
 	
 }
 
 
 //permet de déclancher un événément lors d'un déplacement en fonction du karma 
-void Evenement::Declenchement(){
+bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<10){
+	if((rand()%100)<30){
 
-		if((rand()%2)==0){n = "clicker";}
+		if((rand()%2)==0){n = "hack";}
 
-		else{n = "hack";}
+		else{n = "clicker";}
 
 		tps = 0;
 		tempsD = clock();
 
 	}
+	return n != "rien";
 }
 
 
@@ -69,11 +71,12 @@ void Evenement::fini(int clique){
 
 		if(tps<=50){ 
 			t = true;
-			gain = -1000;
+			gain = 0;
 		}
 
 		else{
 			t = false;
+			gain = -50;
 		}
 
 		
@@ -81,12 +84,15 @@ void Evenement::fini(int clique){
 
 	if (n == "clicker"){
 
-		gain = 10*clique;
+		gain = 3*clique;
 
 	}
-	n = "rien";
 }
 
+void Evenement::reset(){
+	n = "rien";
+	tempsF=0;
+}
 
 //retourne le gain à la fin de l'évenement
 int Evenement::getgain(){
@@ -103,6 +109,10 @@ clock_t Evenement::gettempsD(){
 
 }
 
+clock_t Evenement::getTempsF() const{
+	return tempsF;
+}
+
 
 //-------------------------------------------------------------
 
@@ -115,6 +125,8 @@ Hacking::Hacking(){
 	mot = tab_com[alea];
 	nbSaisie = 0;
 	intAff = 2;
+	fin = false;
+	nbMot = 4;
 
 }
 
@@ -124,6 +136,12 @@ void Hacking::saisir(string N){
 
 		motSaisie = motSaisie + N;
 
+}
+
+void Hacking::effacerLettre()
+{
+    if(motSaisie.length()>0)
+        motSaisie = motSaisie.substr(0, motSaisie.size()-1);
 }
 
 
@@ -142,6 +160,9 @@ void Hacking::valider(){
 		motSaisie = "";
 		intAff = 4;
 
+	}
+	if(nbSaisie>=nbMot){
+		fin = true;
 	}
 }
 
@@ -165,7 +186,6 @@ string Hacking::getMot(){
 
 }
 
-
 //retourne le mot tapé par l'utilisateur
 string Hacking::getMotSaisie(){
 
@@ -181,6 +201,10 @@ unsigned int Hacking::getnbSaisie(){
 
 }
 
+unsigned int Hacking::getnbMot(){
+	return nbMot;
+}
+
 
 //retourne un entier qui permet de choisir le bon affichage
 int Hacking::getIntAff(){
@@ -189,15 +213,19 @@ int Hacking::getIntAff(){
 	
 }
 
+bool Hacking::getFin() const{
+	return fin;
+}
 
 //permet de reset les données membres à la fin de l'évenement hacking
 void Hacking::resetHack(){
 	srand (time(NULL));
 	int alea = rand()%8;
 	mot = tab_com[alea];
+	motSaisie="";
 	nbSaisie = 0;
 	intAff = 2;
-
+	fin = false;
 }
 
 
@@ -205,17 +233,29 @@ void Hacking::resetHack(){
 
 
 //constructeur met le nombre de clique et le temps à 0
-clicker::clicker(){
+Clicker::Clicker(){
 	nbclique = 0;
 	tps_actuel = 0;
+	Fin = false;
 }
 
-
-//permet d'ajouter un clique au compteur
-void clicker::ajoutClique(clock_t tempsD){
+//permet le gestion du temps et la fin du mini jeu
+void Clicker::gestionTps(clock_t tempsD){
 	clock_t temps = clock();
 	tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
-	if(tps_actuel < 10){
+	if(tps_actuel > 10){
+		Fin = true;
+	}
+}
+
+//retourne le bool fin
+bool Clicker::getFin() const{
+	return Fin;
+}
+
+//permet d'ajouter un clique au compteur
+void Clicker::ajoutClique(){
+	if(Fin == false){
 		nbclique++;
 	}
 
@@ -223,21 +263,22 @@ void clicker::ajoutClique(clock_t tempsD){
 
 
 //retourne le temps actuel pour le timer
-float clicker::gettps_actuel(){
+float Clicker::gettps_actuel(){
 	return tps_actuel;
 }
 
 
 //retourne le nombre d'appuie 
-unsigned int clicker::getnbclique(){
+unsigned int Clicker::getnbclique(){
 	return nbclique;
 }
 
 
-//permet de reset les données membres à la fin de l'évenement clicker
-void clicker::resetClicker(){
+//permet de reset les données membres à la fin de l'évenement Clicker
+void Clicker::resetClicker(){
 
 	nbclique = 0;
 	tps_actuel = 0;
-}
+	Fin = false;
+}	
 
