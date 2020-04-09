@@ -42,11 +42,11 @@ class Pion{
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
 		Des d;							///Dés du pion
-		bool prisonnier;				///Booléen qui indique si le joueur est prisonnier ou non
+		bool prisonnier;				///Booléen qui indique si le pion est prisonnier ou non
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
-
+		bool ticket;
 
 	public :
 
@@ -121,6 +121,8 @@ class Pion{
 
 	Des getDes() const;
 
+	bool getTicket() const;
+
 	/**
 	@brief Mutateur du caractère du pion
 	@param c : charactere
@@ -140,6 +142,8 @@ class Pion{
 	void setPos(const unsigned int p);
 
 	void nomAleatoire();
+
+	void setTicket(bool achat);
 
 	/**
 	@brief Procédure qui lance les dés du pion
@@ -203,7 +207,17 @@ class Pion{
 	*/
 	void achete(Case * c);
 
+	/**
+	@brief Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case
+	@param i : l'entier qui nous dit si le joueur investit dans l'illégal ou non,	c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
+	*/
 	void investit(int i,Case * c);
+
+	/**
+	@brief Procédure qui reset
+	@param none
+	*/
+	void EstEnFaillite();
 
 
 };

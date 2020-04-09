@@ -28,6 +28,8 @@ private:
 	*/
 	void affichageMenu();
 
+	void affichageCampagneDePub();
+
 	void affichageCase(const Case & c);
 
 	/**

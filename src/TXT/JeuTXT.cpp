@@ -225,6 +225,7 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
+			cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
@@ -352,6 +353,20 @@ void JeuTXT::affichageMenu(){
 	Endl();
 }
 
+void JeuTXT::affichageCampagneDePub(){
+	cout<<"<[-($)-]¯-_-¯-CAMPAGNE DE PUB-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Pour quel quartier voulez vous faire de la pub" << endl;
+	cout << "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
+		cout<<"vous etes sur ? (o/n) ";Endl();
+	}
+}
+
 
 void JeuTXT::affichage(){
 	/*if(j.gete().getn() == "rien"){
@@ -369,6 +384,10 @@ void JeuTXT::affichage(){
 	}
 	else if(j.gete().getn()== "clicker"){
 		//affichageClicker();
+	}
+
+	else if(j.getBool("ad")){
+		affichageCampagneDePub();
 	}
 
 	else{//aucun mini Jeu en cour et la partie a commencer

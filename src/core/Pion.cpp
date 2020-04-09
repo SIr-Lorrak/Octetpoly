@@ -27,34 +27,43 @@ Pion::Pion(){
 	{
 		doubles[i] = false;
 	}
+	ticket = false;
 
 }
 
 ///---------------------------------------------------------Accesseurs-----------------------------------------------------------
 
-string Pion::getNom() const					
-{ return nom;} 
+string Pion::getNom() const{
+ return nom;
+} 
 
-int Pion::getKarma() const					
-{ return karma;}
+int Pion::getKarma() const{
+ return karma;
+}
 
-unsigned int Pion::getRang() const			
-{ return rang;}
+unsigned int Pion::getRang() const{
+ return rang;
+}
 
-float Pion::getCoin() const 				
-{ return bitcoin;}
+float Pion::getCoin() const{
+ return bitcoin;
+}
 
-unsigned int Pion::getNbPropriete() const 	
-{ return nbpropriete;}
+unsigned int Pion::getNbPropriete() const{
+ return nbpropriete;
+}
 
-unsigned int Pion::getPos() const 			
-{ return pos;}
+unsigned int Pion::getPos() const{
+ return pos;
+}
 
-char Pion::getCar() const 					
-{ return car;}
+char Pion::getCar() const{
+ return car;
+}
 
-bool Pion::getPrisonnier() const 			
-{ return prisonnier;}
+bool Pion::getPrisonnier() const{
+ return prisonnier;
+}
 
 Pion * Pion::getPion(){
   return this;
@@ -64,6 +73,9 @@ Des Pion::getDes() const{
 	return d;
 }
 
+bool Pion::getTicket() const{
+	return ticket;
+}
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
 void Pion::setCar(const char c){
@@ -84,6 +96,10 @@ void Pion::setRang(const unsigned int r){
 
 void Pion::setPos(const unsigned int p){
 	pos = p;
+}
+
+void Pion::setTicket(bool achat){
+	ticket = achat;
 }
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
@@ -134,19 +150,17 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos += d.D1 + d.D2;
+		pos += 1;//d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
 		if(pos > MAXCASEP)
 		{
 			pos = pos - MAXCASEP - 1;
 		}
-
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-
 		salaire();
 	}
 	
@@ -167,7 +181,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin > c->getPrix());
+	assert(bitcoin >= c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;
@@ -176,7 +190,7 @@ void Pion::achete(Case * c)
 	c->estAcheter(rang);
 }
 
-void Pion::vend(unsigned int indP, Case * c)
+void Pion::vend(unsigned int indP, Case * c)//A MODIFIER !
 {
 	assert(nbpropriete != 0);
 	assert(indP < nbpropriete);
@@ -243,14 +257,42 @@ void Pion::effacerLettre()
 }
 
 void Pion::investit(int i,Case * c){
+
 	assert(i != 0);
+
 	if(i==-1){
 		bitcoin -= c->getPrixM();
+		karma -= 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma < 100)
+		{
+			karma += 1;
+		}
 	}
 	else{
 		bitcoin -= c->getPrixB();
+		karma += 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma > 100)
+		{
+			karma -= 1;
+		}
 	}
+
 	c->investir(i);
+}
+
+void Pion::EstEnFaillite()
+{
+	for(unsigned int i = 0; i < nbpropriete; i++)
+	{
+		propriete[i]->reset();
+		propriete[i] = NULL;
+	}
+	nbpropriete = 0;
+	bitcoin = -1;
 }
 
 

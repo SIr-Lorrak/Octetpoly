@@ -9,6 +9,7 @@ Case::Case(){
 	type = '0';
 	investissement = 0;
 	ad = false;
+	coeffAd = 1.0;
 	nom="";
 
 	prix = 0;
@@ -114,7 +115,20 @@ void Case::initCase(char categorie,unsigned int p,string n,unsigned int pV,unsig
 
 
 void Case::initPrixInitial(){
-	prix = prixInitial;
+	//Utile pour la fonction investissement car quand on investit, c'est qu'on posséde
+	//la case ainsi le loyer initial est égal au prixInitial*2 après achat
+	if(occupation > 0)
+	{
+		prix = 2*prixInitial;
+	}
+
+	//Utile pour la fonction reset, on remet bien tout au prix initial vu que la 
+	//case n'appartient plus à personne
+	else
+	{
+		prix = prixInitial;
+	}
+
 	prixDeVente = prixDeVenteInitial;
 	prixM = prixMInitial;
 	prixB = prixBInitial;
@@ -213,18 +227,20 @@ void Case::estAcheter(unsigned int i){
 	prix = prix*2;
 }
 
-void Case::advertising(unsigned int i){
+void Case::advertising(){
 	ad = true;
-	prix = prix*i;
-	loyer = loyer*i;
-	prixDeVente = prixDeVente*i;
+	coeffAd = coeffAd*1.2;
+	prix = prix*coeffAd;
+	loyer = loyer*coeffAd;
+	prixDeVente = prixDeVente*coeffAd;
 }
 
-void Case::endAdvertising(unsigned int i){
+void Case::endAdvertising(){
 	ad = false;
-	prix = prix/i;
-	loyer = loyer/i;
-	prixDeVente = prixDeVente/i;
+	prix = prix/coeffAd;
+	loyer = loyer/coeffAd;
+	prixDeVente = prixDeVente/coeffAd;
+	coeffAd = 1.0;
 }
 
 void Case::reset(){
@@ -241,6 +257,7 @@ void Case::reset(){
 void Case::affichageRegression(){
 	cout << endl << "Affichage : ........" << endl;
 	cout << "ad : " << ad << endl; 
+	cout << "coeffAd : " << coeffAd << endl; 
 	cout << "nom : " << nom << endl;
 	cout << "occupation : " << occupation << endl;
 	cout << "type : " << type << endl; ; 
@@ -265,7 +282,7 @@ void Case::affichageRegression(){
 void Case::testRegressionCase(){
 	cout << endl << endl;
 	cout << "Appel initCase() : ....." << endl;
-	initCase('E',35,"testEntreprise",1,7,42,69);
+	initCase('E',35,"testEntreprise",45,7,42,69);
 	affichageRegression();
 
 	cout << endl << "Appel estAcheter() : ....." << endl;
@@ -276,18 +293,18 @@ void Case::testRegressionCase(){
 	investir(1);
 	investir(1);
 	affichageRegression();
-
+	
 	cout << endl << "Investissement -2" << endl;
 	investir(-1);
 	investir(-1);
 	affichageRegression();
-
+	
 	cout << endl << " Appel advertising() :....." << endl;
-	advertising(2);
+	advertising();
 	affichageRegression();
 
 	cout << endl << " Appel endAdvertising() :....." << endl;
-	endAdvertising(2);
+	endAdvertising();
 	affichageRegression();
 
 	cout << endl << " Appel initPrixInitial() :....." << endl;
@@ -297,6 +314,4 @@ void Case::testRegressionCase(){
 	cout << endl << "Appel Reset() :....." << endl;
 	reset();
 	affichageRegression();
-
-
 }

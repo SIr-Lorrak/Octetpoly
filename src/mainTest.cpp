@@ -16,8 +16,14 @@ int main(int argc,char ** argv)
 
 	cout<<"test\ntest"<<endl;
 
+	//Case c;
+	//c.testRegressionCase();
+
 	Plateau board;
 	board.testRegressionPlateau();
+
+	//Jeu je;
+	//je.campagneDePub();
 
 	return 0;
 }

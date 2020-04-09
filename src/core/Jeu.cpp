@@ -33,13 +33,18 @@ Jeu::Jeu(){
 	attendreAmplete = true;
 	actionObligatoire = true;
 	tourFini = false;
+	/////////////
+	vend = false;
+	ad = false;
+	porteO = false;
+	choix = "";
+	/////////////
 	chance = NULL;
 
 	tourOrdi = false;
 
 	nbJoueur = 0;
 	nbTour = 0;
-	coeffAd = 1.0;
 
 	tabO = NULL;
 	unsigned int alea;
@@ -65,6 +70,11 @@ Case & Jeu::getJCase(const unsigned int i)
 	return *board.getCase(i);
 }
 
+string Jeu::getChoix() const
+{
+	return choix;
+}
+
 bool Jeu::getBool(const string & type) const
 {
 	if(type=="attendreNom")
@@ -81,6 +91,12 @@ bool Jeu::getBool(const string & type) const
 		return attendreAmplete;
 	else if(type=="actionObligatoire")
 		return actionObligatoire;
+	else if(type=="vend")
+		return vend;
+	else if(type=="ad")
+		return ad;
+	else if(type=="porteOuverte")
+		return porteO;
 	else
 		assert(false);
 }
@@ -210,6 +226,24 @@ void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 }
 
 
+void Jeu::ajouterNombre(const string nombre)
+{
+	/*
+    if(nom.length()<=20)
+        nom+=lettre;
+        */
+}
+
+
+void Jeu::effacerNombre()
+{
+	/*
+    if(nom.length()>0)
+        nom = nom.substr(0, nom.size()-1);
+        */
+}
+
+
 void Jeu::resetBool()
 {
 	konamiCode("");
@@ -220,6 +254,11 @@ void Jeu::resetBool()
 	attendreAmplete = true;
 	tourFini = false;
 	actionObligatoire = true;
+	//////////////////
+	vend = false;
+	ad = false;
+	porteO = false;
+	/////////////////
 }
 
 void Jeu::tourSuivant(){
@@ -257,8 +296,15 @@ void Jeu::actionPartie(const string & touche)
 			}
 		}
 	}
+
 	if(!p->getPrisonnier()){
-		if(!desLance){
+		if(getPion(joueurCourant)->getTicket())
+		{	
+			porteOuverte(touche);
+			desLance = true;
+			avance = true;
+		}
+		else if(!desLance){
 			if(touche == "\n"){
 				p->lanceDes();
 				desLance = true;
@@ -299,7 +345,7 @@ void Jeu::actionPartie(const string & touche)
 
 
 void Jeu::actionMenu(const string & touche)
-{
+	{
 	if(!attendreNom&&nbJoueur<4){
 		if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
 			if(touche == "+"){
@@ -455,70 +501,144 @@ void Jeu::payeLoyerJoueur(){
 	else if((coinCourant + getPion(joueurCourant)->patrimoineActif()) >= c->getLoyer())
 	{
 		//on passe dans l'interface de vente (c'est a dire on passe le booléen vend a true et c'est tout)
-		/*while(getPion(joueurCourant)->getCoin() < 0)//pour guillaume => /!\ pas de while ici car code d'execute déjà dans une boucle infinie on fera un if
+		//vend = true;
+		if(vend)
 		{
-			//getPion(joueurCourant)->vend(); on passe dans l'interface de vente
-		}*/
+			//TODO RECUP la case à vendre
+			//getPion(joueurCourant)->vend()
+		}
 	}
-	else
+
+	//Le joueurCourant n'as pas assez d'argent pour s'acquitter du loyer
+	//il est en faillite (fin du jeu pour lui)
+	else 
 	{
-		//en faillite le pion donne le reste de son argent au pion qu'il doit payer
-		//puis on appele une fonction Pion::faitFaillite() qui mettra l'argent du pion a -1
-		//tourSuivant(); //si le pion fait faillite on passe au tour d'après
+		paye(joueurCourant,c->getOccupation(),coinCourant);	
+		getPion(joueurCourant)->EstEnFaillite();
+		tourSuivant(); 
 	}
 }
 
 void Jeu::pub(unsigned int quelleCase){
-	/*if (quelleCase == casePub)
-	{
-		coeffAd++;
-		Case * championnat = board.getCase(casePub);
-		championnat->advertising(coeffAd);
 
+	//Case qui aura le championnat (la case choisit par le joueur)
+	Case * championnat = board.getCase(quelleCase);
+	if (championnat->getAd())
+	{
+		championnat->advertising();
 	}
 	else
 	{
-		if (casePub == 0)
+		if (board.getcasePub() > 0)
 		{
-			Case * exChampionnat = board.getCase(casePub);
-			exChampionnat->endAdvertising(coeffAd);
+			Case * exChampionnat = board.getCase(board.getcasePub());
+			exChampionnat->endAdvertising();
 
-			casePub = quelleCase;
-			coeffAd = 2;
-			Case * championnat = board.getCase(quelleCase);
-			championnat->advertising(coeffAd);
+			board.setcasePub(quelleCase);
+			championnat->advertising();
 		}
 		else
-		{	
-			casePub = quelleCase;
-			coeffAd = 2;
-			Case * championnat = board.getCase(quelleCase);
-			championnat->advertising(coeffAd);
+		{
+			board.setcasePub(quelleCase);
+			championnat->advertising();
 		}		
-	} */
-	//pour guillaume => casePub devrait être un booléen dans case les calcules de prix doivent d'ailleur se dérouler dans case (fonction Case::organisePub())
-	//je te recommande de regarder la fonction actionBE que j'ai juste un tout petit peu modifié pour qu'elle est le bon comportement.
+	}
+	attendreAmplete = false; 
 }
 
 void Jeu::campagneDePub(const string touche){
 	Case * c = board.getCase(16);//ATTENTION APPEL FRAUDULEUX
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
-	if(coinCourant >= c->getPrix())
+	actionObligatoire = false;//La campagne de Pub n'est pas une action obligatoire
+
+	if((touche == "o" ||touche == "O") 
+		&& (coinCourant >= c->getPrix())
+		&& (!ad))
+		//&& (getPion(joueurCourant)->getNbPropriete()>0))
 	{
-		if(touche == "+")
+		ad = true;
+	}
+
+	else if(ad)
+	{
+		if(tourOrdi)
 		{
-			unsigned int Case = 1;//TODO
-			pub(Case);
-			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());	
-		}
-		else
-		{
+			pub(tabO[joueurCourant-1].AIchampionat());
+			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
+			ad = false;	
 			attendreAmplete = false;
 		}
+
+		else
+		{
+			if((touche=="o"|| touche=="O") && !confirmation)
+			{
+				confirmation = true;//on demande confirmation
+			}
+
+			else if(!confirmation)
+			{
+				if(touche[0]==127||touche[0]==8||touche[0]=='\b')
+				{// = pour 'effacer'
+					choix = choix.substr(0, choix.size()-1);			
+				}		
+
+				else if(choix.length()<2)
+				{
+					choix = choix + touche;
+				}
+			}
+
+			else if(confirmation)
+			{
+				if(touche=="o"|| touche=="O")
+				{
+					pub(stoul(choix));
+					getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
+					ad = false;
+					attendreAmplete = false;
+				}
+				else if(touche=="n"||touche=="N")
+				{
+					confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
+				}
+			}
+		}
 	}
-	//pour guillaume ne pas oublier que le joueur doit appuyer sur une touche d'abord pour dire si'il veut mettre une pub SI IL PEUT
+
+	else if(touche=="n"||touche=="N" || touche == "\n")
+	{
+		attendreAmplete = false;
+	}
 	// puis après ouvrir un menu qui lui montre ses propriété pour qu'il choisisse où la mettre
 	//ça doit donc ce dérouler en deux temps (utilise le booléen choix)
+}
+
+void Jeu::porteOuverte(const string & touche){
+	Case * c = board.getCase(24);//ATTENTION APPEL FRAUDULEUX
+	actionObligatoire = false;
+
+	if(getPion(joueurCourant)->getTicket())
+	{
+		//TODO demander au joueur où il veut se rendre
+		//getPion(joueurCourant)->setPos()
+		if(touche == "\n")
+		{
+			getPion(joueurCourant)->setTicket(false);
+		}
+	}
+
+	else if((touche == "o" ||touche == "O") 
+		&& (getPion(joueurCourant)->getCoin() >= c->getPrix())
+		&& (board.nbCaseFree() > 0))
+	{
+		getPion(joueurCourant)->setTicket(true);
+	}
+
+	else if(touche == "\n")
+	{
+		attendreAmplete = false;
+	}
 }
 
 void Jeu::carteChance(const string & touche){
@@ -581,15 +701,11 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'A':
-			attendreAmplete= false;
-			actionObligatoire = false;
-			//campagneDePub(touche);
+			campagneDePub(touche);
 			break;
 
 		case 'O':
-			attendreAmplete= false;
-			actionObligatoire = false;
-			//porteOuverte();
+			//porteOuverte(touche);
 			break;
 
 		case 'I':

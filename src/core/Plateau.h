@@ -14,6 +14,7 @@ private:
 
 	//Champs liée au plateau
 	Case * tabC;
+	unsigned int casePub;
 
 public:
 	//---------------------------------Constructeur--------------------------------------
@@ -29,7 +30,7 @@ public:
 	*/
 	~Plateau();
 
-	//---------------------------------Méthodes-------------------------------------------
+	//---------------------------------Getters-------------------------------------------
 
 	/**
 	@brief Permet de récupèrer l'adresse d'une case
@@ -38,7 +39,17 @@ public:
 	*/
 	Case * getCase(unsigned int numCase);
 
-//-------------------------------------TEST REGRESSION-----------------------------------
+	unsigned int getcasePub();
+
+	//---------------------------------Setters-------------------------------------------
+
+	void setcasePub(unsigned int numCase);
+
+	//---------------------------------Méthodes-------------------------------------------
+
+	unsigned int nbCaseFree();
+
+	//-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**
 	@brief Permet d'afficher toutes les données membre de la classe

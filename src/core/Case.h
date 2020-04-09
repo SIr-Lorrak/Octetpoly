@@ -10,6 +10,8 @@ class Case{
 private:
 
 	bool ad; //Indique si la case est en publicité
+	float coeffAd; //Indique coefficient Ad
+
 	string nom;
 	unsigned int occupation;//Qui occupe la case
 	char type; //Type une entreprise, une banque, un case chance,...
@@ -150,14 +152,14 @@ public:
 	@brief Indique que l'entreprise fait de la pub (Change les prix)
 	@param i : unsigned int
 	*/ 
-	void advertising(unsigned int i);
+	void advertising();
 
 
 	/**
 	@brief Indique que l'entreprise ne fait plus de pub (Change les prix)
 	@param i : unsigned int
 	*/ 
-	void endAdvertising(unsigned int i);
+	void endAdvertising();
 
 	/**
 	@brief Renitialisation de la case

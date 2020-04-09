@@ -9,8 +9,8 @@ Plateau::Plateau(){
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase('D',0,"Depart",0,0,0,0);
-	tabC[1].initCase('E',5,"Auchan",4,1,1,2);
-	tabC[2].initCase('E',10,"Aldi",4,1,1,2);
+	tabC[1].initCase('E',5,"Auchan",4,1,1,50);
+	tabC[2].initCase('A',10,"Aldi",4,1,1,2);
 	tabC[3].initCase('E',15,"Carrefour",4,1,1,2);
 	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,2);
 	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,2);
@@ -43,6 +43,8 @@ Plateau::Plateau(){
 	tabC[29].initCase('E',95,"Amazon",4,1,1,2);
 	tabC[30].initCase('I',0,"Impot",0,0,0,0);
 	tabC[31].initCase('E',100,"Google",4,1,1,2);
+
+	casePub = 0;
 }
 
 Plateau::~Plateau(){
@@ -50,10 +52,33 @@ Plateau::~Plateau(){
 	delete [] tabC;
 }
 
-//-------------------------------------Méthodes--------------------------------
 Case * Plateau::getCase(unsigned int numCase){
 	return &tabC[numCase];
 }
+	
+unsigned int Plateau::getcasePub(){
+	return casePub;
+}
+//---------------------------------Setters-------------------------------------------
+void Plateau::setcasePub(unsigned int numCase){
+	casePub = numCase;
+}
+
+//-------------------------------------Méthodes------------------------------------------
+
+	unsigned int Plateau::nbCaseFree(){
+		unsigned int nbcase = 0;
+		for(unsigned int i = 0 ; i < TPLATEAU ; i++)
+		{
+			if(((tabC[i].getType() == 'E') 
+				|| (tabC[i].getType() == 'B')) && 
+				(tabC[i].getOccupation() == 0))
+			{
+				nbcase = nbcase + 1;
+			}
+		}
+		return nbcase;
+	}
 
 //-------------------------------------TEST REGRESSION-----------------------------------
 
@@ -77,10 +102,12 @@ Case * Plateau::getCase(unsigned int numCase){
 	*/
 	void Plateau::testRegressionPlateau(){
 		affichageRegression();
-
+		/*
 		cout << "Appel getCase() : ....." << endl;
 		Case * c = getCase(6);
 		cout << endl << "Case Appelé : " << c->getNom() << endl;
 		c->affichageRegression();
+		*/
+		cout << nbCaseFree() << endl;
 	}
 
