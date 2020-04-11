@@ -23,7 +23,7 @@ bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	if((rand()%100)<0){
+	if((rand()%100)<30){
 
 		if((rand()%2)==0){n = "hack";}
 
