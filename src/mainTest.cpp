@@ -19,10 +19,13 @@ int main(int argc,char ** argv)
 	//Case c;
 	//c.testRegressionCase();
 
-	Plateau board;
-	board.testRegressionPlateau();
+	//Plateau board;
+	//board.testRegressionPlateau();
 
-	//Jeu je;
+	// Jeu je;
+	// cout << je.board.getcasePub() << endl;
+	// je.board.setcasePub(5);
+	// cout << je.board.getcasePub() << endl;
 	//je.campagneDePub();
 
 	return 0;

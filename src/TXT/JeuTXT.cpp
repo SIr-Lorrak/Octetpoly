@@ -356,7 +356,13 @@ void JeuTXT::affichageMenu(){
 void JeuTXT::affichageCampagneDePub(){
 	cout<<"<[-($)-]¯-_-¯-CAMPAGNE DE PUB-_-¯-_-[-($)-]>"<<endl<<endl;
 	cout << "Pour quel quartier voulez vous faire de la pub" << endl;
-	cout << "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+	cout << "Voici vos propriété : " << endl;
+	for (unsigned int i = 0; i < j.getPion(j.getJoueurCourant())->getNbPropriete() ; ++i)
+	{
+		cout << i << " " << (j.getPion(j.getJoueurCourant())->getPropriete(i))->getNom() << endl;
+	}
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
 	if(!j.getBool("confirmation")){
 		cout<<"Confirmer (o/n) ";Endl();	

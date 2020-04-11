@@ -77,6 +77,10 @@ bool Pion::getTicket() const{
 	return ticket;
 }
 
+Case * Pion::getPropriete(unsigned int indice) const{
+	return &*propriete[indice];
+}
+
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
 void Pion::setCar(const char c){
 	car = c;
@@ -150,7 +154,7 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos += 1;//d.D1 + d.D2;
+		pos += d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
 		if(pos > MAXCASEP)

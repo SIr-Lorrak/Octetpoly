@@ -123,6 +123,8 @@ class Pion{
 
 	bool getTicket() const;
 
+	Case * getPropriete(unsigned int indice)const;
+
 	/**
 	@brief Mutateur du caractère du pion
 	@param c : charactere

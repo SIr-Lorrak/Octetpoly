@@ -49,6 +49,8 @@ public:
 
 	unsigned int nbCaseFree();
 
+	unsigned int getCasePos(string nom); 
+
 	//-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**

@@ -487,7 +487,6 @@ void Jeu::payeLoyerJoueur(){
 //C'est un joueur qui joue	
 	//La case où se trouve le joueurCourant
 	Case * c = board.getCase(getPion(joueurCourant)->getPos());
-
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 
 	//Le joueurCourant paye directement si il a assez d'argent 
@@ -520,11 +519,11 @@ void Jeu::payeLoyerJoueur(){
 }
 
 void Jeu::pub(unsigned int quelleCase){
-
 	//Case qui aura le championnat (la case choisit par le joueur)
 	Case * championnat = board.getCase(quelleCase);
 	if (championnat->getAd())
 	{
+		board.setcasePub(quelleCase);
 		championnat->advertising();
 	}
 	else
@@ -553,8 +552,8 @@ void Jeu::campagneDePub(const string touche){
 
 	if((touche == "o" ||touche == "O") 
 		&& (coinCourant >= c->getPrix())
-		&& (!ad))
-		//&& (getPion(joueurCourant)->getNbPropriete()>0))
+		&& (!ad)
+		&& ((getPion(joueurCourant)->getNbPropriete()>0)))
 	{
 		ad = true;
 	}
@@ -562,18 +561,26 @@ void Jeu::campagneDePub(const string touche){
 	else if(ad)
 	{
 		if(tourOrdi)
-		{
-			pub(tabO[joueurCourant-1].AIchampionat());
+		{	choix = tabO[joueurCourant-1].AIchampionat();
+			pub(board.getCasePos(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
 			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 			ad = false;	
 			attendreAmplete = false;
+			choix = "";
 		}
 
 		else
-		{
-			if((touche=="o"|| touche=="O") && !confirmation)
+		{	
+			//Première confirmation
+			if((touche=="o"|| touche=="O") && !confirmation && choix != "")
 			{
-				confirmation = true;//on demande confirmation
+				confirmation = true;
+				 
+				if(stoul(choix) > getPion(joueurCourant)->getNbPropriete()-1
+					|| stoul(choix) < 0) //On vérifie si l'utilisateur n'a pas écrit n'importe quoi
+				{
+					confirmation = false;
+				}
 			}
 
 			else if(!confirmation)
@@ -582,21 +589,22 @@ void Jeu::campagneDePub(const string touche){
 				{// = pour 'effacer'
 					choix = choix.substr(0, choix.size()-1);			
 				}		
-
-				else if(choix.length()<2)
+				//On empêche l'utilisateur d'écrire autre chose qu'un chiffre
+				else if(choix.length()<2 && (touche[0] >= 48 && touche[0] <= 57))
 				{
 					choix = choix + touche;
 				}
 			}
-
 			else if(confirmation)
 			{
+				//Deuxième confirmation
 				if(touche=="o"|| touche=="O")
 				{
-					pub(stoul(choix));
+					pub(board.getCasePos(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
 					getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 					ad = false;
 					attendreAmplete = false;
+					choix = "";
 				}
 				else if(touche=="n"||touche=="N")
 				{

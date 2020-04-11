@@ -19,6 +19,7 @@ brief permet le fonctionnement du jeu peut importe le type d'affichage
 class Jeu{
 	private :
 		Plateau board;
+		
 		//Chance Paquet;//après implémantation des cartes chance.
 		//Evenement e; //après implémantation des minis jeux.
 		Joueur * tabJ[4];

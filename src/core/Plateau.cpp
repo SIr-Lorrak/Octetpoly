@@ -10,7 +10,7 @@ Plateau::Plateau(){
 	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase('D',0,"Depart",0,0,0,0);
 	tabC[1].initCase('E',5,"Auchan",4,1,1,50);
-	tabC[2].initCase('A',10,"Aldi",4,1,1,2);
+	tabC[2].initCase('E',10,"Aldi",4,1,1,2);
 	tabC[3].initCase('E',15,"Carrefour",4,1,1,2);
 	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,2);
 	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,2);
@@ -55,7 +55,7 @@ Plateau::~Plateau(){
 Case * Plateau::getCase(unsigned int numCase){
 	return &tabC[numCase];
 }
-	
+
 unsigned int Plateau::getcasePub(){
 	return casePub;
 }
@@ -80,6 +80,20 @@ void Plateau::setcasePub(unsigned int numCase){
 		return nbcase;
 	}
 
+	unsigned int Plateau::getCasePos(string nom){
+		unsigned int numCase = 0;
+		unsigned int i = 0;
+		while(numCase == 0 && i < TPLATEAU )
+		{
+			if(tabC[i].getNom() == nom)
+			{
+				numCase = i;
+			}
+			i = i+1;
+		}
+		return numCase;
+	}
+
 //-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**
@@ -101,13 +115,18 @@ void Plateau::setcasePub(unsigned int numCase){
 	@param none
 	*/
 	void Plateau::testRegressionPlateau(){
-		affichageRegression();
+		//affichageRegression();
 		/*
 		cout << "Appel getCase() : ....." << endl;
 		Case * c = getCase(6);
 		cout << endl << "Case Appelé : " << c->getNom() << endl;
 		c->affichageRegression();
 		*/
-		cout << nbCaseFree() << endl;
+		//cout << nbCaseFree() << endl;
+		cout << casePub << endl;
+		setcasePub(5);
+		cout << casePub << endl;
+		cout << getcasePub() << endl; 
+
 	}
 
