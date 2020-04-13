@@ -229,6 +229,7 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
+			cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
 			break;
 		default:
 			assert(false);
@@ -356,7 +357,7 @@ void JeuTXT::affichageMenu(){
 void JeuTXT::affichageCampagneDePub(){
 	cout<<"<[-($)-]¯-_-¯-CAMPAGNE DE PUB-_-¯-_-[-($)-]>"<<endl<<endl;
 	cout << "Pour quel quartier voulez vous faire de la pub" << endl;
-	cout << "Voici vos propriété : " << endl;
+	cout << "Voici votre/vos propriété(s) : " << endl;
 	for (unsigned int i = 0; i < j.getPion(j.getJoueurCourant())->getNbPropriete() ; ++i)
 	{
 		cout << i << " " << (j.getPion(j.getJoueurCourant())->getPropriete(i))->getNom() << endl;
@@ -373,6 +374,23 @@ void JeuTXT::affichageCampagneDePub(){
 	}
 }
 
+void JeuTXT::affichagePorteOuvete(){
+	cout<<"<[-($)-]¯-_-¯-PORTE OUVERTE-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Vers quel voulez-vous vous rendre ?" << endl;
+	cout << "Voici les quartier(s) disponible(s) : " << endl;
+	
+	j.affichageQuartierDisponible();
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
+		cout<<"vous etes sur ? (o/n) ";Endl();
+	}
+}
 
 void JeuTXT::affichage(){
 	/*if(j.gete().getn() == "rien"){
@@ -395,7 +413,9 @@ void JeuTXT::affichage(){
 	else if(j.getBool("ad")){
 		affichageCampagneDePub();
 	}
-
+	else if(j.getBool("porteO")){
+		affichagePorteOuvete();
+	}
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();
 	}

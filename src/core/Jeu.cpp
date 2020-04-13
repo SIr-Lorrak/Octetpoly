@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -95,7 +94,7 @@ bool Jeu::getBool(const string & type) const
 		return vend;
 	else if(type=="ad")
 		return ad;
-	else if(type=="porteOuverte")
+	else if(type=="porteO")
 		return porteO;
 	else
 		assert(false);
@@ -228,20 +227,38 @@ void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 
 void Jeu::ajouterNombre(const string nombre)
 {
-	/*
-    if(nom.length()<=20)
-        nom+=lettre;
-        */
+	choix+=nombre;
 }
 
 
 void Jeu::effacerNombre()
 {
-	/*
-    if(nom.length()>0)
-        nom = nom.substr(0, nom.size()-1);
-        */
+	choix = choix.substr(0, choix.size()-1);     
 }
+
+void Jeu::ecrire(const string touche){
+	if(touche[0]==127||touche[0]==8||touche[0]=='\b')
+	{// = pour 'effacer'
+		effacerNombre();
+	}		
+	//On empêche l'utilisateur d'écrire autre chose qu'un chiffre
+	else if(choix.length()<2 && (touche[0] >= 48 && touche[0] <= 57))
+	{
+		ajouterNombre(touche);
+	}
+}
+
+void Jeu::affichageQuartierDisponible(){
+	for (int i = 0; i < 32; ++i)
+	{
+		if((board.getCase(i)->getType()=='E'||board.getCase(i)->getType()=='B')
+			&&board.getCase(i)->getOccupation()==0)
+		{
+			cout << i << " " << board.getCase(i)->getNom() << endl; 
+		}	
+	}
+}
+
 
 
 void Jeu::resetBool()
@@ -299,10 +316,13 @@ void Jeu::actionPartie(const string & touche)
 
 	if(!p->getPrisonnier()){
 		if(getPion(joueurCourant)->getTicket())
-		{	
+		{
+			porteO = true;	
 			porteOuverte(touche);
 			desLance = true;
 			avance = true;
+			actionObligatoire = true;
+			attendreAmplete = true;
 		}
 		else if(!desLance){
 			if(touche == "\n"){
@@ -585,15 +605,7 @@ void Jeu::campagneDePub(const string touche){
 
 			else if(!confirmation)
 			{
-				if(touche[0]==127||touche[0]==8||touche[0]=='\b')
-				{// = pour 'effacer'
-					choix = choix.substr(0, choix.size()-1);			
-				}		
-				//On empêche l'utilisateur d'écrire autre chose qu'un chiffre
-				else if(choix.length()<2 && (touche[0] >= 48 && touche[0] <= 57))
-				{
-					choix = choix + touche;
-				}
+				ecrire(touche);
 			}
 			else if(confirmation)
 			{
@@ -626,24 +638,64 @@ void Jeu::porteOuverte(const string & touche){
 	Case * c = board.getCase(24);//ATTENTION APPEL FRAUDULEUX
 	actionObligatoire = false;
 
-	if(getPion(joueurCourant)->getTicket())
+	if((touche == "o" ||touche == "O")
+		&& (getPion(joueurCourant)->getCoin() >= c->getPrix())
+		&& (board.nbCaseFree() > 0)
+		&&!(getPion(joueurCourant)->getTicket()))
 	{
-		//TODO demander au joueur où il veut se rendre
-		//getPion(joueurCourant)->setPos()
-		if(touche == "\n")
-		{
-			getPion(joueurCourant)->setTicket(false);
+		getPion(joueurCourant)->setTicket(true);
+		attendreAmplete = false;
+		tourSuivant();
+	}
+
+	else if(getPion(joueurCourant)->getTicket())
+	{
+		if(tourOrdi)
+		{	
+			//choix = tabO[joueurCourant-1].AIporteOuverte();
+			getPion(joueurCourant)->setPos(stoul(choix));
+			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+			getPion(joueurCourant)->setTicket(false);	
+			attendreAmplete = false;
+			choix = "";
+		}
+
+		else
+		{	
+			//Première confirmation
+			if((touche=="o"|| touche=="O") 
+				&& !confirmation 
+				&& choix != ""
+				&& board.caseValide(stoul(choix)))
+			{
+				confirmation = true;
+			}
+
+			else if(!confirmation)
+			{
+				ecrire(touche);
+			}
+			else if(confirmation)
+			{
+				//Deuxième confirmation
+				if(touche=="o"|| touche=="O")
+				{
+					getPion(joueurCourant)->setPos(stoul(choix));
+					getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+					getPion(joueurCourant)->setTicket(false);	
+					attendreAmplete = false;
+					choix = "";
+					porteO = false;
+				}
+				else if(touche=="n"||touche=="N")
+				{
+					confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
+				}
+			}
 		}
 	}
 
-	else if((touche == "o" ||touche == "O") 
-		&& (getPion(joueurCourant)->getCoin() >= c->getPrix())
-		&& (board.nbCaseFree() > 0))
-	{
-		getPion(joueurCourant)->setTicket(true);
-	}
-
-	else if(touche == "\n")
+	else if(touche=="n" || touche=="N" || touche == "\n")
 	{
 		attendreAmplete = false;
 	}
@@ -713,7 +765,7 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'O':
-			//porteOuverte(touche);
+			porteOuverte(touche);
 			break;
 
 		case 'I':

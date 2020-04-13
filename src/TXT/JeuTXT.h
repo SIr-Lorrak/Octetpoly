@@ -30,6 +30,8 @@ private:
 
 	void affichageCampagneDePub();
 
+	void affichagePorteOuvete();
+
 	void affichageCase(const Case & c);
 
 	/**

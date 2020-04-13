@@ -94,6 +94,24 @@ void Plateau::setcasePub(unsigned int numCase){
 		return numCase;
 	}
 
+	bool Plateau::caseValide(unsigned int choix){
+		bool valide = false;
+		unsigned int i = 0;
+		while(!valide && i < TPLATEAU )
+		{
+			if((tabC[i].getType() == 'B' || tabC[i].getType() == 'E')
+				&& tabC[i].getOccupation() == 0)
+			{
+				if(choix == i)
+				{
+					valide = true;
+				}
+			}
+			i = i+1;
+		}
+		return valide;
+	}
+
 //-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**

@@ -89,9 +89,28 @@ class Jeu{
 		void ajouterLettre(const unsigned int j, const string lettre);
 
 
-		void ajouterNombre(const string lettre);
+		/**
+		@brief Permet ajouter un nombre lors du mode vente ou pour choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		@param un string : le/les nombre a rajouter 
+		*/
+		void ajouterNombre(const string nombre);
 
+		/**
+		@brief Permet effacer un nombre lors du mode vente ou pour choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		@param none 
+		*/
 		void effacerNombre();
+
+		/**
+		@brief Permet ajouter ou effacer un nombre, permet au joueur de choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		ou bien quelle quartier veut-il vendre
+		@param touche : string
+		*/
+		void ecrire(const string touche);
+
 
 		/**
 		@brief sauvegarde le jeu dans un fichier pour reprendre plus tard
@@ -177,7 +196,8 @@ class Jeu{
 		*/
 		void getOrdre(unsigned int tab[4]) const;
 
-
+		void affichageQuartierDisponible();
+		
 		/**
 		@brief renvoie le booléen demander
 		@param un string : type, il donne le nom du booléen demander 

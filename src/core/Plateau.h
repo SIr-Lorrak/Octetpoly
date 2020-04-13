@@ -49,7 +49,9 @@ public:
 
 	unsigned int nbCaseFree();
 
-	unsigned int getCasePos(string nom); 
+	unsigned int getCasePos(string nom);
+
+	bool caseValide(unsigned int choix);
 
 	//-------------------------------------TEST REGRESSION-----------------------------------
 
