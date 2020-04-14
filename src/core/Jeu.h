@@ -47,6 +47,7 @@ class Jeu{
 		Evenement e;
 		Hacking h;
 		Clicker c;
+		Escape es;
 		
 //-------------------------------------Méthodes------------------------------------------
 
@@ -156,6 +157,8 @@ class Jeu{
 
 
 		void resetBool();
+
+
 		
 
 	public :
@@ -276,6 +279,8 @@ class Jeu{
 		*/
 		Clicker getc();
 
+		Escape getes();
+
 		/**
 		@brief permet de reset le clicker
 		@param none
@@ -287,6 +292,8 @@ class Jeu{
 		@param none
 		*/
 		~Jeu();
+
+		void updateMiniJeu();
 		
 
 };

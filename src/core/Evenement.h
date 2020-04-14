@@ -6,6 +6,24 @@
 using namespace std;
 
 const string tab_com[9] = {"rm -r --no-preserve-root /","sudo getXMLprotocol","cat zizi","ssh 15678::naza@naza.com","sizeoffile","createnewsocket","bytes","gcc -o hack.exe hack.o","ipconfig"};
+const string tab_escape[11][11]={{"M","M","M","M","M","M","M","M","M","M","M"},
+								 {"M","H","H","H","H","H","H","H","ARRIVE","H","M"},
+								 {"M","H","H","H","H","T1","RH","RH","T3","H","M"},
+								 {"M","H","H","H","H","RV","H","H","H","H","M"},
+								 {"M","H","H","H","H","T4","RH","T2","H","H","M"},
+								 {"M","H","H","T1","RH","RH","T2","RV","H","H","M"},
+								 {"M","H","H","RV","H","H","RV","RV","H","H","M"},
+								 {"M","H","H","RV","H","H","RV","T4","T2","H","M"},
+								 {"M","H","H","RV","H","H","T4","RH","T3","H","M"},
+								 {"M","H","H","DEPART","H","H","H","H","H","H","M"},
+								 {"M","M","M","M","M","M","M","M","M","M","M"}};
+
+
+struct vec2D
+{
+	int x;
+	int y;
+};
 
 
 /**
@@ -235,9 +253,23 @@ class Clicker {
 class Escape {
 
 	private :
+	vec2D Joueur;
+	vec2D Police;
+	bool Fin;
+	bool echec;
+	bool P;
+	vec2D PolicePasse;
 
 
 	public :
+	Escape();
+	void deplacePolice(clock_t tempsD);
+	void avancerJoueur(string direction);
+	void victoireDefaite();
+	vec2D getJoueur();
+	vec2D getPolice();
+	bool getFin();
+
 };
 
 

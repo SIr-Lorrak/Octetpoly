@@ -24,10 +24,12 @@ bool Evenement::Declenchement(){
 	srand (time(NULL));
 
 	if((rand()%100)<30){
+		int a = (rand()%2);
+		//if(a ==0){n = "hack";}
 
-		if((rand()%2)==0){n = "hack";}
+		//else if(a == 1){n = "clicker";}
 
-		else{n = "clicker";}
+		/*else if(a == 2){*/n = "escape";/*}*/
 
 		tps = 0;
 		tempsD = clock();
@@ -281,4 +283,116 @@ void Clicker::resetClicker(){
 	tps_actuel = 0;
 	Fin = false;
 }	
+
+
+//-----------------------Escape--------------------------------------
+
+Escape::Escape(){
+	Joueur.x = 3;
+	Joueur.y = 9;
+	Police.x = 3;
+	Police.y = 10;
+	Fin = false;
+	echec = false;
+	PolicePasse.x=3;
+	PolicePasse.y=10;
+	P = false;
+
+}
+
+/*bool operator== (const& vec2D a, const& vec2D b){
+	return ((a.x==b.x)&&(a.y==b.y));
+}*/
+
+void Escape::avancerJoueur(string direction){
+	
+
+	if(direction=="z"){
+
+		if((tab_escape[Joueur.y-1][Joueur.x]=="RV")||(tab_escape[Joueur.y-1][Joueur.x]=="T1")||(tab_escape[Joueur.y-1][Joueur.x]=="T2")||(tab_escape[Joueur.y-1][Joueur.x]=="ARRIVE")){
+			
+			Joueur.y-=1;
+		}
+	}
+	if(direction=="s"){
+		if((tab_escape[Joueur.y+1][Joueur.x]=="RV")||(tab_escape[Joueur.y+1][Joueur.x]=="T3")||(tab_escape[Joueur.y+1][Joueur.x]=="T4")){
+			Joueur.y+=1;
+		}
+	}
+	if(direction=="q"){
+		if((tab_escape[Joueur.y][Joueur.x-1]=="RH")||(tab_escape[Joueur.y][Joueur.x-1]=="T1")||(tab_escape[Joueur.y][Joueur.x-1]=="T4")){
+			Joueur.x-=1;
+		}
+	}
+	if(direction=="d"){
+		if((tab_escape[Joueur.y][Joueur.x+1]=="RH")||(tab_escape[Joueur.y][Joueur.x+1]=="T2")||(tab_escape[Joueur.y][Joueur.x+1]=="T3")){
+			Joueur.x+=1;
+		}
+	}
+}
+
+vec2D Escape::getJoueur(){
+	return Joueur;
+}
+
+vec2D Escape::getPolice(){
+	return Police;
+}
+
+
+void Escape::victoireDefaite(){
+	if((Joueur.x==Police.x)&&(Joueur.y==Police.y)){
+		Fin = true;
+		echec = true;
+	}
+	else if((Joueur.x==8)&&(Joueur.y==1)){
+		
+		Fin = true;
+	}
+}
+
+bool Escape::getFin(){
+	return Fin;
+}
+
+void Escape::deplacePolice(clock_t tempsD){
+	//for(int i=0;i<5;i++){cout<<"aa"<<endl;}
+	clock_t temps = clock();
+	int tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
+	if(tps_actuel%2 == 1){P = true;}
+	if((tps_actuel%2 == 0)&&(tps_actuel>0)&&(P == true)){
+		//for(int i=0;i<5000;i++){cout<<Police.y<<endl;}
+		
+		if(((tab_escape[Police.y+1][Police.x]=="RV")||(tab_escape[Police.y+1][Police.x]=="T3")||(tab_escape[Police.y+1][Police.x]=="T4"))&&(tab_escape[Police.y+1][Police.x]!=tab_escape[PolicePasse.y][PolicePasse.x])){
+			
+			PolicePasse.x=Police.x;
+			PolicePasse.y=Police.y;
+			Police.y+=1;
+			P = false;
+
+		}
+		else if(((tab_escape[Police.y-1][Police.x]=="RV")||(tab_escape[Police.y-1][Police.x]=="T1")||(tab_escape[Police.y-1][Police.x]=="T2")||(tab_escape[Police.y-1][Police.x]=="DEPART"))&&(tab_escape[Police.y-1][Police.x]!=tab_escape[PolicePasse.y][PolicePasse.x])){
+			PolicePasse.x=Police.x;
+			PolicePasse.y=Police.y;
+			Police.y-=1;
+			P = false;
+			
+		}
+		else if(((tab_escape[Police.y][Police.x+1]=="RH")||(tab_escape[Police.y][Police.x+1]=="T2")||(tab_escape[Police.y][Police.x+1]=="T3"))&&(tab_escape[Police.y][Police.x+1]!=tab_escape[PolicePasse.y][PolicePasse.x])){
+			PolicePasse.x=Police.x;
+			PolicePasse.y=Police.y;
+			Police.x+=1;
+			P = false;
+		}
+		else if(((tab_escape[Police.y][Police.x-1]=="RH")||(tab_escape[Police.y][Police.x-1]=="T1")||(tab_escape[Police.y][Police.x-1]=="T4"))&&(tab_escape[Police.y][Police.x-1]!=tab_escape[PolicePasse.y][PolicePasse.x])){
+			PolicePasse.x=Police.x;
+			PolicePasse.y=Police.y;
+			Police.x-=1;
+			P = false;
+		}
+	}
+}
+
+
+
 

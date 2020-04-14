@@ -174,18 +174,82 @@ void JeuTXT::affichageClicker(){
 
 	jeuClear();
 	if (j.getc().getFin()==false){
-		cout << "Timer : " << 10-((clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC)) <<" seconde"<< endl;
-		cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+		cout << "Timer : " << 10-((clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC)) <<" seconde";Endl();
+		cout<< "Appuyez à répétion sur espace pour faire de la pub!";Endl();Endl();
 
-		cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
+		cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". ";Endl();
 	}	
 	else{
 
-		cout<<"TERMINER! Vous avez réalisé "<<j.getc().getnbclique()<<". "<<endl;
-		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
+		cout<<"TERMINER! Vous avez réalisé "<<j.getc().getnbclique()<<". ";Endl();
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $";Endl();
 
 	}
 }
+
+void JeuTXT::affichageEscape(){
+	jeuClear();
+	cout<<"Utilsez les touches Z, Q, S et D pour echapez rapidemant à la police";Endl();Endl();
+	for(int y=0;y<11;y++){
+		for(int x=0;x<11;x++){
+		
+			
+			if((j.getes().getJoueur().y == y)&&(j.getes().getJoueur().x == x)){
+				cout<<" J ";
+			}
+			else if((j.getes().getPolice().y == y)&&(j.getes().getPolice().x == x)){
+				cout<<" P ";
+			}
+			else if(tab_escape[y][x]=="M"){
+				cout<<" M ";
+			}
+			else if(tab_escape[y][x]=="H"){
+				cout<<" # ";
+			}
+			else if(tab_escape[y][x]=="RV"){
+				cout<<" | ";
+			}
+			else if(tab_escape[y][x]=="RH"){
+				cout<<" _ ";
+			}
+			else if(tab_escape[y][x]=="DEPART"){
+				cout<<" D ";
+			}
+			else if(tab_escape[y][x]=="ARRIVE"){
+				cout<<" A ";
+			}
+			else if(tab_escape[y][x]=="T1"){
+				cout<<" / ";
+			}
+			else if(tab_escape[y][x]=="T2"){
+				cout<<" / ";
+			}
+			else if(tab_escape[y][x]=="T3"){
+				cout<<" / ";
+			}
+			else if(tab_escape[y][x]=="T4"){
+				cout<<" / ";
+			}
+
+			if(x==10){
+				Endl();Endl();
+			}
+			
+		}
+	}
+	
+	cout<<j.getes().getPolice().y<<endl;
+	cout<<j.getes().getPolice().x<<endl;
+	Endl();
+	Endl();
+	Endl();
+	Endl();
+	Endl();
+	Endl();
+	Endl();
+	Endl();
+}
+
 
 void affichePion(const Pion & p){
 	if(p.getNom()==""){
@@ -370,6 +434,9 @@ void JeuTXT::affichage(){
 	else if(j.gete().getn()== "clicker"){
 		affichageClicker();
 	}
+	else if(j.gete().getn()== "escape"){
+		affichageEscape();
+	}
 
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();
@@ -380,7 +447,7 @@ void JeuTXT::affichage(){
 bool JeuTXT::update(){
 
 	string touche;
-
+	j.updateMiniJeu();
 	if(kbhit()){
 		touche = fgetc(stdin);
 		if(!j.getBool("tourOrdi")){
@@ -426,3 +493,5 @@ void JeuTXT::run(){
 
 	restoreTerm(); //on restore le terminal comme avant et on le clear.
 }
+
+

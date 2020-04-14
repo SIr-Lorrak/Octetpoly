@@ -671,6 +671,17 @@ void Jeu::actionMiniJeu(const string touche){
 			tourSuivant();
 		}
 	}
+	if(e.getn() == "escape"){
+
+		es.avancerJoueur(touche);
+		//es.victoireDefaite();
+		//cout<<es.getFin();
+		/*if(es.getFin()==true){
+			//for(int i;i<5000;i++){cout<<"b";}
+			tourSuivant();
+		}*/
+		
+	}
 }
 
 void Jeu::actionClavier(const string & touche)
@@ -684,6 +695,7 @@ void Jeu::actionClavier(const string & touche)
 		actionPartie(touche);
 	}
 	else{
+
 		actionMiniJeu(touche);
 	}
 }
@@ -749,6 +761,10 @@ Clicker Jeu::getc(){
 
 }
 
+Escape Jeu::getes(){
+	return es;
+}
+
 
 //seteur permettant de mettre à jour clicker c
 void Jeu::setc(){
@@ -765,4 +781,14 @@ Jeu::~Jeu(){
 	for(unsigned int i=0; i<nbJoueur; i++){
 		delete tabJ[i];
 	}
+}
+
+
+void Jeu::updateMiniJeu(){
+
+	if(e.getn() == "escape"){
+
+		es.deplacePolice(gete().gettempsD());
+	}
+	
 }
