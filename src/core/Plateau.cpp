@@ -1,4 +1,5 @@
 #include "Plateau.h"
+#include "assert.h"
 
 using namespace std;
 
@@ -51,6 +52,15 @@ Plateau::~Plateau(){
 }
 
 //-------------------------------------Méthodes--------------------------------
-Case * Plateau::getCase(unsigned int numCase){
+Case * Plateau::getCase(unsigned int numCase) const{
 	return &tabC[numCase];
+}
+
+unsigned int Plateau::getIndice(const string & nom) const{
+	unsigned int i=0;
+	while(tabC[i].getNom()!=nom){
+		i++;
+		assert(i>=32);//si i dépasse le nom envoyé est invalid
+	}
+	return i;
 }

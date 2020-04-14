@@ -21,6 +21,7 @@ Pion::Pion(){
 	pos = 0;
 	car = '*';
 	prisonnier = false;
+	ticket = false;
 	propriete = new Case*[MAXCASEHT];
 
 	for(int i = 0; i < 3; i++)
@@ -47,6 +48,11 @@ float Pion::getCoin() const
 unsigned int Pion::getNbPropriete() const 	
 { return nbpropriete;}
 
+Case * Pion::getPropriete(unsigned int i)
+{ 	assert(i<nbpropriete);
+	return propriete[i];}
+
+
 unsigned int Pion::getPos() const 			
 { return pos;}
 
@@ -63,7 +69,9 @@ Pion * Pion::getPion(){
 Des Pion::getDes() const{
 	return d;
 }
-
+bool Pion::getTicket() const{
+	return ticket;
+}
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
 void Pion::setCar(const char c){
@@ -84,6 +92,23 @@ void Pion::setRang(const unsigned int r){
 
 void Pion::setPos(const unsigned int p){
 	pos = p;
+}
+
+void Pion::setKarma(const unsigned int k){
+	karma = k;
+}
+
+void Pion::setPrisonnier(){
+	if(prisonnier){
+		prisonnier = false;
+	}
+	else{
+		prisonnier = true;
+	}
+}
+
+void Pion::donTicket(){
+	ticket = true;
 }
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
@@ -136,11 +161,7 @@ void Pion::avancer()
 	{
 		pos += d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
-
-		if(pos > MAXCASEP)
-		{
-			pos = pos - MAXCASEP - 1;
-		}
+		pos = pos%MAXCASEP;
 
 		if(pos == 8)
 		{

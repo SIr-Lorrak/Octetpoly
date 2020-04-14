@@ -319,38 +319,84 @@ void JeuTXT::affichageJeu(){
 
 void JeuTXT::affichageMenu(){
 	cout<<"<[-($)-]-_-¯-_-¯-OCTETPOLY-¯-_-¯-_-[-($)-]>"<<endl<<endl;
-	unsigned int nbj = j.getNbJoueur();
-	if(nbj>0){
-		if(j.getBool("attendreNom")){
-			cout<<nbj;
-			if(nbj==1) cout<<"er";
-			else cout<<"e";
-			cout<<" joueur : "<<j.getJoueur(nbj)->getNom();curseur();Endl();
-		}
-		else{
-			for(unsigned int i=1;i<=nbj;i++){
-				cout<<i;
-				if(i==1) cout<<"er";
+	if(j.getBool("nouvellePartie")){//si le joueur crée une nouvelle partie
+		unsigned int nbj = j.getNbJoueur();
+		if(nbj>0){
+			if(j.getBool("attendreNom")){
+				cout<<nbj;
+				if(nbj==1) cout<<"er";
 				else cout<<"e";
-				cout<<" joueur : ";
-				if(j.getJoueur(i)->getNom()==""){
-					cout<<"<anonyme>"<<endl;
-				}
-				else{
-					cout<<j.getJoueur(i)->getNom()<<endl;
+				cout<<" joueur : "<<j.getJoueur(nbj)->getNom();curseur();Endl();
+			}
+			else{
+				for(unsigned int i=1;i<=nbj;i++){
+					cout<<i;
+					if(i==1) cout<<"er";
+					else cout<<"e";
+					cout<<" joueur : ";
+					if(j.getJoueur(i)->getNom()==""){
+						cout<<"<anonyme>"<<endl;
+					}
+					else{
+						cout<<j.getJoueur(i)->getNom()<<endl;
+					}
 				}
 			}
 		}
+		if(j.getNbJoueur()<4){
+			cout<<endl<<"apuyez sur \"+\" pour ajouter un joueur entrez un nom et validez avec entrer"<<endl;
+		}
+		if(j.getBool("confirmation")){
+			cout<<"vous etes sur ? (o/n) ";Endl();
+		}
+		Endl();
+		cout<<endl<<"'ESC' pour revenir en arrière.";
 	}
-	if(j.getNbJoueur()<4){
-		cout<<endl<<"apuyez sur \"+\" pour ajouter un joueur entrez un nom et validez avec entrer"<<endl;
+	else if(j.getBool("attendreNom")){// si le joueur selectione un fichier de sauvegarde (1,2 ou 3)
+		cout<<endl;
+		for(unsigned int i = 1;i<=3;i++){
+			cout<<i<<". ";
+			string fichier = "data/sauvegarde/";
+			switch(i){
+				case 1:
+					fichier = fichier+"1";
+					break;
+				case 2 :
+					fichier = fichier+"2";
+					break;
+				case 3 :
+					fichier = fichier+"3";
+					break;
+				default : assert(false);
+			}
+			if(!fichierExiste(fichier+".save")){
+				cout<<"<empty file>"<<endl;
+			}
+			else{
+				cout<<"fichier de sauvegarde"<<endl;
+			}
+		}
+		cout<<endl<<"'ESC' pour revenir en arrière.";
 	}
-	if(j.getBool("confirmation")){
-		cout<<"vous etes sur ? (o/n) ";Endl();
+	else{//Menu de départ
+		cout<<endl<<"qu'est ce que vous voulez faire ?"<<endl<<
+		"1. "<<"Nouvelle Partie"<<endl<<
+		"2. "<<"Charger une Partie"<<endl<<
+		"3. "<<"QUITTER"<<endl;
 	}
-	Endl();
+
 }
 
+void JeuTXT::affichagePause() const{
+	cout<<"<------------pause------------>"<<endl
+	<<"1. Reprendre le Jeu"<<endl
+	<<"2. Sauvegarder"<<endl
+	<<"3. Revenir au Menu (/!\\ sans sauvegarder)"<<endl
+	<<"4. QUITTER (/!\\ sans sauvegarder)"<<endl;
+	if(j.getBool("confirmation")){
+		cout<<"êtes vous sur ? (o/n)"<<endl;
+	}
+}
 
 void JeuTXT::affichage(){
 	/*if(j.gete().getn() == "rien"){
@@ -369,7 +415,9 @@ void JeuTXT::affichage(){
 	else if(j.gete().getn()== "clicker"){
 		//affichageClicker();
 	}
-
+	else if(j.getBool("pause")){
+		affichagePause();
+	}
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();
 	}
@@ -411,7 +459,7 @@ void JeuTXT::run(){
 
 	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
 	
-	while(!j.getBool("quitter")){
+	while(!j.getBool("quitte")){
 		update(); 
 		affichage();
 	}

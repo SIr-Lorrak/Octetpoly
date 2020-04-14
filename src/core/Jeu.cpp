@@ -33,7 +33,7 @@ Jeu::Jeu(){
 	actionObligatoire = true;
 	nouvellePartie = false;
 	chance = NULL;
-	quitter = false;
+	quitte = false;
 
 	pause = false;
 
@@ -52,9 +52,52 @@ Jeu::Jeu(){
 		}while(!estPasDans(alea,ordre,i));
 		ordre[i] = alea;
 	}
-	joueurCourant = ordre[3];
+	joueurCourant = ordre[0];//au début le joueur courant est le dernier joueur comme ça quand on commence le jeu ça sera au premier joueur de jouer
 }
 
+void Jeu::reset()
+{
+	
+	if(tabO!=NULL){
+		delete [] tabO;
+	}
+	for(unsigned int i=0; i<nbJoueur; i++){
+		delete tabJ[i];
+	}
+	srand(time(NULL));
+
+	konamiCode("");
+
+	attendreNom = false;
+	desLance = false;
+	avance = false;
+	confirmation = false;
+	attendreAmplete = true;
+	vend = false;
+	actionObligatoire = true;
+	nouvellePartie = false;
+	chance = NULL;
+	quitte = false;
+
+	pause = false;
+
+	tourOrdi = false;
+
+	nbJoueur = 0;
+	nbTour = 0;
+	coeffAd = 1.0;
+
+	tabO = NULL;
+	unsigned int alea;
+	alea = 0;
+	for(unsigned int i=0;i<4;i++){
+		do{
+			alea = rand()%4+1;
+		}while(!estPasDans(alea,ordre,i));
+		ordre[i] = alea;
+	}
+	joueurCourant = ordre[0];
+}
 
 //-------------------------------------Méthodes--------------------------------
 void Jeu::getOrdre(unsigned int tab[4]) const
@@ -83,8 +126,12 @@ bool Jeu::getBool(const string & type) const
 		return attendreAmplete;
 	else if(type=="actionObligatoire")
 		return actionObligatoire;
-	else if(type=="quitter")
-		return quitter;
+	else if(type=="quitte")
+		return quitte;
+	else if(type=="pause")
+		return pause;
+	else if(type=="nouvellePartie")
+		return nouvellePartie;
 	else
 		assert(false);
 }
@@ -137,12 +184,28 @@ Carte * Jeu::getCarte()const
 
 //transforme une chaine de caractère avec des espaces en remplacent les expaces par des underscores _
 string SpaceToUnderscore(const string & nom){
-	return "prout_prout";
+	string nomr = nom;
+	unsigned int i= 0;
+	while(nom.c_str()[i] != '\0'){
+		if(nom[i]==' '){
+			nomr[i]='_';
+		}
+		i++;
+	}
+	return nomr;
 }
 
 //transforme une chaine de caractère sans espace en remplacent les underscores _ par des espaces
 string UnderscoreToSpace(const string & nom){
-	return "prout prout";
+	string nomr = nom;
+	unsigned int i= 0;
+	while(nom[i] != '\0'){
+		if(nom[i]=='_'){
+			nomr[i]=' ';
+		}
+		i++;
+	}
+	return nomr;
 }
 
 void Jeu::sauver(const string & file) const
@@ -155,23 +218,23 @@ void Jeu::sauver(const string & file) const
 		fichier<<ordre[i]<<" ";
 	}
 	fichier<<endl<<joueurCourant<<endl;
-	for(unsigned int i = 0;i<4;i++){
+	for(unsigned int i = 1;i<=4;i++){
 		fichier<<SpaceToUnderscore(getPion(i)->getNom())<<" ";//nom des Joueurs
 	}
 	fichier<<endl;
-	for(unsigned int i = 0;i<4;i++){
+	for(unsigned int i = 1;i<=4;i++){
 		fichier<<getPion(i)->getPos()<<" ";//position des Joueurs
 	}
 	fichier<<endl;
-	for(unsigned int i = 0;i<4;i++){
+	for(unsigned int i = 1;i<=4;i++){
 		fichier<<getPion(i)->getCoin()<<" ";//argents des Joueurs
 	}
 	fichier<<endl;
-	for(unsigned int i = 0;i<4;i++){
+	for(unsigned int i = 1;i<=4;i++){
 		fichier<<getPion(i)->getKarma()<<" ";
 	}
 	fichier<<endl;
-	for(unsigned int i = 0;i<4;i++){
+	for(unsigned int i = 1;i<=4;i++){
 		if(getPion(i)->getPrisonnier()){
 			fichier<<"1 ";
 		}
@@ -180,21 +243,136 @@ void Jeu::sauver(const string & file) const
 		}
 	}
 	fichier<<endl;
+	for(unsigned int i = 1;i<=4;i++){
+		if(getPion(i)->getTicket()){
+			fichier<<"1 ";
+		}
+		else{
+			fichier<<"0 ";
+		}
+	}
+	fichier<<endl;
+	for(unsigned int i = 1;i<=4;i++){
+		fichier<<getPion(i)->getCar()<<" ";
+	}
+	fichier<<endl;
+	fichier<<0<<endl;
+	//<<board.getCasePub()<<endl;
+	for(unsigned int i = 0;i<32;i++){
+		const Case * c = board.getCase(i);
+		fichier<<c->getPrix()<<" "<<c->getLoyer()<<" "
+		<<c->getPrixDeVente()<<" "<<c->getPrixM()<<" "
+		<<c->getPrixB()<<" "<<c->getOccupation()<<" "
+		<<c->getInvestissement()<<endl;
+	}
+	for(unsigned int i = 1;i<=4;i++){
+		Pion * p = getPion(i);
+		fichier<<p->getNbPropriete()<<endl;
+		for(unsigned int j=0;j<p->getNbPropriete();j++){
+			fichier<<board.getIndice(p->getPropriete(j)->getNom())<<" ";
+		}
+		fichier<<endl;
+	}
 	fichier.close();
 }
 
 
 bool Jeu::charger(const string & file)
 {
+	bool valide = true;
 	ifstream fichier(file.c_str());
 	assert(fichier.is_open());
-	//TODO
-	
+	string recup;
+	int recupint;
+	fichier>>recup;
+	if(recup == "OCTETPOLY666"){
+		fichier>>nbJoueur;
+		for(unsigned int i=0;i<4;i++){
+			tabJ[i]=new Joueur;
+		}
+		tabO = new Ordi [4-nbJoueur];
+
+		for(unsigned int i= 0; i<4;i++){
+			fichier>>ordre[i];
+		}
+		fichier>>joueurCourant;
+		for(unsigned int i = 1;i<=4;i++){
+			fichier>>recup;
+			getPion(i)->setNom(UnderscoreToSpace(recup));
+		}
+		for(unsigned int i = 1;i<=4;i++){
+			fichier>>recupint;
+			getPion(i)->setPos(recupint);
+		}
+		for(unsigned int i = 1;i<=4;i++){
+			fichier>>recupint;
+			getPion(i)->setCoin(recupint);
+		}
+		for(unsigned int i = 1;i<=4;i++){
+			fichier>>recupint;
+			getPion(i)->setKarma(recupint);
+		}
+		for(unsigned int i = 1;i<=4;i++){
+			fichier>>recupint;
+			if(recupint==1){
+				getPion(i)->setPrisonnier();
+			}
+		}
+		for(unsigned int i=1;i<=4;i++){
+			fichier>>recupint;
+			if(recupint == 1){
+				getPion(i)->donTicket();
+			}
+		}
+		for(unsigned int i=1;i<=4;i++){
+			fichier>>recup;
+			getPion(i)->setCar(recup[0]);
+		}
+		fichier>>recupint;
+		if(recupint!=0){
+			//championat du monde (casePub dans plateau)
+		}
+		for(unsigned int i = 0;i<32;i++){
+			//initCase(prix loyer prixdevente prixM prixB proprio investissement)
+			//if(i == board.getCasePub()){
+
+			//}
+		}
+
+		for(unsigned int i=1;i<=4;i++){
+			unsigned int nbProp;
+			fichier>>nbProp;
+			for(unsigned int j=0;j<nbProp;j++){
+				fichier>>recupint;
+				//getPion(i)->don(board.getCase(recupint));
+			}
+		}
+		//TODO
+	}
+	else{
+		valide = false;
+	}
 
 	fichier.close();
-	return true;
+	commencerPartie();
+	return valide;
 }
 
+bool fichierExiste(const string & file)
+{
+	bool retour;
+	ifstream fichier(file.c_str());
+	retour = fichier.is_open();
+	if(retour){
+		string format;
+		fichier>>format;
+		if(format != "OCTETPOLY666"){
+			retour = false;
+		}
+	}
+	fichier.close();
+	return retour;
+}
 
 void Jeu::konamiCode(const string touche)
 {
@@ -270,12 +448,13 @@ void Jeu::resetBool()
 void Jeu::tourSuivant(){
 	nbTour++;
 	unsigned int i=0;
-	while(joueurCourant!=ordre[i]){
-		cout<<"lol";
-		i++;
-	}
+	if(nbTour>1){
+		while(joueurCourant!=ordre[i]){
+			i++;
+		}
 
-	joueurCourant = ordre[(i+1)%4];
+		joueurCourant = ordre[(i+1)%4];
+	}
 
 	resetBool();
 	if(joueurCourant>nbJoueur) tourOrdi = true ;
@@ -349,7 +528,7 @@ void Jeu::actionMenu(const string & touche)
 {	if(nouvellePartie){
 		if(!attendreNom&&nbJoueur<4){
 			if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
-				if(touche == "+"){
+				if(touche == "+"||touche == "="){
 					ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
 				}
 
@@ -412,23 +591,25 @@ void Jeu::actionMenu(const string & touche)
 			else if(touche=="2"){//deuxième option : le joueur veut charger une partie existante
 				attendreNom = true;//on attend le choix du nom de la sauvegarde
 			}
+			if(touche=="3"||touche=="\e"){
+				quitte = true;//echap sur le menu d'origine quitte le jeu.
+			}
 		}
 		else{
 			if(touche =="1"||touche == "2"||touche =="3"){
-				if(charger("data/sauvegarde/"+touche+".save")){
-					nbTour++;
-					invalidSave = false;
-				}
-				else{
-					invalidSave = true;
+				if(fichierExiste("data/sauvegarde/"+touche+".save")){
+					if(charger("data/sauvegarde/"+touche+".save")){
+						invalidSave = false;
+					}
+
+					else{
+						invalidSave = true;//fichier corrompu
+					}
 				}
 			}
 			if(touche=="\e"){
 				attendreNom = false;//passe dans le menu précédent
 			}
-		}
-		if(touche=="\e"){
-			quitter = true;//echap sur le menu d'origine quitte le jeu.
 		}
 	}
 }
@@ -620,7 +801,7 @@ void Jeu::campagneDePub(const string touche){
 		getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());	
 	}
 	//pour guillaume ne pas oublier que le joueur doit appuyer sur une touche d'abord pour dire si'il veut mettre une pub SI IL PEUT
-	// puis après ouvrir un menu qui lui montre ses propriété pour qu'il choisisse où la mettre
+	//puis après ouvrir un menu qui lui montre ses propriété pour qu'il choisisse où la mettre
 	//ça doit donc ce dérouler en deux temps (utilise le booléen choix)
 }
 
@@ -746,7 +927,18 @@ void Jeu::actionMiniJeu(const string touche){
 }
 
 void Jeu::actionPause(const string & touche){
-	return;
+	if(touche=="\e"||touche=="1"){
+		pause=false;
+	}
+	else if(touche=="2"){
+		//choix d'un fichier de sauvegarde
+	}
+	else if(touche=="3"){
+		reset();
+	}
+	else if(touche=="4"){
+		quitte= true;
+	}
 }
 
 void Jeu::actionVente(const string & touche){
@@ -762,8 +954,13 @@ void Jeu::actionClavier(const string & touche)
 		actionPause(touche);
 	}
 	else if(e.getn()=="rien"){
-		konamiCode(touche);//pour le konami code
-		actionPartie(touche);
+		if(touche=="\e"){
+			pause = true;
+		}
+		else{
+			konamiCode(touche);//pour le konami code
+			actionPartie(touche);
+		}
 	}
 	else{
 		actionMiniJeu(touche);
@@ -837,6 +1034,17 @@ void Jeu::setc(){
 
 	c.resetClicker();
 
+}
+
+void Jeu::testRegression(){
+	Jeu j;
+	j.commencerPartie();
+	j.sauver("data/sauvegarde/test.save");
+	Jeu y;
+	y.charger("data/sauvegarde/test.save");
+	y.tourSuivant();
+	y.tourSuivant();
+	y.sauver("data/sauvegarde/toast.save");
 }
 
 

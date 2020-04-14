@@ -10,6 +10,8 @@ using namespace std;
 #include "../core/Jeu.h"
 
 
+bool fichierExiste(const string & file);
+
 
 /**
 @brief classe qui gère le jeu en affichage TXT
@@ -44,6 +46,12 @@ private:
 	@param none
 	*/
 	void affichageHacking();
+
+	/**
+	@brief permet l'affichage txt de l'interface de pause
+	@param none
+	*/
+	void affichagePause() const ;
 
 	/**
 	@brief permet de mettre a jour les objets suite à l'appuie d'une touche

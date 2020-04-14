@@ -17,30 +17,23 @@ void ecrire(const string & file){
 
 void lire(const string & file){
 	ifstream fichier (file.c_str());
-	assert(fichier.is_open());
-	string a;
-	for(int i = 0;i<=4;i++){
-		fichier>>a;
-		cout<<a<<endl;
+	if(!fichier.is_open()){
+		cout<<"ce fichier n'existe pas voyons"<<endl;
+	}
+	else{
+		string a;
+		for(int i = 0;i<=4;i++){
+			fichier>>a;
+			cout<<a<<endl;
+		}
 	}
 	fichier.close();
 }
 
 int main(int argc,char ** argv)
 {
-	Jeu j,g,h;
-	unsigned int tab[4];
-	j.getOrdre(tab);
-	for(int i = 0;i<4;i++){ 
-		cout<<tab[i]<<" ";
-	}
-	cout<<endl;
-
-	cout<<"test\ntest"<<endl;
-
-	cout<<"---------test fichier---------"<<endl<<endl;
-	ecrire("data/sauvegarde/titatitutu");
-	lire("data/sauvegarde/titatitutu");
+	Jeu j;
+	j.testRegression();
 
 	return 0;
 }

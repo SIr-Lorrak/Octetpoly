@@ -46,6 +46,7 @@ class Pion{
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
+		bool ticket;
 
 
 	public :
@@ -78,6 +79,12 @@ class Pion{
 	int getKarma() const;
 
 	/**
+	@brief pour changer le karma (uniquement lors du chargement d'une nouvelle partie)
+	@param un entier k, valeur du karma
+	*/
+	void setKarma(const unsigned int k);
+
+	/**
 	@brief Accesseur du rang du pion
 	@param none
 	*/
@@ -96,6 +103,12 @@ class Pion{
 	unsigned int getNbPropriete() const;
 
 	/**
+	@brief Accesseur de la n-ieme propriété du pion
+	@param un entier i, l'indice de la propriété
+	*/
+	Case * getPropriete(unsigned int i);
+
+	/**
 	@brief Accesseur de la position du pion
 	@param none
 	**/
@@ -107,11 +120,21 @@ class Pion{
 	**/
 	char getCar() const;
 
+	bool getTicket() const;
+
+	void donTicket();
+
 	/**
 	@brief Accesseur du booléen prisonnier qui définit si le pion est en prison ou non
 	@param none
 	**/
 	bool getPrisonnier() const;
+
+	/**
+	@brief met le pion en prison si il est libre et inversement (utiliser a l'exterieur que au chargement d'un fichier de sauvegarde)
+	@param none
+	*/
+	void setPrisonnier();
 
 	/**
 	@brief Mutateur du pion

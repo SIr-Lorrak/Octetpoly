@@ -48,7 +48,7 @@ class Jeu{
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
-		bool quitter;
+		bool quitte;
 
 		Evenement e;
 		Hacking h;
@@ -172,11 +172,21 @@ class Jeu{
 		*/
 		void actionCase(const string & touche = "");
 
-
+		/**
+		@brief permet de reset tous les booléens important au déroulement du tour au début de chaque tour
+		@param none
+		*/
 		void resetBool();
+
+		/**
+		@brief reset la partie pour revenir au menu de départ
+		@param none
+		*/
+		void reset();
 		
 
 	public :
+
 		/**
 		@brief constructeur par défaut de Jeu
 		@param aucun
@@ -299,6 +309,8 @@ class Jeu{
 		@param none
 		*/
 		void setc();
+
+		void testRegression();
 
 		/**
 		@brief destructeur de Jeu

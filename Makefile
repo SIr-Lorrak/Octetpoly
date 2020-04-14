@@ -20,7 +20,7 @@ exe = $(bin)/$(exe_Test) $(bin)/$(exe_TXT) $(bin)/$(exe_SDL)
 
 ifeq ($(OS),Windows_NT)
 	test = if not exist
-	pipe =  
+	pipe = 
 	rm = del
 else
 	test = test -d
@@ -47,4 +47,4 @@ $(obj)/%.o: src/%.cpp
 	$(CC) -c $(debug) $< -o $@
 
 clean:
-	$(rm) -r obj/;echo ok
+	$(rm) -r obj/* data/sauvegarde/* bin/*;echo clean ok.

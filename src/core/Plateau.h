@@ -33,7 +33,14 @@ public:
 	@param numCase : unsigned int
 	@return L'adresse d'une case
 	*/
-	Case * getCase(unsigned int numCase);
+	Case * getCase(unsigned int numCase) const;
+
+
+	/**
+	@brief Permet d'avoir l'indice d'une case a partir de son nom
+	@param un string, nom : le nom de la case recherchée
+	*/
+	unsigned int getIndice(const string & nom) const;
 
 };
 
