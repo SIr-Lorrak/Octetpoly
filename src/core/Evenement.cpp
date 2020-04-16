@@ -24,12 +24,12 @@ bool Evenement::Declenchement(){
 	srand (time(NULL));
 
 	if((rand()%100)<30){
-		int a = (rand()%2);
-		//if(a ==0){n = "hack";}
+		int a = (rand()%3);
+		if(a ==0){n = "hack";}
 
-		//else if(a == 1){n = "clicker";}
+		else if(a == 1){n = "clicker";}
 
-		/*else if(a == 2){*/n = "escape";/*}*/
+		else if(a == 2){n = "escape";}
 
 		tps = 0;
 		tempsD = clock();
@@ -86,9 +86,10 @@ void Evenement::fini(int clique){
 
 	if (n == "clicker"){
 
-		gain = 3*clique;
+		gain = 0.5*clique;
 
 	}
+
 }
 
 void Evenement::reset(){
@@ -245,7 +246,7 @@ Clicker::Clicker(){
 void Clicker::gestionTps(clock_t tempsD){
 	clock_t temps = clock();
 	tps_actuel = (temps - tempsD)/CLOCKS_PER_SEC;
-	if(tps_actuel > 10){
+	if(tps_actuel > 9){
 		Fin = true;
 	}
 }
@@ -288,16 +289,32 @@ void Clicker::resetClicker(){
 //-----------------------Escape--------------------------------------
 
 Escape::Escape(){
-	Joueur.x = 3;
+	Joueur.x = 7;
 	Joueur.y = 9;
-	Police.x = 3;
+	Police.x = 7;
 	Police.y = 10;
 	Fin = false;
 	echec = false;
-	PolicePasse.x=3;
+	PolicePasse.x=7;
 	PolicePasse.y=10;
 	P = false;
+	//JoueurPasse.x = 7;
+	//JoueurPasse.y = 9;
 
+}
+
+void Escape::resetEscape(){
+	Joueur.x = 7;
+	Joueur.y = 9;
+	Police.x = 7;
+	Police.y = 10;
+	Fin = false;
+	echec = false;
+	PolicePasse.x=7;
+	PolicePasse.y=10;
+	P = false;
+	JoueurPasse.x = 7;
+	JoueurPasse.y = 9;
 }
 
 /*bool operator== (const& vec2D a, const& vec2D b){
@@ -310,26 +327,66 @@ void Escape::avancerJoueur(string direction){
 	if(direction=="z"){
 
 		if((tab_escape[Joueur.y-1][Joueur.x]=="RV")||(tab_escape[Joueur.y-1][Joueur.x]=="T1")||(tab_escape[Joueur.y-1][Joueur.x]=="T2")||(tab_escape[Joueur.y-1][Joueur.x]=="ARRIVE")){
-			
+			JoueurPasse.y=Joueur.y;
+			JoueurPasse.x=Joueur.x;
 			Joueur.y-=1;
+		}
+		else{
+			Joueur.x = JoueurPasse.x;
+			Joueur.y = JoueurPasse.y; 
+
 		}
 	}
 	if(direction=="s"){
 		if((tab_escape[Joueur.y+1][Joueur.x]=="RV")||(tab_escape[Joueur.y+1][Joueur.x]=="T3")||(tab_escape[Joueur.y+1][Joueur.x]=="T4")){
+			JoueurPasse.y=Joueur.y;
+			JoueurPasse.x=Joueur.x;
 			Joueur.y+=1;
+		}
+		else{
+			Joueur.x = JoueurPasse.x;
+			Joueur.y = JoueurPasse.y; 
+
+
 		}
 	}
 	if(direction=="q"){
 		if((tab_escape[Joueur.y][Joueur.x-1]=="RH")||(tab_escape[Joueur.y][Joueur.x-1]=="T1")||(tab_escape[Joueur.y][Joueur.x-1]=="T4")){
+			JoueurPasse.x=Joueur.x;
+			JoueurPasse.y=Joueur.y;
 			Joueur.x-=1;
+		}
+		else{
+			Joueur.x = JoueurPasse.x;
+			Joueur.y = JoueurPasse.y; 
+
+
 		}
 	}
 	if(direction=="d"){
 		if((tab_escape[Joueur.y][Joueur.x+1]=="RH")||(tab_escape[Joueur.y][Joueur.x+1]=="T2")||(tab_escape[Joueur.y][Joueur.x+1]=="T3")){
+			JoueurPasse.x=Joueur.x;
+			JoueurPasse.y=Joueur.y;
 			Joueur.x+=1;
+		}
+		else{
+			Joueur.x = JoueurPasse.x;
+			Joueur.y = JoueurPasse.y; 
+
+
 		}
 	}
 }
+
+//retourne le bool fin
+bool Escape::getFin() const{
+	return Fin;
+}
+
+bool Escape::getEchec(){
+	return echec;
+}
+
 
 vec2D Escape::getJoueur(){
 	return Joueur;
@@ -345,7 +402,7 @@ void Escape::victoireDefaite(){
 		Fin = true;
 		echec = true;
 	}
-	else if((Joueur.x==8)&&(Joueur.y==1)){
+	else if((Joueur.x==7)&&(Joueur.y==1)){
 		
 		Fin = true;
 	}

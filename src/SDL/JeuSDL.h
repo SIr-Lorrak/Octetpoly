@@ -43,6 +43,7 @@ private:
 
 	Image plateau;
 	Image test;
+	
 
 	bool a;
 

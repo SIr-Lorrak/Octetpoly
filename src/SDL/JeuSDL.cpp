@@ -116,15 +116,29 @@ void JeuSDL::boucleJeu(){
             if(events.type == SDL_QUIT){
                 quit = true;
             }
-            switch (events.key.keysym.scancode) {
-                case SDLK_a:
-                    a = true;
-                    break;
-                case SDLK_z:
-                    a = false;
-                    break;
+            switch (events.type) {
+                
                 case SDL_SCANCODE_ESCAPE:
                     quit = true;
+                    break;
+
+                case SDL_KEYDOWN: //detecter une touche: par exemple pour les mini jeu passer events.key.keysym.sym dans l'appel de la fonction
+                    if(events.key.keysym.sym==SDLK_a){
+                        a=true;
+                    }
+                    if(events.key.keysym.sym==SDLK_z){
+                        a=false;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                
+                    if(events.button.button==SDL_BUTTON_LEFT){
+                        //ici pour la souris, il suffit delettre des if avec les coordonéé
+                        if((events.button.y>0) && (events.button.x>0) && (events.button.y<200) && (events.button.y<200) ){
+                            a=true;
+                        }
+                    }
+                    
                     break;
                 default: break;
             }

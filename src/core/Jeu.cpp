@@ -659,12 +659,12 @@ void Jeu::actionMiniJeu(const string touche){
 		}
 	}
 	if(e.getn() == "clicker"){
-		c.gestionTps(gete().gettempsD());
+		
 		if(touche == " "){
 			c.ajoutClique();
 		}
 		if((c.getFin()==true)&&(touche == "\n")){
-			e.fini();
+			
 			//TODO : faire les gains / pertes avant de passer au tour suivant.
 			e.reset();
 			c.resetClicker();
@@ -673,13 +673,18 @@ void Jeu::actionMiniJeu(const string touche){
 	}
 	if(e.getn() == "escape"){
 
-		es.avancerJoueur(touche);
-		//es.victoireDefaite();
-		//cout<<es.getFin();
-		/*if(es.getFin()==true){
-			//for(int i;i<5000;i++){cout<<"b";}
+		
+		if((es.getFin()==true)&&(touche=="\n")){
+			if(es.getEchec()==true){
+				//TODO : faire aller en prison
+			}
+			e.reset();
+			es.resetEscape();
 			tourSuivant();
-		}*/
+		}
+		else{
+			es.avancerJoueur(touche);
+		}
 		
 	}
 }
@@ -789,6 +794,12 @@ void Jeu::updateMiniJeu(){
 	if(e.getn() == "escape"){
 
 		es.deplacePolice(gete().gettempsD());
+		es.victoireDefaite();
+	}
+	if(e.getn() == "clicker"){
+		c.gestionTps(gete().gettempsD());
+		if(c.getFin()==true){e.fini();}
+		
 	}
 	
 }

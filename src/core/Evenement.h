@@ -6,17 +6,17 @@
 using namespace std;
 
 const string tab_com[9] = {"rm -r --no-preserve-root /","sudo getXMLprotocol","cat zizi","ssh 15678::naza@naza.com","sizeoffile","createnewsocket","bytes","gcc -o hack.exe hack.o","ipconfig"};
-const string tab_escape[11][11]={{"M","M","M","M","M","M","M","M","M","M","M"},
-								 {"M","H","H","H","H","H","H","H","ARRIVE","H","M"},
-								 {"M","H","H","H","H","T1","RH","RH","T3","H","M"},
-								 {"M","H","H","H","H","RV","H","H","H","H","M"},
-								 {"M","H","H","H","H","T4","RH","T2","H","H","M"},
-								 {"M","H","H","T1","RH","RH","T2","RV","H","H","M"},
-								 {"M","H","H","RV","H","H","RV","RV","H","H","M"},
-								 {"M","H","H","RV","H","H","RV","T4","T2","H","M"},
-								 {"M","H","H","RV","H","H","T4","RH","T3","H","M"},
-								 {"M","H","H","DEPART","H","H","H","H","H","H","M"},
-								 {"M","M","M","M","M","M","M","M","M","M","M"}};
+const string tab_escape[11][11]={{"M" , "M" , "M" , "M" , "M" , "M" , "M" ,   "M"  , "M" , "M" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,"ARRIVE", "H" , "H" , "M"},
+								 {"M" , "H" ,"T1" , "RH", "T2", "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" ,"RV" , "H" , "T4", "RH", "RH",   "T3" , "H" , "H" , "M"},
+								 {"M" , "H" ,"RV" , "H" , "H" , "H" , "H" ,    "H" , "H" , "H" , "M"},
+								 {"M" , "H" ,"T4" , "T2", "H" , "H" , "H" ,    "H" , "H" , "H" , "M"},
+								 {"M" , "H" ,"T1" , "T3", "T1", "RH", "RH",   "T2" , "H" , "H" , "M"},
+								 {"M" , "H" , "T4", "RH", "T3", "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,"DEPART", "H" , "H" , "M"},
+								 {"M" , "M" , "M" , "M" , "M" , "M" , "M" ,    "M" , "M" , "M" , "M"}};
 
 
 struct vec2D
@@ -259,6 +259,7 @@ class Escape {
 	bool echec;
 	bool P;
 	vec2D PolicePasse;
+	vec2D JoueurPasse;
 
 
 	public :
@@ -269,6 +270,9 @@ class Escape {
 	vec2D getJoueur();
 	vec2D getPolice();
 	bool getFin();
+	bool getFin() const;
+	bool getEchec();
+	void resetEscape();
 
 };
 

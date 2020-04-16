@@ -182,72 +182,82 @@ void JeuTXT::affichageClicker(){
 	else{
 
 		cout<<"TERMINER! Vous avez réalisé "<<j.getc().getnbclique()<<". ";Endl();
-		cout<<"Vous gagner "<<j.gete().getgain()<<" $";Endl();
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $                                   ";Endl();
+		for(int i =0;i<21;i++){
+			cout<<"                                                    "<<endl;
+		}
 
 	}
+
 }
 
 void JeuTXT::affichageEscape(){
 	jeuClear();
-	cout<<"Utilsez les touches Z, Q, S et D pour echapez rapidemant à la police";Endl();Endl();
-	for(int y=0;y<11;y++){
-		for(int x=0;x<11;x++){
-		
+	if(j.getes().getFin()==false){
+		cout<<"Utilsez les touches Z, Q, S et D pour echapez rapidemant à la police";Endl();
+		cout<<"Attention de ne pas quitter la route, sinon vous reculez!";Endl();Endl();
+		for(int y=0;y<11;y++){
+			for(int x=0;x<11;x++){
 			
-			if((j.getes().getJoueur().y == y)&&(j.getes().getJoueur().x == x)){
-				cout<<" J ";
-			}
-			else if((j.getes().getPolice().y == y)&&(j.getes().getPolice().x == x)){
-				cout<<" P ";
-			}
-			else if(tab_escape[y][x]=="M"){
-				cout<<" M ";
-			}
-			else if(tab_escape[y][x]=="H"){
-				cout<<" # ";
-			}
-			else if(tab_escape[y][x]=="RV"){
-				cout<<" | ";
-			}
-			else if(tab_escape[y][x]=="RH"){
-				cout<<" _ ";
-			}
-			else if(tab_escape[y][x]=="DEPART"){
-				cout<<" D ";
-			}
-			else if(tab_escape[y][x]=="ARRIVE"){
-				cout<<" A ";
-			}
-			else if(tab_escape[y][x]=="T1"){
-				cout<<" / ";
-			}
-			else if(tab_escape[y][x]=="T2"){
-				cout<<" / ";
-			}
-			else if(tab_escape[y][x]=="T3"){
-				cout<<" / ";
-			}
-			else if(tab_escape[y][x]=="T4"){
-				cout<<" / ";
-			}
+				
+				if((j.getes().getJoueur().y == y)&&(j.getes().getJoueur().x == x)){
+					cout<<" J ";
+				}
+				else if((j.getes().getPolice().y == y)&&(j.getes().getPolice().x == x)){
+					cout<<" P ";
+				}
+				else if(tab_escape[y][x]=="M"){
+					cout<<" M ";
+				}
+				else if(tab_escape[y][x]=="H"){
+					cout<<" # ";
+				}
+				else if(tab_escape[y][x]=="RV"){
+					cout<<" | ";
+				}
+				else if(tab_escape[y][x]=="RH"){
+					cout<<" _ ";
+				}
+				else if(tab_escape[y][x]=="DEPART"){
+					cout<<" D ";
+				}
+				else if(tab_escape[y][x]=="ARRIVE"){
+					cout<<" A ";
+				}
+				else if(tab_escape[y][x]=="T1"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T2"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T3"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T4"){
+					cout<<" / ";
+				}
 
-			if(x==10){
-				Endl();Endl();
+				if(x==10){
+					Endl();Endl();
+				}
+				
 			}
-			
 		}
 	}
-	
-	cout<<j.getes().getPolice().y<<endl;
-	cout<<j.getes().getPolice().x<<endl;
-	Endl();
-	Endl();
-	Endl();
-	Endl();
-	Endl();
-	Endl();
-	Endl();
-	Endl();
+	if(j.getes().getFin()==true) {
+		if(j.getes().getEchec()==true){
+			cout<<"Vous n'avez pas reussit à vous echaper!                                  ";Endl();
+			cout<< "direction la prison!                                             ";Endl();
+		}
+		else{
+			
+			cout<<"Vous avez reussit à vous echaper"                                                  ;Endl();
+		}
+		for(int i =0;i<30;i++){
+			cout<<"                                                    "<<endl;
+		}
+	}
+
 }
 
 
@@ -487,8 +497,9 @@ void JeuTXT::run(){
 	int quit = false;
 	
 	while(!quit){
-		quit = update(); 
 		affichage();
+		quit = update(); 
+		
 	}
 
 	restoreTerm(); //on restore le terminal comme avant et on le clear.
