@@ -33,6 +33,14 @@ void Image::loadFichier(const char* nom_fichier, SDL_Renderer * renderer){
      }
 }
 
+void Image::loadSurface (SDL_Renderer * renderer) {
+    texture = SDL_CreateTextureFromSurface(renderer,surface);
+    if (texture == NULL) {
+        cout << "Error: problem to create the texture from surface " << endl;
+        exit(1);
+    }
+}
+
 
 void Image::dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h){
     SDL_Rect r;
@@ -46,6 +54,8 @@ void Image::dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h){
 SDL_Texture * Image::getTexture(){
     return texture;
 }
+
+void Image::setSurface(SDL_Surface * surf) {surface = surf;}
 
 
 //--------------------------JeuSDL--------------------------
@@ -77,6 +87,11 @@ JeuSDL::JeuSDL(){
     plateau.loadFichier("data/octopoly.png",renderer);
     test.loadFichier("data/screen.png",renderer);
 
+    Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
+    if (Police == NULL) {
+            cout << "Failed to load DejaVuSansCondensed.ttf! SDL_TTF Error: " << TTF_GetError() << endl; SDL_Quit(); exit(1);
+    }
+
     a = false;
 
 
@@ -85,7 +100,8 @@ JeuSDL::JeuSDL(){
 JeuSDL::~JeuSDL(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();   
+    SDL_Quit(); 
+    TTF_Quit();  
 }
 
 
@@ -95,6 +111,13 @@ void JeuSDL::affichageJeu(){
 
     //afficher plateau
     plateau.dessineTexture(renderer,0,0,720,720);
+
+    //texte
+    font_color.r = 50;font_color.g = 50;font_color.b = 255;
+    texteExemple.setSurface(TTF_RenderText_Solid(Police,"ceci est un exemple",font_color));
+    texteExemple.loadSurface(renderer);
+    texteExemple.dessineTexture(renderer,50,50,200,30);
+
 
     if(a == true){
        test.dessineTexture(renderer,20,20,200,200);

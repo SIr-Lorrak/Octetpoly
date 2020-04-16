@@ -25,8 +25,10 @@ private:
 public:
 	Image();
 	void loadFichier(const char* nom_fichier, SDL_Renderer * renderer);
+	void loadSurface (SDL_Renderer * renderer);
 	void dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h);
 	SDL_Texture * getTexture();
+	void setSurface(SDL_Surface * surf);
 
 
 };
@@ -39,11 +41,16 @@ class JeuSDL{
 private:
 	SDL_Window * window;
 	SDL_Renderer * renderer;
+	TTF_Font * Police;
+	SDL_Color font_color;
+
+
+	Image texteExemple;
 
 
 	Image plateau;
 	Image test;
-	
+
 
 	bool a;
 
