@@ -25,7 +25,7 @@ void Image::loadFichier(const char* nom_fichier, SDL_Renderer * renderer){
 
 
      texture = SDL_CreateTextureFromSurface(renderer,surface);
-     cout<<SDL_GetError()<<endl;
+     //cout<<SDL_GetError()<<endl;
     
      if(texture == NULL){
         cout<<"probleme creation texture :"<<nom_fichier<<endl;
@@ -49,6 +49,7 @@ void Image::dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h){
     r.w = w;
     r.h = h;
     SDL_RenderCopy(renderer,texture,NULL,&r);
+
 }
 
 SDL_Texture * Image::getTexture(){
@@ -76,7 +77,7 @@ JeuSDL::JeuSDL(){
     }
 
 
-    window = SDL_CreateWindow("OctetPoly", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 720, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow("OctetPoly", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1100, 720, SDL_WINDOW_SHOWN );
     if (window == NULL) {
         cout << "Erreur lors de la creation de la fenetre : " << SDL_GetError() << endl; SDL_Quit(); exit(1);
     }
@@ -85,14 +86,25 @@ JeuSDL::JeuSDL(){
 
 
     plateau.loadFichier("data/octopoly.png",renderer);
-    test.loadFichier("data/screen.png",renderer);
+
+    ARRIVEE.loadFichier("data/ARRIVEE.png",renderer);
+    DEPART.loadFichier("data/DEPART.png",renderer);
+    H.loadFichier("data/H.png",renderer);
+    POLICE.loadFichier("data/POLICE.png",renderer);
+    RH.loadFichier("data/RH.png",renderer);
+    RV.loadFichier("data/RV.png",renderer);
+    T1.loadFichier("data/T1.png",renderer);
+    T2.loadFichier("data/T2.png",renderer);
+    T3.loadFichier("data/T3.png",renderer);
+    T4.loadFichier("data/T4.png",renderer);
+    M.loadFichier("data/M.png",renderer);
 
     Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
     if (Police == NULL) {
             cout << "Failed to load DejaVuSansCondensed.ttf! SDL_TTF Error: " << TTF_GetError() << endl; SDL_Quit(); exit(1);
     }
 
-    a = false;
+    font_color.r = 0;font_color.g = 0;font_color.b = 0;
 
 
 }
@@ -106,25 +118,115 @@ JeuSDL::~JeuSDL(){
 
 
 void JeuSDL::affichageJeu(){
-    SDL_SetRenderDrawColor(renderer, 120, 120, 120, 255);
+
+    SDL_SetRenderDrawColor(renderer, 218, 233, 212, 255);
     SDL_RenderClear(renderer);
 
     //afficher plateau
     plateau.dessineTexture(renderer,0,0,720,720);
 
-    //texte
-    font_color.r = 50;font_color.g = 50;font_color.b = 255;
-    texteExemple.setSurface(TTF_RenderText_Solid(Police,"ceci est un exemple",font_color));
-    texteExemple.loadSurface(renderer);
-    texteExemple.dessineTexture(renderer,50,50,200,30);
+    
 
+    
 
-    if(a == true){
-       test.dessineTexture(renderer,20,20,200,200);
+   if(ev.getn()=="escape"){
+       affichageEscape();
     }
-    else{
-        //printf("bonjour\n");
-        a = false;
+}
+
+
+void JeuSDL::affichageEscape(){
+    int ix = 112;
+    int iy = 110;
+    if(e.getFin()==false){
+            
+        for(int y=0;y<11;y++){
+            for(int x=0;x<11;x++){
+            
+                
+                    
+                if(tab_escape[y][x]=="M"){
+                       M.dessineTexture(renderer,ix,iy,45,45);
+
+                       ix+=45;
+                }
+                else if(tab_escape[y][x]=="H"){
+                    H.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="RV"){
+                    RV.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="RH"){
+                    RH.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="DEPART"){
+                    DEPART.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="ARRIVE"){
+                    ARRIVEE.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="T1"){
+                    T1.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="T2"){
+                    T2.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="T3"){
+                    T3.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                else if(tab_escape[y][x]=="T4"){
+                    T4.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                if((e.getJoueur().y == y)&&(e.getJoueur().x == x)){
+                    POLICE.dessineTexture(renderer,ix-45,iy,45,45);
+                }
+                else if((e.getPolice().y == y)&&(e.getPolice().x == x)){
+                        POLICE.dessineTexture(renderer,ix-45,iy,45,45);
+                }
+
+
+                if(x==10){
+                    ix=112;
+                    iy+=45;
+                }
+
+                
+            }
+        }
+            
+        texteExemple.setSurface(TTF_RenderText_Solid(Police,"Utilsez les touches Z, Q, S et D pour echapez rapidemant a la police",font_color));
+        texteExemple.loadSurface(renderer);
+        texteExemple.dessineTexture(renderer,730,50,370,30);
+    
+        texteExemple.setSurface(TTF_RenderText_Solid(Police,"Attention de ne pas quitter la route, sinon vous reculez!",font_color));
+        texteExemple.loadSurface(renderer);
+        texteExemple.dessineTexture(renderer,730,90,370,30);
+    }
+    if(e.getFin()==true) {
+        if(e.getEchec()==true){
+            texteExemple.setSurface(TTF_RenderText_Solid(Police,"Vous n'avez pas reussit a vous echaper!",font_color));
+            texteExemple.loadSurface(renderer);
+            texteExemple.dessineTexture(renderer,730,50,370,30);
+
+            texteExemple.setSurface(TTF_RenderText_Solid(Police,"direction la prison!",font_color));
+            texteExemple.loadSurface(renderer);
+            texteExemple.dessineTexture(renderer,730,90,370,30);
+        }
+        else{
+            texteExemple.setSurface(TTF_RenderText_Solid(Police,"Vous avez reussit a vous echaper",font_color));
+            texteExemple.loadSurface(renderer);
+            texteExemple.dessineTexture(renderer,730,50,370,30);
+        }
+            
     }
 
 }
@@ -134,6 +236,7 @@ void JeuSDL::boucleJeu(){
     SDL_Event events;
     bool quit = false;
     //cout<<1;
+    ev.Declenchement();//normalement fonction dans jeu
     while(!quit){
         while(SDL_PollEvent(&events)) {
             if(events.type == SDL_QUIT){
@@ -146,28 +249,43 @@ void JeuSDL::boucleJeu(){
                     break;
 
                 case SDL_KEYDOWN: //detecter une touche: par exemple pour les mini jeu passer events.key.keysym.sym dans l'appel de la fonction
-                    if(events.key.keysym.sym==SDLK_a){
-                        a=true;
-                    }
-                    if(events.key.keysym.sym==SDLK_z){
-                        a=false;
+                    
+                    if(ev.getn()=="escape"){//normalement appel action clavier ou un truc du genre avec la touche
+                        if(events.key.keysym.sym==122){
+                            e.avancerJoueur("z");
+                        }
+                        if(events.key.keysym.sym==113){
+                            e.avancerJoueur("q");
+                        }
+                        if(events.key.keysym.sym==115){
+                            e.avancerJoueur("s");
+                        }
+                        if(events.key.keysym.sym==100){
+                            e.avancerJoueur("d");
+                        }
                     }
                     break;
+                    
                 case SDL_MOUSEBUTTONDOWN:
                 
                     if(events.button.button==SDL_BUTTON_LEFT){
                         //ici pour la souris, il suffit delettre des if avec les coordonéé
                         if((events.button.y>0) && (events.button.x>0) && (events.button.y<200) && (events.button.y<200) ){
-                            a=true;
+                            
                         }
                     }
                     
                     break;
                 default: break;
             }
+            
         }
+        
+        e.deplacePolice(ev.gettempsD());//normalement fonction dans jeu
+        e.victoireDefaite();//normalement fonction dans jeu
         affichageJeu();
 
         SDL_RenderPresent(renderer);
     }
 }
+

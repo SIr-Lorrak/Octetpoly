@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include "Jeu.h"
+#include "Evenement.h"
 
 
 using namespace std;
@@ -39,6 +39,8 @@ public:
 class JeuSDL{
 
 private:
+	Escape e;
+	Evenement ev;
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	TTF_Font * Police;
@@ -49,7 +51,19 @@ private:
 
 
 	Image plateau;
-	Image test;
+	Image ARRIVEE;
+	Image DEPART;
+	Image H;
+	Image POLICE;
+	Image RH;
+	Image RV;
+	Image T1;
+	Image T2;
+	Image T3;
+	Image T4;
+	Image M;
+
+
 
 
 	bool a;
@@ -61,6 +75,7 @@ public:
 	JeuSDL();
 	~JeuSDL();
 	void affichageJeu();
+	void affichageEscape();
 	void boucleJeu();
 
 
