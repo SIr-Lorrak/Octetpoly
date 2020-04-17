@@ -192,14 +192,26 @@ void Jeu::ajouterJoueur()
 	tabJ[nbJoueur] = new Joueur;
 	tabJ[nbJoueur]->setRang(nbJoueur+1);
 	nbJoueur++;
-	attendreNom = true;
 }
 
 
-void Jeu::enleverJoueur()
+void Jeu::enleverJoueur(unsigned int n)
 {
+	if(n==0){//si n==0 c'est que la fonction a été appeler sans paramètre dans ce cas la on supprime le dernier joueur
+		n=nbJoueur;
+	}
+	assert(n<=4);
+	delete tabJ[n-1];//on suprimme le joueur souchaité
+	for(unsigned int i=n-1;i<nbJoueur;i++){//on décale ensuite le reste des joueurs
+		if(i==nbJoueur-1){
+			tabJ[i]=NULL;
+		}
+		else{
+			tabJ[i]=tabJ[i+1];
+			tabJ[i]->setRang(tabJ[i]->getRang()-1);
+		}
+	}
 	nbJoueur--;
-	delete tabJ[nbJoueur];
 }
 
 
@@ -226,7 +238,6 @@ void Jeu::tourSuivant(){
 	nbTour++;
 	unsigned int i=0;
 	while(joueurCourant!=ordre[i]){
-		cout<<"lol";
 		i++;
 	}
 
@@ -302,8 +313,9 @@ void Jeu::actionMenu(const string & touche)
 {
 	if(!attendreNom&&nbJoueur<4){
 		if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
-			if(touche == "+"){
+			if(touche == "+"||touche=="="){
 				ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
+				attendreNom = true;
 			}
 
 			if(touche == "-"&&nbJoueur>0){
@@ -788,7 +800,6 @@ Jeu::~Jeu(){
 	}
 }
 
-
 void Jeu::updateMiniJeu(){
 
 	if(e.getn() == "escape"){
@@ -799,7 +810,6 @@ void Jeu::updateMiniJeu(){
 	if(e.getn() == "clicker"){
 		c.gestionTps(gete().gettempsD());
 		if(c.getFin()==true){e.fini();}
-		
 	}
 	
 }

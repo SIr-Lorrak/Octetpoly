@@ -5,4 +5,6 @@ bin/
 
 doc/html/
 
-src/main.cpp
+src/mainTest.cpp
+
+*BAKCUP
