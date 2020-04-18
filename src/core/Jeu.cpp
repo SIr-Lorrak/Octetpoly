@@ -37,6 +37,11 @@ Jeu::Jeu(){
 	ad = false;
 	porteO = false;
 	choix = "";
+	nbVente = 0;
+	for (int i = 0; i < 24; ++i)
+	{
+		vente[i] = "";
+	}
 	/////////////
 	chance = NULL;
 
@@ -72,6 +77,16 @@ Case & Jeu::getJCase(const unsigned int i)
 string Jeu::getChoix() const
 {
 	return choix;
+}
+
+string Jeu::getVente(unsigned int indice)
+{
+	return vente[indice];
+}
+
+unsigned int Jeu::getNbVente() 
+{
+	return nbVente;
 }
 
 bool Jeu::getBool(const string & type) const
@@ -217,6 +232,16 @@ void Jeu::enleverJoueur()
 	delete tabJ[nbJoueur];
 }
 
+void ajouterVente(){
+	//Voir plus tard
+}
+
+
+void Jeu::enleverVente(){
+	nbVente--;
+	vente[nbVente] = "";
+}
+
 
 void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 {
@@ -248,6 +273,24 @@ void Jeu::ecrire(const string touche){
 	}
 }
 
+unsigned int Jeu::totalVente(){
+	unsigned int total = 0;
+	for (unsigned int i = 0; i < nbVente; ++i)
+	{
+		total = total + board.getCase(board.getIndice(vente[i]))->getPrixDeVente();
+	}
+	return total;
+}
+
+ void Jeu::remiseZeroEtVente(){
+	for (unsigned int i = 0; i < nbVente; ++i)
+	{
+		getPion(joueurCourant)->vend(vente[i]);
+		vente[i] = "";
+	}
+	nbVente = 0;
+}
+
 void Jeu::affichageQuartierDisponible(){
 	for (int i = 0; i < 32; ++i)
 	{
@@ -257,6 +300,20 @@ void Jeu::affichageQuartierDisponible(){
 			cout << i << " " << board.getCase(i)->getNom() << endl; 
 		}	
 	}
+}
+
+bool Jeu::dejaEnVente(unsigned int indice){
+	bool enVente = false;
+	unsigned int i = 0;
+	while(!enVente && i < nbVente)
+	{
+		if(getPion(joueurCourant)->getPropriete(indice)->getNom() == vente[i])
+		{
+			enVente = true;
+		}
+		i++;
+	}
+	return enVente;
 }
 
 
@@ -445,7 +502,6 @@ void Jeu::investirEJoueur(const string touche){
 }
 
 void Jeu::actionBE(const string touche){
-
 	//La case où se trouve le JOUEUR
 	Case * c = board.getCase(getPion(joueurCourant)->getPos());
 
@@ -459,8 +515,8 @@ void Jeu::actionBE(const string touche){
 	if(occupant != joueurCourant)
 	{	
 		if(occupant != 0 && actionObligatoire){// La case appartient a une autre personne
-			if(touche == "\n"){
-				payeLoyerJoueur();
+			if(vend || touche == "\n"){
+				payeLoyerJoueur(touche);
 			}
 		}
 
@@ -503,14 +559,13 @@ void Jeu::paye(unsigned int payeur, unsigned int creancier, float montant){
 }
 
 
-void Jeu::payeLoyerJoueur(){
+void Jeu::payeLoyerJoueur(const string touche){
 //C'est un joueur qui joue	
 	//La case où se trouve le joueurCourant
 	Case * c = board.getCase(getPion(joueurCourant)->getPos());
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
-
 	//Le joueurCourant paye directement si il a assez d'argent 
-	if(coinCourant >= c->getLoyer())
+	if(coinCourant >= c->getLoyer() && !vend)
 	{
 		paye(joueurCourant,c->getOccupation(),c->getLoyer());
 		actionObligatoire = false;//si le pion paye alors c'est bon il a fait ces actions obligatoires
@@ -519,12 +574,50 @@ void Jeu::payeLoyerJoueur(){
 	//Le joueurCourant doit vendre pour payer le loyer
 	else if((coinCourant + getPion(joueurCourant)->patrimoineActif()) >= c->getLoyer())
 	{
-		//on passe dans l'interface de vente (c'est a dire on passe le booléen vend a true et c'est tout)
-		//vend = true;
-		if(vend)
+		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
+		vend = true;
+		if(!confirmation)
 		{
-			//TODO RECUP la case à vendre
-			//getPion(joueurCourant)->vend()
+			if(touche == "-" && nbVente > 0)
+			{
+				enleverVente();
+			}
+
+			else if(touche=="+"
+				&& choix != ""
+				&& stoul(choix) < getPion(joueurCourant)->getNbPropriete()
+				&& stoul(choix) >= 0
+				&& !dejaEnVente(stoul(choix)))
+			{
+				vente[nbVente] = getPion(joueurCourant)->getPropriete(stoul(choix))->getNom(); 
+				nbVente++;
+				choix = "";
+			}
+
+			else if((touche=="o"|| touche=="O") 
+				&& coinCourant + totalVente() >= c->getLoyer())
+			{
+				confirmation = true;
+			}
+
+			else
+			{
+				ecrire(touche);
+			}
+		}
+
+		else 
+		{
+			//Deuxième confirmation
+			if(touche=="o"|| touche=="O")
+			{	
+				remiseZeroEtVente();
+				vend = false;
+			}
+			else if(touche=="n"||touche=="N")
+			{
+				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
+			}
 		}
 	}
 
@@ -569,7 +662,6 @@ void Jeu::campagneDePub(const string touche){
 	Case * c = board.getCase(16);//ATTENTION APPEL FRAUDULEUX
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 	actionObligatoire = false;//La campagne de Pub n'est pas une action obligatoire
-
 	if((touche == "o" ||touche == "O") 
 		&& (coinCourant >= c->getPrix())
 		&& (!ad)
@@ -579,49 +671,37 @@ void Jeu::campagneDePub(const string touche){
 	}
 
 	else if(ad)
-	{
-		if(tourOrdi)
-		{	choix = tabO[joueurCourant-1].AIchampionat();
-			pub(board.getCasePos(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
-			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
-			ad = false;	
-			attendreAmplete = false;
-			choix = "";
+	{	
+		//Première confirmation
+		if((touche=="o"|| touche=="O") && !confirmation && choix != "")
+		{
+			confirmation = true;
+				
+			if(stoul(choix) > getPion(joueurCourant)->getNbPropriete()-1
+				|| stoul(choix) < 0) //On vérifie si l'utilisateur n'a pas écrit n'importe quoi
+			{
+				confirmation = false;
+			}
 		}
 
-		else
-		{	
-			//Première confirmation
-			if((touche=="o"|| touche=="O") && !confirmation && choix != "")
+		else if(!confirmation)
+		{
+			ecrire(touche);
+		}
+		else if(confirmation)
+		{
+			//Deuxième confirmation
+			if(touche=="o"|| touche=="O")
 			{
-				confirmation = true;
-				 
-				if(stoul(choix) > getPion(joueurCourant)->getNbPropriete()-1
-					|| stoul(choix) < 0) //On vérifie si l'utilisateur n'a pas écrit n'importe quoi
-				{
-					confirmation = false;
-				}
+				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
+				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
+				ad = false;
+				attendreAmplete = false;
+				choix = "";
 			}
-
-			else if(!confirmation)
+			else if(touche=="n"||touche=="N")
 			{
-				ecrire(touche);
-			}
-			else if(confirmation)
-			{
-				//Deuxième confirmation
-				if(touche=="o"|| touche=="O")
-				{
-					pub(board.getCasePos(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
-					getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
-					ad = false;
-					attendreAmplete = false;
-					choix = "";
-				}
-				else if(touche=="n"||touche=="N")
-				{
-					confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-				}
+				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
 			}
 		}
 	}
@@ -649,48 +729,35 @@ void Jeu::porteOuverte(const string & touche){
 	}
 
 	else if(getPion(joueurCourant)->getTicket())
-	{
-		if(tourOrdi)
-		{	
-			//choix = tabO[joueurCourant-1].AIporteOuverte();
-			getPion(joueurCourant)->setPos(stoul(choix));
-			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
-			getPion(joueurCourant)->setTicket(false);	
-			attendreAmplete = false;
-			choix = "";
+	{	
+		//Première confirmation
+		if((touche=="o"|| touche=="O") 
+			&& !confirmation 
+			&& choix != ""
+			&& board.caseValide(stoul(choix),joueurCourant))
+		{
+			confirmation = true;
 		}
 
-		else
-		{	
-			//Première confirmation
-			if((touche=="o"|| touche=="O") 
-				&& !confirmation 
-				&& choix != ""
-				&& board.caseValide(stoul(choix)))
+		else if(!confirmation)
+		{
+			ecrire(touche);
+		}
+		else if(confirmation)
+		{
+			//Deuxième confirmation
+			if(touche=="o"|| touche=="O")
 			{
-				confirmation = true;
+				getPion(joueurCourant)->setPos(stoul(choix));
+				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+				getPion(joueurCourant)->setTicket(false);	
+				attendreAmplete = false;
+				choix = "";
+				porteO = false;
 			}
-
-			else if(!confirmation)
+			else if(touche=="n"||touche=="N")
 			{
-				ecrire(touche);
-			}
-			else if(confirmation)
-			{
-				//Deuxième confirmation
-				if(touche=="o"|| touche=="O")
-				{
-					getPion(joueurCourant)->setPos(stoul(choix));
-					getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
-					getPion(joueurCourant)->setTicket(false);	
-					attendreAmplete = false;
-					choix = "";
-					porteO = false;
-				}
-				else if(touche=="n"||touche=="N")
-				{
-					confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-				}
+				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
 			}
 		}
 	}

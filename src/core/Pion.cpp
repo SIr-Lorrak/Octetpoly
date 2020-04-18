@@ -194,26 +194,36 @@ void Pion::achete(Case * c)
 	c->estAcheter(rang);
 }
 
-void Pion::vend(unsigned int indP, Case * c)//A MODIFIER !
+void Pion::vend(string nom)
 {
 	assert(nbpropriete != 0);
-	assert(indP < nbpropriete);
 
-	bitcoin += c->getPrixDeVente();
-	propriete[indP] = NULL;
-	
+	unsigned int i = 0;
+	bool trouver = false;
+	while(!trouver && i < nbpropriete)
+	{
+		if(nom == propriete[i]->getNom())
+		{
+			bitcoin += propriete[i]->getPrixDeVente();
+			propriete[i]->reset();
+			propriete[i] = NULL;
+			trouver = true;
+		}
+		i++;
+	}
+
+	//Le nom ne correspond pas à une case de propriété
+	assert(i<32);
+
 	///Il faut déplacer les propriétés pour qu'il n'y ai pas de case vide entre 2 propriétés
-
 	///On supprime la case vide et on replace les autres propriétés
-	for(unsigned int j = indP; j < nbpropriete; j++)
+	for(unsigned int j = i-1; j < nbpropriete - 1 ; j++)
 	{
 		propriete[j] = propriete[j+1];
 	}
 
-	propriete[nbpropriete] = NULL;
-	nbpropriete -= 1;
-
-	c->reset();
+	propriete[nbpropriete - 1] = NULL;
+	nbpropriete = nbpropriete - 1;
 }
 
 
@@ -293,6 +303,7 @@ void Pion::EstEnFaillite()
 	for(unsigned int i = 0; i < nbpropriete; i++)
 	{
 		propriete[i]->reset();
+
 		propriete[i] = NULL;
 	}
 	nbpropriete = 0;
@@ -303,5 +314,5 @@ void Pion::EstEnFaillite()
 ///----------------------------------------------------------------Destructeur--------------------------------------------------------------
 
 Pion::~Pion(){
-	//delete [] propriete;
+	delete [] propriete;
 }

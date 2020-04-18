@@ -49,9 +49,9 @@ public:
 
 	unsigned int nbCaseFree();
 
-	unsigned int getCasePos(string nom);
+	unsigned int getIndice(const string & nom) const;
 
-	bool caseValide(unsigned int choix);
+	bool caseValide(unsigned int choix,unsigned int joueur);
 
 	//-------------------------------------TEST REGRESSION-----------------------------------
 

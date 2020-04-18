@@ -18,7 +18,7 @@ brief permet le fonctionnement du jeu peut importe le type d'affichage
 */
 class Jeu{
 	private :
-		Plateau board;
+		
 		
 		//Chance Paquet;//après implémantation des cartes chance.
 		//Evenement e; //après implémantation des minis jeux.
@@ -30,7 +30,10 @@ class Jeu{
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
 		///////////////////////////
+		unsigned int nbVente;
+		///////////////////////////
 		string choix;
+		string vente[24];	
 		//////////////////////////
 		Carte * chance;
 
@@ -82,6 +85,18 @@ class Jeu{
 		void enleverJoueur();
 
 		/**
+		@brief 
+		@param none
+		*/
+		void ajouterVente();
+
+		/**
+		@brief 
+		@param none
+		*/
+		void enleverVente();
+
+		/**
 		@brief dans le menu de départ ajoute une lettre au nom d'un Joueur
 		@param un entier : l'indice du joueur
 		@param un string : la/les lettre a rajouter (normalement c'est une lettre seul)
@@ -111,6 +126,9 @@ class Jeu{
 		*/
 		void ecrire(const string touche);
 
+		void remiseZeroEtVente();
+
+		bool dejaEnVente(unsigned int indice);
 
 		/**
 		@brief sauvegarde le jeu dans un fichier pour reprendre plus tard
@@ -164,7 +182,7 @@ class Jeu{
 		@brief Procédure qui gére le loyer à payer par un joueur
 		@param none
 		*/
-		void payeLoyerJoueur();
+		void payeLoyerJoueur(const string touche);
 
 		/**
 		@brief Fonction qui prends en paramètre la case sur laque le joueurCourant veux
@@ -184,6 +202,7 @@ class Jeu{
 		
 
 	public :
+		Plateau board;
 		/**
 		@brief constructeur par défaut de Jeu
 		@param aucun
@@ -196,8 +215,6 @@ class Jeu{
 		*/
 		void getOrdre(unsigned int tab[4]) const;
 
-		void affichageQuartierDisponible();
-		
 		/**
 		@brief renvoie le booléen demander
 		@param un string : type, il donne le nom du booléen demander 
@@ -206,7 +223,7 @@ class Jeu{
 
 		Case & getJCase(const unsigned int i);
 
-		string getChoix() const;
+		unsigned int getNbVente();
 
 		/**
 		@brief renvoie ne nombre de joueur (non-ordi)
@@ -234,6 +251,17 @@ class Jeu{
 
 		Carte * getCarte()const;
 
+		string getVente(unsigned int indice);
+
+		/**
+		@brief revoie le choix du joueur quand le joueur vend un quartier ou
+		choisie son quartier pour la campagne de pub ou lors de son déplacement
+		pour les portes ouvertes
+		@param none
+		@return le choix du joueur : string
+		*/
+		string getChoix() const;
+		
 		/**
 		@brief choisi l'action correspondante à la touche entrer par l'utilisateur
 		@param un string : touche, c'est la touche entrer par le joueur
@@ -272,6 +300,15 @@ class Jeu{
 		@param none
 		*/
 		void porteOuverte(const string & touche);
+
+		//!\\A changer au plus vite (utiliser pour les tests)
+		void affichageQuartierDisponible();
+
+		/**
+		@brief indique combien la vente rapportera
+		@return le gain de la vente : unsigned int
+		*/
+		unsigned int totalVente();
 
 		/**
 		brief seteur permetant de mettre à jour l'évenement e

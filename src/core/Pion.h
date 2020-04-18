@@ -201,7 +201,7 @@ class Pion{
 	@brief Procédure qui permet au pion de vendre une propriété
 	@param indP : entier non signé , c : Un pointeur vers la case que le pion veut vendre
 	*/
-	void vend(unsigned int indP, Case * c);
+	void vend(string nom);
 
 	/**
 	@brief Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé

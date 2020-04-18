@@ -195,7 +195,7 @@ void affichePion(const Pion & p){
 }
 
 void JeuTXT::affichageCase(const Case & c){
-	Pion p = *j.getPion(j.getJoueurCourant());
+	Pion * p = j.getPion(j.getJoueurCourant());
 	switch(c.getType()){
 		case 'E':
 			cout<<"vous ètes sur l'entreprise : "<<c.getNom()<<endl;
@@ -248,7 +248,7 @@ void JeuTXT::affichageCase(const Case & c){
 				cout<<"investissement : "<<c.getInvestissement()<<endl;
 			}
 		}
-		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p.getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
 			cout<<"vous devez payer le loyer au joueur "<<c.getOccupation()<<" !"<<endl;
 		}
 		if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
@@ -257,7 +257,7 @@ void JeuTXT::affichageCase(const Case & c){
 				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
 			}
 
-			else if(p.getCoin()>=c.getPrix()){
+			else if(p->getCoin()>=c.getPrix()){
 				if(c.getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
@@ -272,9 +272,9 @@ void JeuTXT::affichageCase(const Case & c){
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
 	
-	Pion joueurCourant;
-	joueurCourant = *j.getPion(j.getJoueurCourant());
-	unsigned int pos = joueurCourant.getPos();
+	Pion * joueurCourant;
+	joueurCourant = j.getPion(j.getJoueurCourant());
+	unsigned int pos = joueurCourant->getPos();
 	Case c = j.getJCase(pos);
 
 	cout<<"case : "<<pos<<endl;
@@ -282,7 +282,7 @@ void JeuTXT::affichageJeu(){
 	affichageCase(c);
 
 	if(j.getBool("desLance")){
-		affichageDes(joueurCourant.getDes().D1,joueurCourant.getDes().D2);
+		affichageDes(joueurCourant->getDes().D1,joueurCourant->getDes().D2);
 	}
 
 	else{
@@ -392,6 +392,36 @@ void JeuTXT::affichagePorteOuvete(){
 	}
 }
 
+void JeuTXT::affichageVente(){
+	cout<<"<[-($)-]¯-_-¯-VENTE-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Quel(s) quartier(s) voulez-vous vendre ?" << endl;
+	cout << "Voici votre/vos propriété(s) : " << endl;
+	for (unsigned int i = 0; i < j.getPion(j.getJoueurCourant())->getNbPropriete() ; ++i)
+	{
+		cout << i << " " << (j.getPion(j.getJoueurCourant())->getPropriete(i))->getNom() << endl;
+	}
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	cout << "Vous possédé " 
+			<< (j.getPion(j.getJoueurCourant())->getCoin() + j.totalVente()) << " Goldus" << endl;
+
+	cout << "Vous vendez : " << endl;
+
+	for (unsigned int i = 0; i < j.getNbVente() ; ++i)
+	{
+		cout << " - " << j.getVente(i) << endl;
+	}
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
+		cout<<"vous etes sur ? (o/n) ";Endl();
+	}
+}
+
 void JeuTXT::affichage(){
 	/*if(j.gete().getn() == "rien"){
 
@@ -415,6 +445,10 @@ void JeuTXT::affichage(){
 	}
 	else if(j.getBool("porteO")){
 		affichagePorteOuvete();
+	}
+	else if(j.getBool("vend"))
+	{
+		affichageVente();
 	}
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();

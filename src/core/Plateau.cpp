@@ -10,11 +10,11 @@ Plateau::Plateau(){
 	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase('D',0,"Depart",0,0,0,0);
 	tabC[1].initCase('E',5,"Auchan",4,1,1,50);
-	tabC[2].initCase('E',10,"Aldi",4,1,1,2);
-	tabC[3].initCase('E',15,"Carrefour",4,1,1,2);
-	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,2);
-	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,2);
-	tabC[6].initCase('E',25,"Ankama",4,1,1,2);
+	tabC[2].initCase('E',10,"Aldi",4,1,1,50);
+	tabC[3].initCase('E',15,"Carrefour",1000,1,1,500);
+	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,50);
+	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,50);
+	tabC[6].initCase('E',25,"Ankama",4,1,1,50);
 	tabC[7].initCase('E',30,"Ubisof",4,1,1,2);
 	tabC[8].initCase('P',15,"Prison",0,0,0,0);
 
@@ -48,7 +48,6 @@ Plateau::Plateau(){
 }
 
 Plateau::~Plateau(){
-	//TODO
 	delete [] tabC;
 }
 
@@ -80,27 +79,22 @@ void Plateau::setcasePub(unsigned int numCase){
 		return nbcase;
 	}
 
-	unsigned int Plateau::getCasePos(string nom){
-		unsigned int numCase = 0;
-		unsigned int i = 0;
-		while(numCase == 0 && i < TPLATEAU )
-		{
-			if(tabC[i].getNom() == nom)
-			{
-				numCase = i;
-			}
-			i = i+1;
-		}
-		return numCase;
+	unsigned int Plateau::getIndice(const string & nom) const{
+    	unsigned int i=0;
+    	while(tabC[i].getNom()!=nom){
+        	assert(i<32);//si i dépasse le nom envoyé est invalid
+        	i++;
+    	}
+    	return i;
 	}
 
-	bool Plateau::caseValide(unsigned int choix){
+	bool Plateau::caseValide(unsigned int choix,unsigned int joueur){
 		bool valide = false;
 		unsigned int i = 0;
 		while(!valide && i < TPLATEAU )
 		{
 			if((tabC[i].getType() == 'B' || tabC[i].getType() == 'E')
-				&& tabC[i].getOccupation() == 0)
+				&& (tabC[i].getOccupation() == 0 || tabC[i].getOccupation() == joueur))
 			{
 				if(choix == i)
 				{

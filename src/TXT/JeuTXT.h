@@ -32,6 +32,8 @@ private:
 
 	void affichagePorteOuvete();
 
+	void affichageVente();
+
 	void affichageCase(const Case & c);
 
 	/**

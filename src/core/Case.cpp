@@ -247,6 +247,7 @@ void Case::reset(){
 	occupation = 0;
 	investissement = 0;
 	ad = false;
+	coeffAd = 1.0;
 
 	//On renitialise les prix
 	initPrixInitial();
