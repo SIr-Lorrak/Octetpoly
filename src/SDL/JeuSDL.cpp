@@ -6,6 +6,7 @@ using namespace std;
 const unsigned int DIMX=1100;
 const unsigned int DIMY=720;
 
+const SDL_Color COL_WINDOW = {218, 233, 212};
 //different type de bouton l'or de l'appel de affiche bouton
 
 
@@ -68,6 +69,8 @@ void Image::setSurface(SDL_Surface * surf) {
     surface = surf;
 }
 
+
+
 Image::~Image(){
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
@@ -103,6 +106,18 @@ JeuSDL::JeuSDL(){
     ange.loadFichier("data/images/ange.png",renderer);
     demon.loadFichier("data/images/demon.png",renderer);
 
+    button.loadFichier("data/images/button.png",renderer);
+    buttonClicked.loadFichier("data/images/buttonClicked.png",renderer);
+    red_button.loadFichier("data/images/red_button.png",renderer);
+    red_buttonClicked.loadFichier("data/images/red_buttonClicked.png",renderer);
+    green_button.loadFichier("data/images/green_button.png",renderer);
+    green_buttonClicked.loadFichier("data/images/green_buttonClicked.png",renderer);
+    blue_button.loadFichier("data/images/blue_button.png",renderer);
+    blue_buttonClicked.loadFichier("data/images/blue_buttonClicked.png",renderer);
+
+
+
+
     ARRIVEE.loadFichier("data/images/ARRIVEE.png",renderer);
     DEPART.loadFichier("data/images/DEPART.png",renderer);
     H.loadFichier("data/images/H.png",renderer);
@@ -131,33 +146,70 @@ JeuSDL::~JeuSDL(){
     TTF_Quit();  
 }
 
-void afficheCursor(const int x,const int y,const int w,const int h,const SDL_Color couleur={0,0,0}){
-    //TODO : affiche un rectangle x,y,w,h de couleur couleur par défaut noir
+void JeuSDL::dessineTexte(const string & texte,int x,int y, unsigned int taille,const SDL_Color couleur){
+    texteExemple.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),couleur));
+    texteExemple.loadSurface(renderer);
+    texteExemple.dessineTexture(renderer,x,y,taille*texte.length(),taille*1.8);
 }
 
-void JeuSDL::afficheButton(const int x,const int y,const int w,const int h,const unsigned int type,const string & c1,const Image * c2,const SDL_Color couleur){
+void afficheCursor(SDL_Renderer * renderer,const int x,const int y,const int w,const int h,const SDL_Color couleur={0,0,0}){
+    //TODO : affiche un rectangle x,y,w,h de couleur couleur par défaut noir
+    if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%51<25){
+        SDL_SetRenderDrawColor(renderer, couleur.r,couleur.g,couleur.b,255);
+        SDL_Rect rectangle = {x,y,w,h};
+        SDL_RenderFillRect(renderer,&rectangle);
+        SDL_SetRenderDrawColor(renderer, COL_WINDOW.r,COL_WINDOW.g,COL_WINDOW.b,255);
+    }
+}
+
+void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,const int h,const unsigned int type,const string & c1,const Image * c2,const int margin,const SDL_Color couleur){
     if(c1!="" && c2!=NULL){//si l'utilisateur a demandé d'afficher un bouton contenant a la fois du texte et a la fois une image
         cout<<"erreur : vous ne pouvez pas vous ne pouvez pas mettre du texte ET une image dans un bouton (c'est peut être dure mais il faut choisir)"<<endl;
         assert(false);
     }
-
+    bool clicked = m.x>x&&m.x<x+w  &&   m.y>y&&m.y<y+h;
+    if(clicked){
+        action=effet;
+    }
     switch(type){
         case DEFAULT:
-            button.dessineTexture(renderer,x,y,w,h);
+            if(clicked){
+                buttonClicked.dessineTexture(renderer,x,y,w,h);
+            }
+            else{
+                button.dessineTexture(renderer,x,y,w,h);
+            }
             break;
 
         case RED:
-            red_button.dessineTexture(renderer,x,y,w,h);
+            if(clicked){
+                red_buttonClicked.dessineTexture(renderer,x,y,w,h);
+            }
+            else{
+                red_button.dessineTexture(renderer,x,y,w,h);
+            }
             break;
 
         case GREEN:
-            green_button.dessineTexture(renderer,x,y,w,h);
+            if(clicked){
+                green_buttonClicked.dessineTexture(renderer,x,y,w,h);
+            }
+            else   {
+                green_button.dessineTexture(renderer,x,y,w,h);
+            }
             break;
 
         case BLUE:
-            blue_button.dessineTexture(renderer,x,y,w,h);
+            if(clicked){
+                blue_buttonClicked.dessineTexture(renderer,x,y,w,h);
+            }
+            else{
+                blue_button.dessineTexture(renderer,x,y,w,h);
+            }
             break;
 
+        case INVISIBLE:
+            break;//on n'affiche rien puisqu'il est invisible
         default:
             cout<<"erreur : type de bouton invalid"<<endl;
             assert(false);
@@ -166,13 +218,13 @@ void JeuSDL::afficheButton(const int x,const int y,const int w,const int h,const
 
     Image im_contenue;
     if(c1!=""){
-        im_contenue.setSurface(TTF_RenderText_Solid(Police,"Attention de ne pas quitter la route, sinon vous reculez!",font_color));
+        im_contenue.setSurface(TTF_RenderText_Solid(Police,c1.c_str(),couleur));
         im_contenue.loadSurface(renderer);
-        im_contenue.dessineTexture(renderer,x+5,y+5,w-10,h-10);
+        im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
     }
     else if(c2!=NULL){
         im_contenue = * c2;
-        im_contenue.dessineTexture(renderer,x+5,y+5,w-10,h-10);
+        im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
     }
 }
 
@@ -252,9 +304,7 @@ void JeuSDL::affichageEscape(){//cette fonction doit être adapté !
             }
         }
             
-        texteExemple.setSurface(TTF_RenderText_Solid(Police,"Utilsez les touches Z, Q, S et D pour echapez rapidemant a la police",font_color));
-        texteExemple.loadSurface(renderer);
-        texteExemple.dessineTexture(renderer,730,50,370,30);
+        dessineTexte("Utilsez les touches Z, Q, S et D pour echapez rapidemant a la police",730,50);
     
         texteExemple.setSurface(TTF_RenderText_Solid(Police,"Attention de ne pas quitter la route, sinon vous reculez!",font_color));
         texteExemple.loadSurface(renderer);
@@ -288,31 +338,60 @@ void JeuSDL::affichageMenu(){
     texteExemple.setSurface(TTF_RenderText_Solid(Police,"OctetPoly !",rouge));
     texteExemple.loadSurface(renderer);
     texteExemple.dessineTexture(renderer,(DIMX/2)-250,0,500,100);
+    unsigned int n = j.getNbJoueur();
+    if(j.getBool("attendreNom")){
+        n-=1;
+    }
+    for(unsigned int i=1;i<=n;i++){
+        string nom = "1.";
+        nom[0]=int('0')+j.getPion(i)->getRang();
+        nom+=j.getPion(i)->getNom();
+        if(j.getPion(i)->getNom().length()==0){
+            nom+="<anonyme>";
+        }
+        dessineTexte(nom.c_str(),35+(i-1)*250,200,14);
+        string act = "- ";
+        act[1]=1;
+        newButton(act,35+i*250-30,250,30,30,RED,"X");
+
+    }
     if(j.getBool("attendreNom")){
 
-        texteExemple.setSurface(TTF_RenderText_Solid(Police,"nom : ",font_color));
-        texteExemple.loadSurface(renderer);
-        texteExemple.dessineTexture(renderer,10,100,90,30);
+        dessineTexte("nom :",35+(j.getNbJoueur()-1)*250,200,14);
 
-        string nom = j.getPion(1)->getNom();
+        string nom = j.getPion(j.getNbJoueur())->getNom();
 
         if(nom.length()>0){
-            texteExemple.setSurface(TTF_RenderText_Solid(Police,nom.c_str(),font_color));
-            texteExemple.loadSurface(renderer);
-            texteExemple.dessineTexture(renderer,110,100,nom.length()*20,30);
+            dessineTexte(nom.c_str(),40+(j.getNbJoueur()-1)*250,230,14);
         }
+        afficheCursor(renderer,50+(j.getNbJoueur()-1)*250+nom.length()*16,230,2,20);
+        newButton("\n",120+(j.getNbJoueur()-1)*250+150,230,30,30,GREEN,"V");
+    }
+    else if(j.getBool("confirmation")){
+        dessineTexte("Commencer avec ces Joueurs ? ",80,DIMY-70,22);
+        newButton("\n",DIMX-300,DIMY-100,90,80,GREEN,"oui",NULL,10);
+        newButton("n",DIMX-150,DIMY-100,90,80,RED,"non",NULL,10);
+    }
+    else{
+        newButton("+",40+(j.getNbJoueur())*250,200,30,30,BLUE,"+");
+        newButton("\n",DIMX-300,DIMY-100,240,80,BLUE,"Commencer !",NULL,10);
     }
 }
 
 void JeuSDL::affichageJeu(){
-
+    //TODO
+    plateau.dessineTexture(renderer,0,0,DIMY,DIMY);
 }
 
 void JeuSDL::affichage(){
 
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 218, 233, 212, 255);
+    SDL_SetRenderDrawColor(renderer, COL_WINDOW.r,COL_WINDOW.g,COL_WINDOW.b,255);
 
+    //afficheCursor(renderer,50,50,50,50);
+
+    //exemple de bouton
+    //newButton("je ne fais rien!",200,200,200,50,DEFAULT,"je suis un bouton",NULL,10);
 
     if(j.getNbTour()==0){
         affichageMenu();
@@ -349,32 +428,38 @@ bool JeuSDL::update(SDL_Event & events){
                     break;
 
 
-                case SDL_KEYDOWN://certaine touches ne peuvent pas être détectée sous la forme de texte
+                case SDL_KEYDOWN://certaine touches ne peuvent pas être détectée sous la forme de texte donc on est obligé de les spécifier
                     switch(events.key.keysym.scancode){
                         case SDL_SCANCODE_BACKSPACE:
-                            j.actionClavier("\b");
+                            input = "\b";
                             break;
                         case SDL_SCANCODE_ESCAPE:
+                            input = "\e";
                             quit = true;
                             break;
                         case SDL_SCANCODE_RETURN:
-                            j.actionClavier("\n");
+                            input = "\n";
                         default:
                             break;
+                    }
+                    if(j.accepteClavier()){//si le jeu accepte les input de type clavier
+                        j.actionClavier(input);
                     }
                     break;
 
                 case SDL_TEXTINPUT: //detecter une touche sous forme de texte (comme ça pas besoin de scancode pour toutes les touches qu'on utilise)
                     
                     input = events.text.text;
-                    j.actionClavier(input);
+                    if(j.accepteClavier()){//si le jeu accepte les input de type clavier
+                        j.actionClavier(input);
+                    }
                     break;
 
 
                 case SDL_MOUSEBUTTONDOWN:
                 
                     if(events.button.button==SDL_BUTTON_LEFT){
-                        //TODO: mettre les coordonnées de la souris dans un truc
+                        //enregistré les coordonnées de la souris au clique
                         m.x=events.button.x;
                         m.y=events.button.y;
                     }
@@ -383,10 +468,13 @@ bool JeuSDL::update(SDL_Event & events){
 
                 case SDL_MOUSEBUTTONUP:
                     if(events.button.button==SDL_BUTTON_LEFT){
-                        //TODO: action souris 
+                        //lancer l'action donner par un bouton lors du relachement de la souris
                         cout<<m.x<<"-"<<m.y<<endl;
+                        cout<<action<<endl;
+                        j.action(action);
                         m.x=-1;
                         m.y=-1;
+                        action="";//l'action est effectuée elle est donc vidée
                     }
 
                 default: break;

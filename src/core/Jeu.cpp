@@ -176,7 +176,7 @@ void Jeu::commencerPartie()
 		tabO = new Ordi [4-nbJoueur];
 	
 		do{
-			for(unsigned int i = 1;i<4-nbJoueur;i++){
+			for(unsigned int i = 0;i<4-nbJoueur;i++){
 				do{
 					tabO[i].nomAleatoire();
 				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
@@ -708,12 +708,25 @@ void Jeu::actionClavier(const string & touche)
 	}
 
 	else if(e.getn()=="rien"){
-		konamiCode(touche);//pour le konami code
+		konamiCode(touche);//pour le konami code implémanter a la fin si il reste du temps.
 		actionPartie(touche);
 	}
 	else{
 
 		actionMiniJeu(touche);
+	}
+}
+
+void Jeu::action(const string & action){
+	if(action.length()==1){
+		actionClavier(action);
+	}
+	else{
+		//ici rajouté des actions personalisée
+		if(action[0]=='-'){
+			enleverJoueur(action[1]);
+			confirmation=false;
+		}
 	}
 }
 
@@ -799,6 +812,12 @@ Jeu::~Jeu(){
 		delete tabJ[i];
 	}
 }
+
+
+bool Jeu::accepteClavier() const{
+	return true;//ajouter les condition pour lesquels on veut que l'utilisateur puisse utiliser le clavier (par exemple pendant le clicker on ne veut pas utiliser le clavier en SDL)
+}
+
 
 void Jeu::updateMiniJeu(){
 

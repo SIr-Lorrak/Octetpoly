@@ -10,7 +10,7 @@
 #include "../core/Jeu.h"
 
 
-const unsigned int DEFAULT=0,RED=1,GREEN=2,BLUE=3;
+const unsigned int DEFAULT=0,RED=1,GREEN=2,BLUE=3,INVISIBLE=4;
 
 using namespace std;
 
@@ -34,6 +34,7 @@ public:
 	void dessineTextureCo(SDL_Renderer * renderer,int x,int y,int x2,int y2);
 	SDL_Texture * getTexture();
 	void setSurface(SDL_Surface * surf);
+	void dessineTexte(SDL_Renderer * renderer,const string & texte,unsigned int taille = 14);
 
 
 };
@@ -57,6 +58,7 @@ private:
 	SDL_Color font_color;
 
 	Mouse m;//coordonnées de la souris
+	string action;//stock l'action d'un bouton en attendant que le joueur relache la souris
 
 	Image texteExemple;//image pour le texte
 
@@ -67,9 +69,13 @@ private:
 
 //---different boutons
 	Image button;
+	Image buttonClicked;
 	Image red_button;
+	Image red_buttonClicked;
 	Image green_button;
+	Image green_buttonClicked;
 	Image blue_button;
+	Image blue_buttonClicked;
 
 //---image pour l'escape
 	Image ARRIVEE;
@@ -89,7 +95,19 @@ private:
 	//pour laisser le temps a l'animation de se terminer.
 
 //---methode
-	void afficheButton(const int x,const int y,const int w,const int h,const unsigned int type=DEFAULT,const string & c1="",const Image * c2=NULL,const SDL_Color couleur={255,255,255});
+	/**
+	@brief cette fonction permet de créer un bouton s'affichant sur la fenetre de different type permettant de lancer une action lors du relachement de la souris
+	@param un string effet, defini la touche de clavier correspondant au bouton ou alors a une action particulière (si l'effet fait plus de 1 caractère)
+	@param quatre entier x,y,w,h respectivement les coordonnées x,y du coin haut-gauche puis la largeur et la hauteur du bouton
+	@param un entier non-signer correspondant au type (il faut utiliser les constante DEFAULT RED GREEN BLUE et INVISIBLE) (DEFAULT par défaut en même temps c'est évident)
+	@param un string c1, le contenue du bouton sous forme de texte (vide par défaut)
+	@param un pointeur sur Image c2, le contenue du bouton sous forme d'une Image (a NULL par défaut)
+	@param un entier margin, la largeur en pixel des bord entre le contenu et les bord du bouton (de 5 pixels par dafaut)
+	@param un SDL_Color, la couleur du texte contenue dans le bouton (blanc par défaut)
+	*/
+	void newButton(const string & effet,const int x,const int y,const int w,const int h,const unsigned int type=DEFAULT,const string & c1="",const Image * c2=NULL,const int margin=5,const SDL_Color couleur={255,255,255});
+
+	void dessineTexte(const string & texte,int x,int y,unsigned int taille=14,const SDL_Color couleur = {0,0,0});
 
 	void affichageEscape();
 	void affichageMenu();
@@ -97,8 +115,6 @@ private:
 	void affichageHacking();
 	void affichageClicker();
 	void affichage();
-
-	void actionSouris();
 
 	bool update(SDL_Event & events);
 

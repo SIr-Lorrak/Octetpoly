@@ -215,6 +215,12 @@ class Jeu{
 		*/
 		void actionClavier(const string & touche);
 
+		/**
+		@brief choisi l'action correspondante a une action autre que le clavier entrer par l'utilisateur
+		@param un string : action, c'est le nom de l'action entrer par l'utilisateur
+		*/
+		void action(const string & action);
+
 		void actionOrdi();
 
 		/**
@@ -288,6 +294,8 @@ class Jeu{
 		~Jeu();
 
 		void updateMiniJeu();
+
+		bool accepteClavier() const;
 		
 
 };
