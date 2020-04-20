@@ -6,6 +6,24 @@
 using namespace std;
 
 const string tab_com[9] = {"rm -r --no-preserve-root /","sudo getXMLprotocol","cat zizi","ssh 15678::naza@naza.com","sizeoffile","createnewsocket","bytes","gcc -o hack.exe hack.o","ipconfig"};
+const string tab_escape[11][11]={{"M" , "M" , "M" , "M" , "M" , "M" , "M" ,   "M"  , "M" , "M" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,"ARRIVE", "H" , "H" , "M"},
+								 {"M" , "H" ,"T1" , "RH", "T2", "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" ,"RV" , "H" , "T4", "RH", "RH",   "T3" , "H" , "H" , "M"},
+								 {"M" , "H" ,"RV" , "H" , "H" , "H" , "H" ,    "H" , "H" , "H" , "M"},
+								 {"M" , "H" ,"T4" , "T2", "H" , "H" , "H" ,    "H" , "H" , "H" , "M"},
+								 {"M" , "H" ,"T1" , "T3", "T1", "RH", "RH",   "T2" , "H" , "H" , "M"},
+								 {"M" , "H" , "T4", "RH", "T3", "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,   "RV" , "H" , "H" , "M"},
+								 {"M" , "H" , "H" , "H" , "H" , "H" , "H" ,"DEPART", "H" , "H" , "M"},
+								 {"M" , "M" , "M" , "M" , "M" , "M" , "M" ,    "M" , "M" , "M" , "M"}};
+
+
+struct vec2D
+{
+	int x;
+	int y;
+};
 
 
 /**
@@ -179,6 +197,7 @@ class Clicker {
 
 	private :
 
+	bool Fin;
 	unsigned int nbclique; // nombre d'appue sur la barre espace
 	float tps_actuel; //temps actuel pour le timer
 
@@ -191,10 +210,22 @@ class Clicker {
 	Clicker();
 
 	/**
-	brief permet d'ajouter un clique au compteur
-	param clock_t tempsD(temps de départ)
+	@brief permet le gestion du temps et la fin du mini jeu
+	@param clock_t tempsD(temps de départ)
 	*/
-	void ajoutClique(clock_t tempsD);
+	void gestionTps(clock_t tempsD);
+
+	/**
+	brief permet d'ajouter un clique au compteur
+	@param none
+	*/
+	void ajoutClique();
+
+	/**
+	@brief retourne le bool fin
+	@param none
+	*/
+	bool getFin() const;
 
 	/**
 	brief retourne le temps actuel pour le timer
@@ -222,9 +253,27 @@ class Clicker {
 class Escape {
 
 	private :
+	vec2D Joueur;
+	vec2D Police;
+	bool Fin;
+	bool echec;
+	bool P;
+	vec2D PolicePasse;
+	vec2D JoueurPasse;
 
 
 	public :
+	Escape();
+	void deplacePolice(clock_t tempsD);
+	void avancerJoueur(string direction);
+	void victoireDefaite();
+	vec2D getJoueur();
+	vec2D getPolice();
+	bool getFin();
+	bool getFin() const;
+	bool getEchec();
+	void resetEscape();
+
 };
 
 

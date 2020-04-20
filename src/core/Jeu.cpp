@@ -176,7 +176,7 @@ void Jeu::commencerPartie()
 		tabO = new Ordi [4-nbJoueur];
 	
 		do{
-			for(unsigned int i = 1;i<4-nbJoueur;i++){
+			for(unsigned int i = 0;i<4-nbJoueur;i++){
 				do{
 					tabO[i].nomAleatoire();
 				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
@@ -192,14 +192,26 @@ void Jeu::ajouterJoueur()
 	tabJ[nbJoueur] = new Joueur;
 	tabJ[nbJoueur]->setRang(nbJoueur+1);
 	nbJoueur++;
-	attendreNom = true;
 }
 
 
-void Jeu::enleverJoueur()
+void Jeu::enleverJoueur(unsigned int n)
 {
+	if(n==0){//si n==0 c'est que la fonction a été appeler sans paramètre dans ce cas la on supprime le dernier joueur
+		n=nbJoueur;
+	}
+	assert(n<=4);
+	delete tabJ[n-1];//on suprimme le joueur souchaité
+	for(unsigned int i=n-1;i<nbJoueur;i++){//on décale ensuite le reste des joueurs
+		if(i==nbJoueur-1){
+			tabJ[i]=NULL;
+		}
+		else{
+			tabJ[i]=tabJ[i+1];
+			tabJ[i]->setRang(tabJ[i]->getRang()-1);
+		}
+	}
 	nbJoueur--;
-	delete tabJ[nbJoueur];
 }
 
 
@@ -226,7 +238,6 @@ void Jeu::tourSuivant(){
 	nbTour++;
 	unsigned int i=0;
 	while(joueurCourant!=ordre[i]){
-		cout<<"lol";
 		i++;
 	}
 
@@ -302,8 +313,9 @@ void Jeu::actionMenu(const string & touche)
 {
 	if(!attendreNom&&nbJoueur<4){
 		if(!confirmation){//si on attend une confirmation pour commencer on n'attend plus d'ajout de joueur
-			if(touche == "+"){
+			if(touche == "+"||touche=="="){
 				ajouterJoueur();//1 ajoute un joueur quand on appuie sur plus et attend son nom
+				attendreNom = true;
 			}
 
 			if(touche == "-"&&nbJoueur>0){
@@ -646,9 +658,9 @@ void Jeu::actionMiniJeu(const string touche){
 		else{
 
 			if (touche == "\n"){
+				//TODO : faire les gains / pertes avant de passer au tour suivant.
 				e.reset();
 				h.resetHack();
-				//TODO : faire les gains / pertes avant de passer au tour suivant.
 				tourSuivant();
 			}
 		}
@@ -659,9 +671,33 @@ void Jeu::actionMiniJeu(const string touche){
 		}
 	}
 	if(e.getn() == "clicker"){
+		
 		if(touche == " "){
-			c.ajoutClique(gete().gettempsD());
+			c.ajoutClique();
 		}
+		if((c.getFin()==true)&&(touche == "\n")){
+			
+			//TODO : faire les gains / pertes avant de passer au tour suivant.
+			e.reset();
+			c.resetClicker();
+			tourSuivant();
+		}
+	}
+	if(e.getn() == "escape"){
+
+		
+		if((es.getFin()==true)&&(touche=="\n")){
+			if(es.getEchec()==true){
+				//TODO : faire aller en prison
+			}
+			e.reset();
+			es.resetEscape();
+			tourSuivant();
+		}
+		else{
+			es.avancerJoueur(touche);
+		}
+		
 	}
 }
 
@@ -672,11 +708,25 @@ void Jeu::actionClavier(const string & touche)
 	}
 
 	else if(e.getn()=="rien"){
-		konamiCode(touche);//pour le konami code
+		konamiCode(touche);//pour le konami code implémanter a la fin si il reste du temps.
 		actionPartie(touche);
 	}
 	else{
+
 		actionMiniJeu(touche);
+	}
+}
+
+void Jeu::action(const string & action){
+	if(action.length()==1){
+		actionClavier(action);
+	}
+	else{
+		//ici rajouté des actions personalisée
+		if(action[0]=='-'){
+			enleverJoueur(action[1]);
+			confirmation=false;
+		}
 	}
 }
 
@@ -741,6 +791,10 @@ Clicker Jeu::getc(){
 
 }
 
+Escape Jeu::getes(){
+	return es;
+}
+
 
 //seteur permettant de mettre à jour clicker c
 void Jeu::setc(){
@@ -757,4 +811,24 @@ Jeu::~Jeu(){
 	for(unsigned int i=0; i<nbJoueur; i++){
 		delete tabJ[i];
 	}
+}
+
+
+bool Jeu::accepteClavier() const{
+	return true;//ajouter les condition pour lesquels on veut que l'utilisateur puisse utiliser le clavier (par exemple pendant le clicker on ne veut pas utiliser le clavier en SDL)
+}
+
+
+void Jeu::updateMiniJeu(){
+
+	if(e.getn() == "escape"){
+
+		es.deplacePolice(gete().gettempsD());
+		es.victoireDefaite();
+	}
+	if(e.getn() == "clicker"){
+		c.gestionTps(gete().gettempsD());
+		if(c.getFin()==true){e.fini();}
+	}
+	
 }

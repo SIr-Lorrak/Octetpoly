@@ -45,6 +45,8 @@ private:
 	*/
 	void affichageHacking();
 
+	void affichageEscape();
+
 	/**
 	@brief permet de mettre a jour les objets suite à l'appuie d'une touche
 	@param none

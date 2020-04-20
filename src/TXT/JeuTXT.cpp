@@ -49,6 +49,7 @@ void clear(){
 void restoreTerm(){
 	#ifndef _WIN32
 		system("setterm -cursor on");
+		system("clear");
 	#endif
 	termios term;
 	tcgetattr(0,&term);
@@ -173,19 +174,93 @@ void JeuTXT::affichageHacking(){
 void JeuTXT::affichageClicker(){
 
 	jeuClear();
+	if (j.getc().getFin()==false){
+		cout << "Timer : " << 10-((clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC)) <<" seconde";Endl();
+		cout<< "Appuyez à répétion sur espace pour faire de la pub!";Endl();Endl();
 
-	cout << "Timer : " << 10 - j.getc().gettps_actuel() <<" seconde"<< endl;
-	cout<< "Appuyez à répétion sur espace pour faire de la pub!"<<endl<<endl;
+		cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". ";Endl();
+	}	
+	else{
 
-	cout<<"nombre de pub réalisé : "<< j.getc().getnbclique()<<". "<<endl;
-
-	if (j.getc().gettps_actuel() >= 10){
-
-		cout<<"TERMINER!"<<endl;
-		cout<<"Vous gagner "<<j.gete().getgain()<<" $"<<endl;
+		cout<<"TERMINER! Vous avez réalisé "<<j.getc().getnbclique()<<". ";Endl();
+		cout<<"Vous gagner "<<j.gete().getgain()<<" $                                   ";Endl();
+		for(int i =0;i<21;i++){
+			cout<<"                                                    "<<endl;
+		}
 
 	}
+
 }
+
+void JeuTXT::affichageEscape(){
+	jeuClear();
+	if(j.getes().getFin()==false){
+		cout<<"Utilsez les touches Z, Q, S et D pour echapez rapidemant à la police";Endl();
+		cout<<"Attention de ne pas quitter la route, sinon vous reculez!";Endl();Endl();
+		for(int y=0;y<11;y++){
+			for(int x=0;x<11;x++){
+			
+				
+				if((j.getes().getJoueur().y == y)&&(j.getes().getJoueur().x == x)){
+					cout<<" J ";
+				}
+				else if((j.getes().getPolice().y == y)&&(j.getes().getPolice().x == x)){
+					cout<<" P ";
+				}
+				else if(tab_escape[y][x]=="M"){
+					cout<<" M ";
+				}
+				else if(tab_escape[y][x]=="H"){
+					cout<<" # ";
+				}
+				else if(tab_escape[y][x]=="RV"){
+					cout<<" | ";
+				}
+				else if(tab_escape[y][x]=="RH"){
+					cout<<" _ ";
+				}
+				else if(tab_escape[y][x]=="DEPART"){
+					cout<<" D ";
+				}
+				else if(tab_escape[y][x]=="ARRIVE"){
+					cout<<" A ";
+				}
+				else if(tab_escape[y][x]=="T1"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T2"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T3"){
+					cout<<" / ";
+				}
+				else if(tab_escape[y][x]=="T4"){
+					cout<<" / ";
+				}
+
+				if(x==10){
+					Endl();Endl();
+				}
+				
+			}
+		}
+	}
+	if(j.getes().getFin()==true) {
+		if(j.getes().getEchec()==true){
+			cout<<"Vous n'avez pas reussit à vous echaper!                                  ";Endl();
+			cout<< "direction la prison!                                             ";Endl();
+		}
+		else{
+			
+			cout<<"Vous avez reussit à vous echaper"                                                  ;Endl();
+		}
+		for(int i =0;i<30;i++){
+			cout<<"                                                    "<<endl;
+		}
+	}
+
+}
+
 
 void affichePion(const Pion & p){
 	if(p.getNom()==""){
@@ -195,7 +270,7 @@ void affichePion(const Pion & p){
 }
 
 void JeuTXT::affichageCase(const Case & c){
-	Pion p = *j.getPion(j.getJoueurCourant());
+	Pion * p = j.getPion(j.getJoueurCourant());
 	switch(c.getType()){
 		case 'E':
 			cout<<"vous ètes sur l'entreprise : "<<c.getNom()<<endl;
@@ -246,7 +321,7 @@ void JeuTXT::affichageCase(const Case & c){
 				cout<<"investissement : "<<c.getInvestissement()<<endl;
 			}
 		}
-		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p.getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
 			cout<<"vous devez payer le loyer au joueur "<<c.getOccupation()<<" !"<<endl;
 		}
 		if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
@@ -255,7 +330,7 @@ void JeuTXT::affichageCase(const Case & c){
 				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
 			}
 
-			else if(p.getCoin()>=c.getPrix()){
+			else if(p->getCoin()>=c.getPrix()){
 				if(c.getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
@@ -270,9 +345,9 @@ void JeuTXT::affichageCase(const Case & c){
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
 	
-	Pion joueurCourant;
-	joueurCourant = *j.getPion(j.getJoueurCourant());
-	unsigned int pos = joueurCourant.getPos();
+	Pion * joueurCourant;
+	joueurCourant = j.getPion(j.getJoueurCourant());
+	unsigned int pos = joueurCourant->getPos();
 	Case c = j.getJCase(pos);
 
 	cout<<"case : "<<pos<<endl;
@@ -280,7 +355,7 @@ void JeuTXT::affichageJeu(){
 	affichageCase(c);
 
 	if(j.getBool("desLance")){
-		affichageDes(joueurCourant.getDes().D1,joueurCourant.getDes().D2);
+		affichageDes(joueurCourant->getDes().D1,joueurCourant->getDes().D2);
 	}
 
 	else{
@@ -368,7 +443,10 @@ void JeuTXT::affichage(){
 		affichageHacking();
 	}
 	else if(j.gete().getn()== "clicker"){
-		//affichageClicker();
+		affichageClicker();
+	}
+	else if(j.gete().getn()== "escape"){
+		affichageEscape();
 	}
 
 	else{//aucun mini Jeu en cour et la partie a commencer
@@ -380,7 +458,7 @@ void JeuTXT::affichage(){
 bool JeuTXT::update(){
 
 	string touche;
-
+	j.updateMiniJeu();
 	if(kbhit()){
 		touche = fgetc(stdin);
 		if(!j.getBool("tourOrdi")){
@@ -417,12 +495,15 @@ void JeuTXT::run(){
 
 	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
 
-	int quit = false;
+	bool quit = false;
 	
 	while(!quit){
-		quit = update(); 
 		affichage();
+		quit = update(); 
+		
 	}
 
 	restoreTerm(); //on restore le terminal comme avant et on le clear.
 }
+
+

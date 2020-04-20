@@ -257,5 +257,5 @@ void Pion::investit(int i,Case * c){
 ///----------------------------------------------------------------Destructeur--------------------------------------------------------------
 
 Pion::~Pion(){
-	//delete [] propriete;
+	delete [] propriete;
 }
