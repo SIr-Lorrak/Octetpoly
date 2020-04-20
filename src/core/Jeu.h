@@ -29,12 +29,11 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
-		///////////////////////////
-		unsigned int nbVente;
-		///////////////////////////
-		string choix;
-		string vente[24];	
-		//////////////////////////
+
+		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
+		string choix;//Permet de stocker une saisie du joueur
+		string vente[24];//Permet de stocker tout les entreprise ou banque que le joueur veut vendre
+
 		Carte * chance;
 
 		bool konami[10]; //vérifie si une suite de 10 touches précise est entrer (a chaque bonne appuie on ajoute un true et a chaque maivais appuie on met tout a false)
@@ -46,11 +45,9 @@ class Jeu{
 		bool tourFini;
 		bool attendreAmplete;
 		bool actionObligatoire;
-		///////////////////////
-		bool vend;
-		bool ad;
-		bool porteO;	
-		///////////////////////
+		bool vend;//Permet de savoir si on entre en mode vente (modification d'affichage)
+		bool ad;//Permet de savoir si on entre en mode campagne de pub (modification d'affichage)
+		bool porteO;//Permet de savoir si on entre en mode porte ouvert (modification d'affichage)	
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
@@ -105,14 +102,14 @@ class Jeu{
 
 
 		/**
-		@brief Permet ajouter un nombre lors du mode vente ou pour choisir sa destination
+		@brief Permet ajouter un nombre à la séléction lors du mode vente ou pour choisir sa destination
 		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
 		@param un string : le/les nombre a rajouter 
 		*/
 		void ajouterNombre(const string nombre);
 
 		/**
-		@brief Permet effacer un nombre lors du mode vente ou pour choisir sa destination
+		@brief Permet effacer un nombre à la selection lors du mode vente ou pour choisir sa destination
 		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
 		@param none 
 		*/
@@ -126,8 +123,20 @@ class Jeu{
 		*/
 		void ecrire(const string touche);
 
+		/**
+		@brief Permet au joueur de récupèré l'argent de ses ventes et de reset toutes les cases
+		qui ont été vendu
+		@param none
+		@return none
+		*/
 		void remiseZeroEtVente();
 
+		/**
+		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
+		même case
+		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
+		@return true si le joueur l'a déja vendu sinon false
+		*/
 		bool dejaEnVente(unsigned int indice);
 
 		/**
@@ -300,9 +309,6 @@ class Jeu{
 		@param none
 		*/
 		void porteOuverte(const string & touche);
-
-		//!\\A changer au plus vite (utiliser pour les tests)
-		void affichageQuartierDisponible();
 
 		/**
 		@brief indique combien la vente rapportera

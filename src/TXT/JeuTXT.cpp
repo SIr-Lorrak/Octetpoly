@@ -225,11 +225,17 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
-			cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
+			if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+			{
+				cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
+			}
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
-			cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+			{
+				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			}
 			break;
 		default:
 			assert(false);
@@ -261,8 +267,8 @@ void JeuTXT::affichageCase(const Case & c){
 				if(c.getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
-				else if (!j.getBool("actionObligatoire")){
-					cout<<"voulez vous exproprier cette case (o/n) ?"<<endl;
+				else if (!j.getBool("actionObligatoire")&& j.board.getCase(p->getPos())->getType() == 'E'){
+					cout<<"voulez vous exproprier cette case (o/n) pour " << j.board.getCase(p->getPos())->getPrixDeVente() << " Goldus ?" <<endl;
 				}
 			}
 		}
@@ -379,7 +385,15 @@ void JeuTXT::affichagePorteOuvete(){
 	cout << "Vers quel voulez-vous vous rendre ?" << endl;
 	cout << "Voici les quartier(s) disponible(s) : " << endl;
 	
-	j.affichageQuartierDisponible();
+	for(unsigned int i = 0 ; i < 32 ; i++)
+	{
+		if(j.board.getCase(i)->getOccupation() == 0
+			&& (j.board.getCase(i)->getType() == 'B'
+			|| j.board.getCase(i)->getType() == 'E'))
+		{
+			cout << i << " " << j.board.getCase(i)->getNom() << endl;	
+		}
+	}
 	
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
@@ -393,18 +407,31 @@ void JeuTXT::affichagePorteOuvete(){
 }
 
 void JeuTXT::affichageVente(){
+	Pion * p = j.getPion(j.getJoueurCourant());
+
 	cout<<"<[-($)-]¯-_-¯-VENTE-_-¯-_-[-($)-]>"<<endl<<endl;
 	cout << "Quel(s) quartier(s) voulez-vous vendre ?" << endl;
 	cout << "Voici votre/vos propriété(s) : " << endl;
-	for (unsigned int i = 0; i < j.getPion(j.getJoueurCourant())->getNbPropriete() ; ++i)
+	for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
 	{
-		cout << i << " " << (j.getPion(j.getJoueurCourant())->getPropriete(i))->getNom() << endl;
+		cout << i << " " << (p->getPropriete(i))->getNom() << endl;
 	}
 	
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
+	cout << "Appuyer sur + pour valider le quartier entré" << endl;
+
 	cout << "Vous possédé " 
-			<< (j.getPion(j.getJoueurCourant())->getCoin() + j.totalVente()) << " Goldus" << endl;
+			<< (p->getCoin() + j.totalVente()) << " Goldus" << endl;
+
+	if(j.board.getCase(p->getPos())->getLoyer() - (p->getCoin() + j.totalVente()) > 0)
+	{
+	cout << "Il vous manque encore " << j.board.getCase(p->getPos())->getLoyer() - (p->getCoin() + j.totalVente())   << " Goldus pour payer le loyer" << endl;			
+	}
+	else
+	{
+		cout << "Vous avez assez pour payer le loyer !" << endl;
+	}
 
 	cout << "Vous vendez : " << endl;
 

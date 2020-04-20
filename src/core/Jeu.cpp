@@ -291,17 +291,6 @@ unsigned int Jeu::totalVente(){
 	nbVente = 0;
 }
 
-void Jeu::affichageQuartierDisponible(){
-	for (int i = 0; i < 32; ++i)
-	{
-		if((board.getCase(i)->getType()=='E'||board.getCase(i)->getType()=='B')
-			&&board.getCase(i)->getOccupation()==0)
-		{
-			cout << i << " " << board.getCase(i)->getNom() << endl; 
-		}	
-	}
-}
-
 bool Jeu::dejaEnVente(unsigned int indice){
 	bool enVente = false;
 	unsigned int i = 0;
@@ -520,7 +509,29 @@ void Jeu::actionBE(const string touche){
 			}
 		}
 
-		else//La case n'appartient a personne
+		//Cas de l'expropriation
+		else if(occupant != joueurCourant && occupant != 0)
+		{
+			if((touche == "o" ||touche == "O") 
+			&& coinCourant >= c->getPrixDeVente() 
+			&& c->getType() == 'E')
+			{
+			    paye(joueurCourant,occupant,c->getPrixDeVente());
+			    getPion(c->getOccupation())->estRacheter(c->getNom());
+				getPion(joueurCourant)->achete(c);	
+			
+				if(c->getType()=='B')
+				{//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
+					attendreAmplete = false;
+				}
+			}
+			else
+			{
+				attendreAmplete = false;//si le joueur ne rachete pas alors il a fini.
+			}
+		} 
+			
+		else if(occupant == 0)//La case n'appartient a personne
 		{
 			actionObligatoire = false;//le joueur na pas de loyer a payer
 			//N'appartient à personne,le JOUEUR peut acheter la banque ou l'entreprise
@@ -529,6 +540,7 @@ void Jeu::actionBE(const string touche){
 			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrix())
 			{
 				getPion(joueurCourant)->achete(c);
+
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
 					attendreAmplete = false;
 				}
@@ -595,7 +607,7 @@ void Jeu::payeLoyerJoueur(const string touche){
 			}
 
 			else if((touche=="o"|| touche=="O") 
-				&& coinCourant + totalVente() >= c->getLoyer())
+				&& coinCourant + totalVente() >= c->getPrixDeVente())
 			{
 				confirmation = true;
 			}
@@ -659,7 +671,7 @@ void Jeu::pub(unsigned int quelleCase){
 }
 
 void Jeu::campagneDePub(const string touche){
-	Case * c = board.getCase(16);//ATTENTION APPEL FRAUDULEUX
+	Case * c = board.getCase(board.getIndice("Campagne de pub"));
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 	actionObligatoire = false;//La campagne de Pub n'est pas une action obligatoire
 	if((touche == "o" ||touche == "O") 
@@ -715,7 +727,7 @@ void Jeu::campagneDePub(const string touche){
 }
 
 void Jeu::porteOuverte(const string & touche){
-	Case * c = board.getCase(24);//ATTENTION APPEL FRAUDULEUX
+	Case * c = board.getCase(board.getIndice("Porte Ouverte"));//ATTENTION APPEL FRAUDULEUX
 	actionObligatoire = false;
 
 	if((touche == "o" ||touche == "O")

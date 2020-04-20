@@ -46,7 +46,7 @@ class Pion{
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
-		bool ticket;
+		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
 
 	public :
 
@@ -121,8 +121,18 @@ class Pion{
 
 	Des getDes() const;
 
+	/**
+	@brief Permet de savoir si le joueur a un ticket
+	@param none
+	@return True si le joueur a acheté un ticket sinon false
+	**/
 	bool getTicket() const;
 
+	/**
+	@brief Permet de récupérer une propriété du joueur
+	@param indice : unsigned int, l'indice de la case qu'on veut récupérer
+	@return L'adresse de la case
+	**/
 	Case * getPropriete(unsigned int indice)const;
 
 	/**
@@ -145,6 +155,11 @@ class Pion{
 
 	void nomAleatoire();
 
+	/**
+	@brief Permet de modifier la valeur du ticket 
+	@param achat : bool, true si le joueur a acheter un ticket, false si il l'a consommé
+	@return none
+	**/
 	void setTicket(bool achat);
 
 	/**
@@ -202,6 +217,8 @@ class Pion{
 	@param indP : entier non signé , c : Un pointeur vers la case que le pion veut vendre
 	*/
 	void vend(string nom);
+
+	void estRacheter(string nom);
 
 	/**
 	@brief Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé

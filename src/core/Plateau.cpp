@@ -3,17 +3,19 @@
 using namespace std;
 
 //-------------------------------------Constructeur--------------------------------------
+
+//Crée le plateau (constructeur par défaut)
 Plateau::Plateau(){
 	tabC = new Case[TPLATEAU];
 
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase('D',0,"Depart",0,0,0,0);
-	tabC[1].initCase('E',5,"Auchan",4,1,1,50);
-	tabC[2].initCase('E',10,"Aldi",4,1,1,50);
-	tabC[3].initCase('E',15,"Carrefour",1000,1,1,500);
-	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,50);
-	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,50);
+	tabC[1].initCase('E',5,"Auchan",1,1,1,5);
+	tabC[2].initCase('E',10,"Aldi",1,1,1,5);
+	tabC[3].initCase('E',15,"Carrefour",1,1,1,2);
+	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,5);
+	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,5);
 	tabC[6].initCase('E',25,"Ankama",4,1,1,50);
 	tabC[7].initCase('E',30,"Ubisof",4,1,1,2);
 	tabC[8].initCase('P',15,"Prison",0,0,0,0);
@@ -47,24 +49,30 @@ Plateau::Plateau(){
 	casePub = 0;
 }
 
+//Destructeur de la classe
 Plateau::~Plateau(){
 	delete [] tabC;
 }
 
+//Permet de récupèrer l'adresse d'une case
 Case * Plateau::getCase(unsigned int numCase){
 	return &tabC[numCase];
 }
 
+//Permet de récupérer la case qui est actuellement en campagne de pub
 unsigned int Plateau::getcasePub(){
 	return casePub;
 }
 //---------------------------------Setters-------------------------------------------
+
+//Permet de changer la valeur de setcasePub 
 void Plateau::setcasePub(unsigned int numCase){
 	casePub = numCase;
 }
 
 //-------------------------------------Méthodes------------------------------------------
 
+	//Compte le nombre restant d'entreprise et de banque non-occupé
 	unsigned int Plateau::nbCaseFree(){
 		unsigned int nbcase = 0;
 		for(unsigned int i = 0 ; i < TPLATEAU ; i++)
@@ -79,6 +87,7 @@ void Plateau::setcasePub(unsigned int numCase){
 		return nbcase;
 	}
 
+	//Permet de recupérer l'indice d'une case entreprise ou banque par l'intermédiaire
 	unsigned int Plateau::getIndice(const string & nom) const{
     	unsigned int i=0;
     	while(tabC[i].getNom()!=nom){
@@ -88,6 +97,7 @@ void Plateau::setcasePub(unsigned int numCase){
     	return i;
 	}
 
+	//Permet de vérifier si la case entreprise ou banque entrez par le joueur pour les portes ouvertes est disponible ou non 
 	bool Plateau::caseValide(unsigned int choix,unsigned int joueur){
 		bool valide = false;
 		unsigned int i = 0;
@@ -108,10 +118,8 @@ void Plateau::setcasePub(unsigned int numCase){
 
 //-------------------------------------TEST REGRESSION-----------------------------------
 
-	/**
-	@brief Permet d'afficher toutes les données membre de la classe
-	@param none
-	*/
+
+	//Permet d'afficher toutes les données membre de la classe
 	void Plateau::affichageRegression(){
 		for(unsigned int i = 0; i < TPLATEAU ; i++)
 		{
@@ -122,10 +130,7 @@ void Plateau::setcasePub(unsigned int numCase){
 
 	}
 
-	/**
-	@brief Teste toutes les fonctions de la classe
-	@param none
-	*/
+	//Teste toutes les fonctions de la classe
 	void Plateau::testRegressionPlateau(){
 		//affichageRegression();
 		/*
