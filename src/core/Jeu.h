@@ -70,10 +70,10 @@ class Jeu{
 		void ajouterJoueur();
 
 		/**
-		@brief dans le menu de départ, enleve un joueur
-		@param none
+		@brief dans le menu de départ, enleve le iéme joueur (si i reste a zero il enleve le dernier)
+		@param un entier non signé i, l'indice du joueur enlevé
 		*/
-		void enleverJoueur();
+		void enleverJoueur(unsigned int n=0);
 
 		/**
 		@brief dans le menu de départ ajoute une lettre au nom d'un Joueur
@@ -215,13 +215,13 @@ class Jeu{
 		*/
 		void actionClavier(const string & touche);
 
-		void actionOrdi();
-
 		/**
-		@brief choisi l'action correspondante au coordonné du clique de l'utilisateur
-		@param deux float : x et y, les coordonnées de la souris
+		@brief choisi l'action correspondante a une action autre que le clavier entrer par l'utilisateur
+		@param un string : action, c'est le nom de l'action entrer par l'utilisateur
 		*/
-		void actionSouris(const float x,const float y);
+		void action(const string & action);
+
+		void actionOrdi();
 
 		/**
 		@brief Détermine qui joue au tour suivant
@@ -294,6 +294,8 @@ class Jeu{
 		~Jeu();
 
 		void updateMiniJeu();
+
+		bool accepteClavier() const;
 		
 
 };

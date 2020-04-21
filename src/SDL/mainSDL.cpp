@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char ** argv)
 {
 	JeuSDL j;
-	j.boucleJeu();
+	j.run();
 	
 	
 	return 0;
