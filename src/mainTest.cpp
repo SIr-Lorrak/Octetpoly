@@ -35,5 +35,19 @@ int main(int argc,char ** argv)
 	Jeu j;
 	j.testRegression();
 
+	cout<<"test\ntest"<<endl;
+
+	//Case c;
+	//c.testRegressionCase();
+
+	//Plateau board;
+	//board.testRegressionPlateau();
+
+	// Jeu je;
+	// cout << je.board.getcasePub() << endl;
+	// je.board.setcasePub(5);
+	// cout << je.board.getcasePub() << endl;
+	//je.campagneDePub();
+
 	return 0;
 }

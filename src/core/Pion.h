@@ -165,6 +165,13 @@ class Pion{
 	void nomAleatoire();
 
 	/**
+	@brief Permet de modifier la valeur du ticket 
+	@param achat : bool, true si le joueur a acheter un ticket, false si il l'a consommé
+	@return none
+	**/
+	void setTicket(bool achat);
+
+	/**
 	@brief Procédure qui lance les dés du pion
 	@param none
 	*/
