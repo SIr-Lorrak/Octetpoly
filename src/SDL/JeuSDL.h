@@ -62,11 +62,11 @@ private:
 	Image T3;
 	Image T4;
 	Image M;
+	Image hack;
 
 
 
-
-	bool a;
+	string inputText;
 
 
 	
@@ -77,6 +77,7 @@ public:
 	void affichageJeu();
 	void affichageEscape();
 	void boucleJeu();
+	void affichageHacking();
 
 
 		

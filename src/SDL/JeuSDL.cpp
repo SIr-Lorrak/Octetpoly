@@ -99,12 +99,16 @@ JeuSDL::JeuSDL(){
     T4.loadFichier("data/T4.png",renderer);
     M.loadFichier("data/M.png",renderer);
 
+    hack.loadFichier("data/hack.png",renderer);
+
     Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
     if (Police == NULL) {
             cout << "Failed to load DejaVuSansCondensed.ttf! SDL_TTF Error: " << TTF_GetError() << endl; SDL_Quit(); exit(1);
     }
 
-    font_color.r = 0;font_color.g = 0;font_color.b = 0;
+    
+
+    inputText = "";
 
 
 }
@@ -132,10 +136,14 @@ void JeuSDL::affichageJeu(){
    if(ev.getn()=="escape"){
        affichageEscape();
     }
+    if(ev.getn()=="hack"){
+        affichageHacking();
+    }
 }
 
 
 void JeuSDL::affichageEscape(){
+    font_color.r = 0;font_color.g = 0;font_color.b = 0;
     int ix = 112;
     int iy = 110;
     if(e.getFin()==false){
@@ -232,36 +240,112 @@ void JeuSDL::affichageEscape(){
 }
 
 
+void JeuSDL::affichageHacking() {
+    hack.dessineTexture(renderer,35,44,612,660);
+    font_color.r = 48;font_color.g = 253;font_color.b = 0;
+    string texte = "Vous avez reussit a vous echaper";
+    int taille = 10;
+    texteExemple.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),font_color));
+    texteExemple.loadSurface(renderer);
+    texteExemple.dessineTexture(renderer,80,80,taille*texte.length(),taille*1.8);
+
+    /*unsigned int cas = j.geth().getIntAff();//affichage de la fin
+    cout<<"progression : [";
+    for(unsigned int i=0;i<j.geth().getnbMot();i++){
+        if(i<j.geth().getnbSaisie()){
+            cout<<"#";
+        }
+        else{
+            cout<<" ";
+        }
+    }
+    cout<<"]";Endl();
+    if(j.geth().getFin())
+    {
+        if(j.gete().getT() == true){
+            cout<<"Vous avez GAGNE en "<<j.gete().gettps()<<" seconde";Endl();
+            cout<<"les hacker n'on pas eu le temps de vous voler";
+        }
+
+        else{
+            cout<<"Vous avez PERDU en "<<j.gete().gettps()<<" seconde";Endl();
+            cout<<"On vous a volé "<<j.gete().getgain()*-1<<"$ !"<<endl;
+        }
+
+    }
+    else{
+        cout<<"timer : "<<(clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC);
+        Endl();
+        switch(cas){
+            case 2 : // premier affiche, quand le hack commence
+                cout<<"Vous devez tapez la commande suivante pour gagné : ";
+                break;
+
+            case 0: // affiche quand le mot tapé précédement est correcte
+                cout<<"commande validé!";Endl();
+                cout<<"Commande suivante : ";
+                break;
+
+            case 1: // affichage quand le mot tapé précédement est incorrecte
+                cout<<"commande non validé!";Endl();
+                cout<<"re-tapez la commande : ";
+                break;
+
+            case 3: // enleve l'affichage précédent avant l'affichage suivant
+                clear();
+                j.seth(1);
+                break;
+
+            case 4: // enleve l'affichage précédent avant l'affichage de la fin
+                clear();
+                j.seth(2);
+                break;
+        }
+        cout<<j.geth().getMot();Endl();
+        cout<<">"<<j.geth().getMotSaisie();
+        curseur();
+        Endl();
+    }
+}*/
+}
+
+
 void JeuSDL::boucleJeu(){
     SDL_Event events;
     bool quit = false;
     //cout<<1;
     ev.Declenchement();//normalement fonction dans jeu
+
+    
+    SDL_StartTextInput();
     while(!quit){
         while(SDL_PollEvent(&events)) {
             if(events.type == SDL_QUIT){
                 quit = true;
             }
             switch (events.type) {
-                
-                case SDL_SCANCODE_ESCAPE:
-                    quit = true;
-                    break;
 
-                case SDL_KEYDOWN: //detecter une touche: par exemple pour les mini jeu passer events.key.keysym.sym dans l'appel de la fonction
+                case SDL_TEXTINPUT: //detecter une touche: par exemple pour les mini jeu passer events.key.keysym.sym dans l'appel de la fonction
+                    
+                        inputText = events.text.text;
+
                     
                     if(ev.getn()=="escape"){//normalement appel action clavier ou un truc du genre avec la touche
-                        if(events.key.keysym.sym==122){
+                        if(inputText == "z"){
                             e.avancerJoueur("z");
+                            inputText = "";
                         }
-                        if(events.key.keysym.sym==113){
+                        if(inputText == "q"){
                             e.avancerJoueur("q");
+                            inputText = "";
                         }
-                        if(events.key.keysym.sym==115){
+                        if(inputText == "s"){
                             e.avancerJoueur("s");
+                            inputText = "";
                         }
-                        if(events.key.keysym.sym==100){
+                        if(inputText == "d"){
                             e.avancerJoueur("d");
+                            inputText = "";
                         }
                     }
                     break;
@@ -281,11 +365,13 @@ void JeuSDL::boucleJeu(){
             
         }
         
-        e.deplacePolice(ev.gettempsD());//normalement fonction dans jeu
-        e.victoireDefaite();//normalement fonction dans jeu
+        //e.deplacePolice(ev.gettempsD());//normalement fonction dans jeu
+        //e.victoireDefaite();//normalement fonction dans jeu
         affichageJeu();
 
         SDL_RenderPresent(renderer);
     }
+    SDL_StopTextInput();
+    
 }
 
