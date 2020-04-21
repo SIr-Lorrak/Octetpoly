@@ -262,7 +262,7 @@ void Jeu::actionPartie(const string & touche)
 			}
 		}
 		else{
-			if(touche == "1"){
+			if(touche == "1"||touche=="\n"){
 				p->lanceDes();
 				desLance = true;
 			}

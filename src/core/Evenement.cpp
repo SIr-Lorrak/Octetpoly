@@ -36,7 +36,7 @@ bool Evenement::Declenchement(){
 		tempsD = clock();
 
 	}*/
-	n="escape";
+	//n="escape";
 	tps = 0;
 	tempsD = clock();
 	return n != "rien";

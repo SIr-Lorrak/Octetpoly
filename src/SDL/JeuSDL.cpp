@@ -153,7 +153,7 @@ void JeuSDL::dessineTexte(const string & texte,int x,int y, unsigned int taille,
 }
 
 void afficheCursor(SDL_Renderer * renderer,const int x,const int y,const int w,const int h,const SDL_Color couleur={0,0,0}){
-    //TODO : affiche un rectangle x,y,w,h de couleur couleur par défaut noir
+    //affiche un rectangle clignotant x,y,w,h de couleur couleur par défaut noir
     if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%51<25){
         SDL_SetRenderDrawColor(renderer, couleur.r,couleur.g,couleur.b,255);
         SDL_Rect rectangle = {x,y,w,h};
@@ -161,6 +161,15 @@ void afficheCursor(SDL_Renderer * renderer,const int x,const int y,const int w,c
         SDL_SetRenderDrawColor(renderer, COL_WINDOW.r,COL_WINDOW.g,COL_WINDOW.b,255);
     }
 }
+
+void dessineRectangle(SDL_Renderer * renderer,const int x,const int y,const int w,const int h,const SDL_Color couleur={0,0,0}){
+    //affiche un rectangle clignotant x,y,w,h de couleur couleur par défaut noir
+    SDL_SetRenderDrawColor(renderer, couleur.r,couleur.g,couleur.b,255);
+    SDL_Rect rectangle = {x,y,w,h};
+    SDL_RenderFillRect(renderer,&rectangle);
+    SDL_SetRenderDrawColor(renderer, COL_WINDOW.r,COL_WINDOW.g,COL_WINDOW.b,255);
+}
+
 
 void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,const int h,const unsigned int type,const string & c1,const Image * c2,const int margin,const SDL_Color couleur){
     if(c1!="" && c2!=NULL){//si l'utilisateur a demandé d'afficher un bouton contenant a la fois du texte et a la fois une image
@@ -381,6 +390,34 @@ void JeuSDL::affichageMenu(){
 void JeuSDL::affichageJeu(){
     //TODO
     plateau.dessineTexture(renderer,0,0,DIMY,DIMY);
+    for(unsigned int i=1;i<=4;i++){
+        unsigned int pos = j.getPion(i)->getPos();
+        int x,y;
+        if(pos>=0&&pos<8){
+            x = (DIMY-(108+pos*72))+35;
+            y = DIMY-40;
+        }
+        else if(pos>=8&&pos<16){
+            x=40;
+            y=(DIMY-(108+(pos-8)*72))+35;
+        }
+        else if(pos>=16&&pos<24){
+            x=(108+(pos-16)*72)-35;
+            y=40;
+        }
+        else if(pos>=24&&pos<32){
+            x=DIMY-40;
+            y=(108+(pos-24)*72)-35;
+        }   
+        else{
+            assert(false);//position trop grande
+        }
+        dessineRectangle(renderer,x,y,30,30,{rand()%255,rand()%255,rand()%255,rand()%255});
+        if(j.getBool("desLance")){
+            dessineTexte("des lancé !",DIMY,100,16);
+        }
+        //if(j.getBool(''))
+    }
 }
 
 void JeuSDL::affichage(){
@@ -442,7 +479,7 @@ bool JeuSDL::update(SDL_Event & events){
                         default:
                             break;
                     }
-                    if(j.accepteClavier()){//si le jeu accepte les input de type clavier
+                    if((j.accepteClavier()&&!j.getBool("tourOrdi"))||input=="\e"){//si le jeu accepte les input de type clavier
                         j.actionClavier(input);
                     }
                     break;
@@ -450,7 +487,7 @@ bool JeuSDL::update(SDL_Event & events){
                 case SDL_TEXTINPUT: //detecter une touche sous forme de texte (comme ça pas besoin de scancode pour toutes les touches qu'on utilise)
                     
                     input = events.text.text;
-                    if(j.accepteClavier()){//si le jeu accepte les input de type clavier
+                    if(j.accepteClavier()&&!j.getBool("tourOrdi")){//si le jeu accepte les input de type clavier
                         j.actionClavier(input);
                     }
                     break;
@@ -471,7 +508,9 @@ bool JeuSDL::update(SDL_Event & events){
                         //lancer l'action donner par un bouton lors du relachement de la souris
                         cout<<m.x<<"-"<<m.y<<endl;
                         cout<<action<<endl;
-                        j.action(action);
+                        if(!j.getBool("tourOrdi")||action=="\e"){
+                            j.action(action);
+                        }
                         m.x=-1;
                         m.y=-1;
                         action="";//l'action est effectuée elle est donc vidée

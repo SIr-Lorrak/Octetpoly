@@ -139,7 +139,7 @@ void Pion::avancer()
 
 		if(pos > MAXCASEP)
 		{
-			pos = pos - MAXCASEP - 1;
+			pos = pos%32;
 		}
 
 		if(pos == 8)
