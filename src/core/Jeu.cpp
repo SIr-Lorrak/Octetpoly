@@ -32,7 +32,6 @@ Jeu::Jeu(){
 	attendreAmplete = true;
 	actionObligatoire = true;
 	tourFini = false;
-	/////////////
 	vend = false;
 	ad = false;
 	porteO = false;
@@ -42,7 +41,7 @@ Jeu::Jeu(){
 	{
 		vente[i] = "";
 	}
-	/////////////
+	prixAPayer = 0;
 	chance = NULL;
 
 	tourOrdi = false;
@@ -77,6 +76,10 @@ Case & Jeu::getJCase(const unsigned int i)
 string Jeu::getChoix() const
 {
 	return choix;
+}
+
+unsigned int Jeu::getPrixAPayer(){
+	return prixAPayer;
 }
 
 string Jeu::getVente(unsigned int indice)
@@ -280,6 +283,54 @@ unsigned int Jeu::totalVente(){
 		total = total + board.getCase(board.getIndice(vente[i]))->getPrixDeVente();
 	}
 	return total;
+}
+
+void Jeu::modeVente(const string touche){
+	if(!confirmation)
+	{
+		if(touche == "-" && nbVente > 0)
+		{
+			enleverVente();
+		}
+
+		else if(touche=="+"
+			&& choix != ""
+			&& stoul(choix) < getPion(joueurCourant)->getNbPropriete()
+			&& stoul(choix) >= 0
+			&& !dejaEnVente(stoul(choix)))
+		{
+			vente[nbVente] = getPion(joueurCourant)->getPropriete(stoul(choix))->getNom(); 
+			nbVente++;
+			choix = "";
+		}
+
+		if((touche=="o"|| touche=="O") 
+		&& getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer)
+		{
+			confirmation = true;
+		}
+
+
+		else
+		{
+			ecrire(touche);
+		}
+	}
+
+	else 
+	{
+		//Deuxième confirmation
+		if(touche=="o"|| touche=="O")
+		{	
+			remiseZeroEtVente();
+			prixAPayer = 0;
+			vend = false;
+		}
+		else if(touche=="n"||touche=="N")
+		{
+			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
+		}
+	}
 }
 
  void Jeu::remiseZeroEtVente(){
@@ -504,7 +555,7 @@ void Jeu::actionBE(const string touche){
 	if(occupant != joueurCourant)
 	{	
 		if(occupant != 0 && actionObligatoire){// La case appartient a une autre personne
-			if(vend || touche == "\n"){
+			if(touche == "\n"){
 				payeLoyerJoueur(touche);
 			}
 		}
@@ -588,49 +639,8 @@ void Jeu::payeLoyerJoueur(const string touche){
 	{
 		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
 		vend = true;
-		if(!confirmation)
-		{
-			if(touche == "-" && nbVente > 0)
-			{
-				enleverVente();
-			}
-
-			else if(touche=="+"
-				&& choix != ""
-				&& stoul(choix) < getPion(joueurCourant)->getNbPropriete()
-				&& stoul(choix) >= 0
-				&& !dejaEnVente(stoul(choix)))
-			{
-				vente[nbVente] = getPion(joueurCourant)->getPropriete(stoul(choix))->getNom(); 
-				nbVente++;
-				choix = "";
-			}
-
-			else if((touche=="o"|| touche=="O") 
-				&& coinCourant + totalVente() >= c->getPrixDeVente())
-			{
-				confirmation = true;
-			}
-
-			else
-			{
-				ecrire(touche);
-			}
-		}
-
-		else 
-		{
-			//Deuxième confirmation
-			if(touche=="o"|| touche=="O")
-			{	
-				remiseZeroEtVente();
-				vend = false;
-			}
-			else if(touche=="n"||touche=="N")
-			{
-				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-			}
-		}
+		prixAPayer = c->getLoyer();
+		modeVente(touche);
 	}
 
 	//Le joueurCourant n'as pas assez d'argent pour s'acquitter du loyer
@@ -813,11 +823,38 @@ void Jeu::carteChance(const string & touche){
 					joueur->setPos(joueur->getPos() - 32);
 				}
 			}
-			//n'oublie pas que si le joueur n'a pas l'argent pour payer il doit vendre donc passer dans l'interface de vente (je m'occuperais de l'interface de vente)
+			
 			actionObligatoire = false; //si le joueur a pu payer il a fini ses action obligatoire	
 			delete chance;//puis on delete la carte chance
 			chance = NULL;//<-- très important
 		}
+	}
+}
+
+void Jeu::impot(const string touche){
+	//La case où se trouve le joueurCourant
+	Case * c = board.getCase(getPion(joueurCourant)->getPos());
+
+	if(getPion(joueurCourant)->getCoin() > c->getPrix())
+	{
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+		actionObligatoire = false;
+	}
+
+	else if((getPion(joueurCourant)->getCoin() + getPion(joueurCourant)->patrimoineActif()) >= c->getPrix())
+	{
+		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
+		vend = true;
+		prixAPayer = c->getPrix();
+		modeVente(touche);
+	}
+
+	//Le joueurCourant n'as pas assez d'argent pour s'acquitter des impôt
+	//il est en faillite (fin du jeu pour lui)
+	else 
+	{
+		getPion(joueurCourant)->EstEnFaillite();
+		tourSuivant(); 
 	}
 }
 
@@ -849,8 +886,7 @@ void Jeu::actionCase(const string & touche){
 
 		case 'I':
 			attendreAmplete= false;
-			actionObligatoire = false;
-			//TODO 
+			impot(touche);
 			break;
 	}
 }
@@ -897,6 +933,11 @@ void Jeu::actionClavier(const string & touche)
 {
 	if(nbTour == 0){
 		actionMenu(touche);
+	}
+
+	else if(vend)
+	{
+		modeVente(touche);
 	}
 
 	else if(e.getn()=="rien"){

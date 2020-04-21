@@ -267,7 +267,7 @@ void JeuTXT::affichageCase(const Case & c){
 				if(c.getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
-				else if (!j.getBool("actionObligatoire")&& j.board.getCase(p->getPos())->getType() == 'E'){
+				else if (!j.getBool("actionObligatoire") && j.board.getCase(p->getPos())->getType() == 'E'){
 					cout<<"voulez vous exproprier cette case (o/n) pour " << j.board.getCase(p->getPos())->getPrixDeVente() << " Goldus ?" <<endl;
 				}
 			}
@@ -421,16 +421,16 @@ void JeuTXT::affichageVente(){
 
 	cout << "Appuyer sur + pour valider le quartier entré" << endl;
 
-	cout << "Vous possédé " 
+	cout << "En prenant en compte la vente vous possédé : " 
 			<< (p->getCoin() + j.totalVente()) << " Goldus" << endl;
 
-	if(j.board.getCase(p->getPos())->getLoyer() - (p->getCoin() + j.totalVente()) > 0)
+	if(j.getPrixAPayer() - (p->getCoin() + j.totalVente()) > 0)
 	{
-	cout << "Il vous manque encore " << j.board.getCase(p->getPos())->getLoyer() - (p->getCoin() + j.totalVente())   << " Goldus pour payer le loyer" << endl;			
+	cout << "Il vous manque encore " << j.getPrixAPayer() - (p->getCoin() + j.totalVente())   << " Goldus pour vous acquitter de votre dette" << endl;			
 	}
 	else
 	{
-		cout << "Vous avez assez pour payer le loyer !" << endl;
+		cout << "Vous avez assez pour payer votre dette !" << endl;
 	}
 
 	cout << "Vous vendez : " << endl;

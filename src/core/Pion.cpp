@@ -310,7 +310,7 @@ void Pion::investit(int i,Case * c){
 		karma -= 1;
 
 		/// Le karma doit être entre -100 et 100
-		if(karma < 100)
+		if(karma < -100)
 		{
 			karma += 1;
 		}

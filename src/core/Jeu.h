@@ -29,6 +29,7 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
+		unsigned int prixAPayer;//le prix a payer en mode vente
 
 		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
 		string choix;//Permet de stocker une saisie du joueur
@@ -123,6 +124,8 @@ class Jeu{
 		*/
 		void ecrire(const string touche);
 
+		void modeVente(const string touche);
+
 		/**
 		@brief Permet au joueur de récupèré l'argent de ses ventes et de reset toutes les cases
 		qui ont été vendu
@@ -200,6 +203,8 @@ class Jeu{
 		*/
 		void pub(unsigned int quelleCase);
 
+		void impot(const string touche);
+
 		/**
 		@brief Détermine l'action possible sur la case
 		@param none
@@ -270,6 +275,8 @@ class Jeu{
 		@return le choix du joueur : string
 		*/
 		string getChoix() const;
+
+		unsigned int getPrixAPayer();
 		
 		/**
 		@brief choisi l'action correspondante à la touche entrer par l'utilisateur
