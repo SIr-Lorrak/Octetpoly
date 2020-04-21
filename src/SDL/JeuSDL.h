@@ -34,7 +34,6 @@ public:
 	void dessineTextureCo(SDL_Renderer * renderer,int x,int y,int x2,int y2);
 	SDL_Texture * getTexture();
 	void setSurface(SDL_Surface * surf);
-	void dessineTexte(SDL_Renderer * renderer,const string & texte,unsigned int taille = 14);
 
 
 };
@@ -60,7 +59,7 @@ private:
 	Mouse m;//coordonnées de la souris
 	string action;//stock l'action d'un bouton en attendant que le joueur relache la souris
 
-	Image texteExemple;//image pour le texte
+	Image inputTexte;//image pour le texte
 
 //---image pour le plateau
 	Image plateau;
@@ -93,6 +92,7 @@ private:
 	bool animation;
 	//quand animation est a true l'utilisateur ne peut rien faire
 	//pour laisser le temps a l'animation de se terminer.
+	bool action_ordi;
 
 //---methode
 	/**

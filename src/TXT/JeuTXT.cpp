@@ -473,7 +473,7 @@ bool JeuTXT::update(){
 	}
 
 	if(j.getBool("tourOrdi")){
-		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%401<200){
+		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%301<150){
 			if(action){
 				clear();
 				action = false;

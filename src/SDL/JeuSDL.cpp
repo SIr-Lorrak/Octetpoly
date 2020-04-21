@@ -147,9 +147,9 @@ JeuSDL::~JeuSDL(){
 }
 
 void JeuSDL::dessineTexte(const string & texte,int x,int y, unsigned int taille,const SDL_Color couleur){
-    texteExemple.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),couleur));
-    texteExemple.loadSurface(renderer);
-    texteExemple.dessineTexture(renderer,x,y,taille*texte.length(),taille*1.8);
+    inputTexte.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),couleur));
+    inputTexte.loadSurface(renderer);
+    inputTexte.dessineTexture(renderer,x,y,taille*texte.length(),taille*1.8);
 }
 
 void afficheCursor(SDL_Renderer * renderer,const int x,const int y,const int w,const int h,const SDL_Color couleur={0,0,0}){
@@ -315,24 +315,24 @@ void JeuSDL::affichageEscape(){//cette fonction doit être adapté !
             
         dessineTexte("Utilsez les touches Z, Q, S et D pour echapez rapidemant a la police",730,50);
     
-        texteExemple.setSurface(TTF_RenderText_Solid(Police,"Attention de ne pas quitter la route, sinon vous reculez!",font_color));
-        texteExemple.loadSurface(renderer);
-        texteExemple.dessineTexture(renderer,730,90,370,30);
+        inputTexte.setSurface(TTF_RenderText_Solid(Police,"Attention de ne pas quitter la route, sinon vous reculez!",font_color));
+        inputTexte.loadSurface(renderer);
+        inputTexte.dessineTexture(renderer,730,90,370,30);
     }
     if(e.getFin()==true) {
         if(e.getEchec()==true){
-            texteExemple.setSurface(TTF_RenderText_Solid(Police,"Vous n'avez pas reussit a vous echaper!",font_color));
-            texteExemple.loadSurface(renderer);
-            texteExemple.dessineTexture(renderer,730,50,370,30);
+            inputTexte.setSurface(TTF_RenderText_Solid(Police,"Vous n'avez pas reussit a vous echaper!",font_color));
+            inputTexte.loadSurface(renderer);
+            inputTexte.dessineTexture(renderer,730,50,370,30);
 
-            texteExemple.setSurface(TTF_RenderText_Solid(Police,"direction la prison!",font_color));
-            texteExemple.loadSurface(renderer);
-            texteExemple.dessineTexture(renderer,730,90,370,30);
+            inputTexte.setSurface(TTF_RenderText_Solid(Police,"direction la prison!",font_color));
+            inputTexte.loadSurface(renderer);
+            inputTexte.dessineTexture(renderer,730,90,370,30);
         }
         else{
-            texteExemple.setSurface(TTF_RenderText_Solid(Police,"Vous avez reussit a vous echaper",font_color));
-            texteExemple.loadSurface(renderer);
-            texteExemple.dessineTexture(renderer,730,50,370,30);
+            inputTexte.setSurface(TTF_RenderText_Solid(Police,"Vous avez reussit a vous echaper",font_color));
+            inputTexte.loadSurface(renderer);
+            inputTexte.dessineTexture(renderer,730,50,370,30);
         }
             
     }
@@ -344,9 +344,9 @@ void JeuSDL::affichageMenu(){
     rouge.r = 255;
     rouge.g = 0;
     rouge.b = 0;
-    texteExemple.setSurface(TTF_RenderText_Solid(Police,"OctetPoly !",rouge));
-    texteExemple.loadSurface(renderer);
-    texteExemple.dessineTexture(renderer,(DIMX/2)-250,0,500,100);
+    inputTexte.setSurface(TTF_RenderText_Solid(Police,"OctetPoly !",rouge));
+    inputTexte.loadSurface(renderer);
+    inputTexte.dessineTexture(renderer,(DIMX/2)-250,0,500,100);
     unsigned int n = j.getNbJoueur();
     if(j.getBool("attendreNom")){
         n-=1;
@@ -393,31 +393,54 @@ void JeuSDL::affichageJeu(){
     for(unsigned int i=1;i<=4;i++){
         unsigned int pos = j.getPion(i)->getPos();
         int x,y;
+        unsigned char r,g,b;
+        r=g=b=0;
         if(pos>=0&&pos<8){
-            x = (DIMY-(108+pos*72))+35;
-            y = DIMY-40;
+            x = (DIMY-(108+pos*72))+5;
+            y = DIMY-63;
         }
         else if(pos>=8&&pos<16){
-            x=40;
-            y=(DIMY-(108+(pos-8)*72))+35;
+            x=0;
+            y=(DIMY-(108+(pos-8)*72))+5;
         }
         else if(pos>=16&&pos<24){
-            x=(108+(pos-16)*72)-35;
-            y=40;
+            x=(108+(pos-16)*72)-5;
+            y=0;
         }
         else if(pos>=24&&pos<32){
-            x=DIMY-40;
-            y=(108+(pos-24)*72)-35;
+            x=DIMY-63;
+            y=(108+(pos-24)*72)-5;
         }   
         else{
             assert(false);//position trop grande
         }
-        dessineRectangle(renderer,x,y,30,30,{rand()%255,rand()%255,rand()%255,rand()%255});
-        if(j.getBool("desLance")){
-            dessineTexte("des lancé !",DIMY,100,16);
+        if(i==1){
+            r=g=255;
         }
+        if(i==2){
+            x+=33;
+            r=255;
+        }
+        if(i==3){  
+            y+=33;
+            g=255;
+
+        }
+        if(i==4){
+            x+=33;
+            y+=33;
+            b=255;
+        }
+        dessineRectangle(renderer,x,y,30,30,{r,g,b});
         //if(j.getBool(''))
     }
+        if(j.getBool("desLance")){
+            dessineTexte("des lancé !",DIMY,100,16);
+            string des = "   ";
+            des[0]=int('0')+j.getPion(j.getJoueurCourant())->getDes().D1;
+            des[2]=int('0')+j.getPion(j.getJoueurCourant())->getDes().D2;
+            dessineTexte(des,DIMY,200,16);;
+        }
 }
 
 void JeuSDL::affichage(){
@@ -518,10 +541,23 @@ bool JeuSDL::update(SDL_Event & events){
 
                 default: break;
             }
+    }
+    
+    if(j.getBool("tourOrdi")){
+        if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%201<100){
+            if(action_ordi){
+                action_ordi = false;
+                j.actionOrdi();// a intervalle régulier genre toutes les 5 secondes
+            }
         }
-        
-        e.deplacePolice(ev.gettempsD());//normalement fonction dans jeu
-        e.victoireDefaite();//normalement fonction dans jeu
+
+        else{
+            action_ordi = true;
+        }
+    }
+
+    e.deplacePolice(ev.gettempsD());//normalement fonction dans jeu
+    e.victoireDefaite();//normalement fonction dans jeu
     return quit;
 }
 
