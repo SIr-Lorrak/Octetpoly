@@ -42,11 +42,11 @@ class Pion{
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
 		Des d;							///Dés du pion
-		bool prisonnier;				///Booléen qui indique si le joueur est prisonnier ou non
+		bool prisonnier;				///Booléen qui indique si le pion est prisonnier ou non
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
-
+		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
 
 	public :
 
@@ -122,6 +122,35 @@ class Pion{
 	Des getDes() const;
 
 	/**
+	@brief Permet de savoir si le joueur a un ticket
+	@param none
+	@return True si le joueur a acheté un ticket sinon false
+	**/
+	bool getTicket() const;
+
+	void donTicket();
+
+
+	/**
+	@brief met le pion en prison si il est libre et inversement (utiliser a l'exterieur que au chargement d'un fichier de sauvegarde)
+	@param none
+	*/
+	void setPrisonnier();
+
+	/**
+	@brief pour changer le karma (uniquement lors du chargement d'une nouvelle partie)
+	@param un entier k, valeur du karma
+	*/
+	void setKarma(const unsigned int k);
+
+	/**
+	@brief Permet de récupérer une propriété du joueur
+	@param indice : unsigned int, l'indice de la case qu'on veut récupérer
+	@return L'adresse de la case
+	**/
+	Case * getPropriete(unsigned int indice)const;
+
+	/**
 	@brief Mutateur du caractère du pion
 	@param c : charactere
 	**/
@@ -140,6 +169,13 @@ class Pion{
 	void setPos(const unsigned int p);
 
 	void nomAleatoire();
+
+	/**
+	@brief Permet de modifier la valeur du ticket 
+	@param achat : bool, true si le joueur a acheter un ticket, false si il l'a consommé
+	@return none
+	**/
+	void setTicket(bool achat);
 
 	/**
 	@brief Procédure qui lance les dés du pion
@@ -195,7 +231,9 @@ class Pion{
 	@brief Procédure qui permet au pion de vendre une propriété
 	@param indP : entier non signé , c : Un pointeur vers la case que le pion veut vendre
 	*/
-	void vend(unsigned int indP, Case * c);
+	void vend(string nom);
+
+	void estRacheter(string nom);
 
 	/**
 	@brief Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé
@@ -203,7 +241,19 @@ class Pion{
 	*/
 	void achete(Case * c);
 
+	void don(Case *c);
+
+	/**
+	@brief Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case
+	@param i : l'entier qui nous dit si le joueur investit dans l'illégal ou non,	c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
+	*/
 	void investit(int i,Case * c);
+
+	/**
+	@brief Procédure qui reset
+	@param none
+	*/
+	void EstEnFaillite();
 
 
 };

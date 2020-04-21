@@ -49,7 +49,6 @@ void clear(){
 void restoreTerm(){
 	#ifndef _WIN32
 		system("setterm -cursor on");
-		system("clear");
 	#endif
 	termios term;
 	tcgetattr(0,&term);
@@ -192,6 +191,7 @@ void JeuTXT::affichageClicker(){
 
 }
 
+
 void JeuTXT::affichageEscape(){
 	jeuClear();
 	if(j.getes().getFin()==false){
@@ -261,7 +261,6 @@ void JeuTXT::affichageEscape(){
 
 }
 
-
 void affichePion(const Pion & p){
 	if(p.getNom()==""){
 		cout<<"<anonyme>";
@@ -300,9 +299,17 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
+			if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+			{
+				cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
+			}
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
+			if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+			{
+				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			}
 			break;
 		default:
 			assert(false);
@@ -334,8 +341,8 @@ void JeuTXT::affichageCase(const Case & c){
 				if(c.getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
-				else if (!j.getBool("actionObligatoire")){
-					cout<<"voulez vous exproprier cette case (o/n) ?"<<endl;
+				else if (!j.getBool("actionObligatoire") && j.board.getCase(p->getPos())->getType() == 'E'){
+					cout<<"voulez vous exproprier cette case (o/n) pour " << j.board.getCase(p->getPos())->getPrix() << " Goldus ?" <<endl;
 				}
 			}
 		}
@@ -395,37 +402,183 @@ void JeuTXT::affichageJeu(){
 
 void JeuTXT::affichageMenu(){
 	cout<<"<[-($)-]-_-¯-_-¯-OCTETPOLY-¯-_-¯-_-[-($)-]>"<<endl<<endl;
-	unsigned int nbj = j.getNbJoueur();
-	if(nbj>0){
-		if(j.getBool("attendreNom")){
-			cout<<nbj;
-			if(nbj==1) cout<<"er";
-			else cout<<"e";
-			cout<<" joueur : "<<j.getJoueur(nbj)->getNom();curseur();Endl();
-		}
-		else{
-			for(unsigned int i=1;i<=nbj;i++){
-				cout<<i;
-				if(i==1) cout<<"er";
+	if(j.getBool("nouvellePartie")){//si le joueur crée une nouvelle partie
+		unsigned int nbj = j.getNbJoueur();
+		if(nbj>0){
+			if(j.getBool("attendreNom")){
+				cout<<nbj;
+				if(nbj==1) cout<<"er";
 				else cout<<"e";
-				cout<<" joueur : ";
-				if(j.getJoueur(i)->getNom()==""){
-					cout<<"<anonyme>"<<endl;
-				}
-				else{
-					cout<<j.getJoueur(i)->getNom()<<endl;
+				cout<<" joueur : "<<j.getJoueur(nbj)->getNom();curseur();Endl();
+			}
+			else{
+				for(unsigned int i=1;i<=nbj;i++){
+					cout<<i;
+					if(i==1) cout<<"er";
+					else cout<<"e";
+					cout<<" joueur : ";
+					if(j.getJoueur(i)->getNom()==""){
+						cout<<"<anonyme>"<<endl;
+					}
+					else{
+						cout<<j.getJoueur(i)->getNom()<<endl;
+					}
 				}
 			}
 		}
+		if(j.getNbJoueur()<4){
+			cout<<endl<<"apuyez sur \"+\" pour ajouter un joueur entrez un nom et validez avec entrer"<<endl;
+		}
+		if(j.getBool("confirmation")){
+			cout<<"vous etes sur ? (o/n) ";Endl();
+		}
+		Endl();
+		cout<<endl<<"'ESC' pour revenir en arrière.";
 	}
-	if(j.getNbJoueur()<4){
-		cout<<endl<<"apuyez sur \"+\" pour ajouter un joueur entrez un nom et validez avec entrer"<<endl;
+	else if(j.getBool("attendreNom")){// si le joueur selectione un fichier de sauvegarde (1,2 ou 3)
+		cout<<endl;
+		for(unsigned int i = 1;i<=3;i++){
+			cout<<i<<". ";
+			string fichier = "data/sauvegarde/";
+			fichier += char(int('0')+i);
+			if(!fichierExiste(fichier+".save")){
+				cout<<"<empty file>"<<endl;
+			}
+			else{
+				cout<<fichier+".save"<<endl;
+			}
+		}
+		cout<<endl<<"'ESC' pour revenir en arrière.";
 	}
-	if(j.getBool("confirmation")){
+	else{//Menu de départ
+		cout<<endl<<"qu'est ce que vous voulez faire ?"<<endl<<
+		"1. "<<"Nouvelle Partie"<<endl<<
+		"2. "<<"Charger une Partie"<<endl<<
+		"3. "<<"QUITTER"<<endl;
+	}
+}
+
+
+void JeuTXT::affichagePause() const{
+
+	cout<<"<------------pause------------>"<<endl;
+	if(j.getBool("attendreNom")){
+		cout<<endl;
+		for(unsigned int i = 1;i<=3;i++){
+			cout<<i<<". ";
+			string fichier = "data/sauvegarde/";
+			fichier += char(int('0')+i);
+			if(!fichierExiste(fichier+".save")){
+				cout<<"<empty file>"<<endl;
+			}
+			else{
+				cout<<fichier+".save"<<endl;
+			}
+		}
+		cout<<endl<<"'ESC' pour revenir en arrière.";
+	}
+	else{
+		cout<<"1. Reprendre le Jeu"<<endl
+		    <<"2. Sauvegarder"<<endl
+		    <<"3. Revenir au Menu (/!\\ sans sauvegarder)"<<endl
+		    <<"4. QUITTER (/!\\ sans sauvegarder)"<<endl;
+	}
+}
+
+
+void JeuTXT::affichageCampagneDePub(){
+	cout<<"<[-($)-]¯-_-¯-CAMPAGNE DE PUB-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Pour quel quartier voulez vous faire de la pub" << endl;
+	cout << "Voici votre/vos propriété(s) : " << endl;
+	for (unsigned int i = 0; i < j.getPion(j.getJoueurCourant())->getNbPropriete() ; ++i)
+	{
+		cout << i << " " << (j.getPion(j.getJoueurCourant())->getPropriete(i))->getNom() << endl;
+	}
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
 		cout<<"vous etes sur ? (o/n) ";Endl();
 	}
-	Endl();
 }
+
+void JeuTXT::affichagePorteOuvete(){
+	cout<<"<[-($)-]¯-_-¯-PORTE OUVERTE-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Vers quel voulez-vous vous rendre ?" << endl;
+	cout << "Voici les quartier(s) disponible(s) : " << endl;
+	
+	for(unsigned int i = 0 ; i < 32 ; i++)
+	{
+		if(j.board.getCase(i)->getOccupation() == 0
+			&& (j.board.getCase(i)->getType() == 'B'
+			|| j.board.getCase(i)->getType() == 'E'))
+		{
+			cout << i << " " << j.board.getCase(i)->getNom() << endl;	
+		}
+	}
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
+		cout<<"vous etes sur ? (o/n) ";Endl();
+	}
+}
+
+void JeuTXT::affichageVente(){
+	Pion * p = j.getPion(j.getJoueurCourant());
+
+	cout<<"<[-($)-]¯-_-¯-VENTE-_-¯-_-[-($)-]>"<<endl<<endl;
+	cout << "Quel(s) quartier(s) voulez-vous vendre ?" << endl;
+	cout << "Voici votre/vos propriété(s) : " << endl;
+	for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
+	{
+		cout << i << " " << (p->getPropriete(i))->getNom() << endl;
+	}
+	
+	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
+
+	cout << "Appuyer sur + pour valider le quartier entré" << endl;
+
+	cout << "En prenant en compte la vente vous possédé : " 
+			<< (p->getCoin() + j.totalVente()) << " Goldus" << endl;
+
+	if(j.getPrixAPayer() - (p->getCoin() + j.totalVente()) > 0)
+	{
+	cout << "Il vous manque encore " << j.getPrixAPayer() - (p->getCoin() + j.totalVente())   << " Goldus pour vous acquitter de votre dette" << endl;			
+	}
+	else
+	{
+		cout << "Vous avez assez pour payer votre dette !" << endl;
+	}
+
+	cout << "Vous vendez : " << endl;
+
+	for (unsigned int i = 0; i < j.getNbVente() ; ++i)
+	{
+		cout << " - " << j.getVente(i) << endl;
+	}
+
+	if(!j.getBool("confirmation")){
+		cout<<"Confirmer (o/n) ";Endl();	
+	}
+
+	else{
+		cout<<"vous etes sur ? (o/n) ";Endl();
+	}
+}
+
+void JeuTXT::affichageVictoire(){
+	cout<<j.getPion(j.getVainqueur())->getNom()<<" a gagné gg a lui !"<<endl;
+}
+
 
 
 void JeuTXT::affichage(){
@@ -438,41 +591,52 @@ void JeuTXT::affichage(){
 	if(j.getNbTour()==0){//la partie n'a pas encore commencer 
 		affichageMenu();
 	}
-
+	else if(j.getVainqueur()!=0){
+		affichageVictoire();
+	}
 	else if(j.gete().getn() == "hack"){//le mini Jeu Hacking est en court
 		affichageHacking();
 	}
 	else if(j.gete().getn()== "clicker"){
 		affichageClicker();
 	}
-	else if(j.gete().getn()== "escape"){
+	else if(j.gete().getn()=="escape"){
 		affichageEscape();
 	}
-
+	else if(j.getBool("pause")){
+		affichagePause();
+	}
+	else if(j.getBool("ad")){
+		affichageCampagneDePub();
+	}
+	else if(j.getBool("porteO")){
+		affichagePorteOuvete();
+	}
+	else if(j.getBool("vend"))
+	{
+		affichageVente();
+	}
 	else{//aucun mini Jeu en cour et la partie a commencer
 		affichageJeu();
 	}
 }
 
 //permet de mettre a jour les objets suite à l'appuie d'une touche
-bool JeuTXT::update(){
+void JeuTXT::update(){
 
 	string touche;
+
 	j.updateMiniJeu();
+
 	if(kbhit()){
 		touche = fgetc(stdin);
-		if(!j.getBool("tourOrdi")){
-			clear();
-
+		clear();
+		if(!j.getBool("tourOrdi")||touche=="\e"||j.getBool("pause")){
 			j.actionClavier(touche);
-		}
-		
-		if(touche=="\e"){//on peut arreter la partie avec echape peut importe le a qui est le tour pour l'instant aucune sauvegarde n'est faite
-			return true;
 		}
 	}
 
-	if(j.getBool("tourOrdi")){
+	if(j.getBool("tourOrdi")&&!j.getBool("pause")){
 		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%401<200){
 			if(action){
 				clear();
@@ -485,7 +649,6 @@ bool JeuTXT::update(){
 			action = true;
 		}
 	}
-	return false;
 }
 	
 
@@ -494,16 +657,11 @@ bool JeuTXT::update(){
 void JeuTXT::run(){
 
 	setTerm();//on met le terminal en non canonique, on enlève le curseur et on clear le texte.
-
-	bool quit = false;
 	
-	while(!quit){
+	while(!j.getBool("quitte")){
+		update(); 
 		affichage();
-		quit = update(); 
-		
 	}
 
 	restoreTerm(); //on restore le terminal comme avant et on le clear.
 }
-
-

@@ -64,4 +64,4 @@ $(obj)/%.o: src/%.cpp
 	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
 
 clean:
-	$(rm) -r obj/;echo ok
+	$(rm) -r obj/* data/sauvegarde/* bin/*;echo clean ok.

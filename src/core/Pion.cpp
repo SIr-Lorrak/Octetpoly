@@ -16,7 +16,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin = INITCOIN; 
+	bitcoin =INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
@@ -27,34 +27,43 @@ Pion::Pion(){
 	{
 		doubles[i] = false;
 	}
+	ticket = false;
 
 }
 
 ///---------------------------------------------------------Accesseurs-----------------------------------------------------------
 
-string Pion::getNom() const					
-{ return nom;} 
+string Pion::getNom() const{
+ return nom;
+} 
 
-int Pion::getKarma() const					
-{ return karma;}
+int Pion::getKarma() const{
+ return karma;
+}
 
-unsigned int Pion::getRang() const			
-{ return rang;}
+unsigned int Pion::getRang() const{
+ return rang;
+}
 
-float Pion::getCoin() const 				
-{ return bitcoin;}
+float Pion::getCoin() const{
+ return bitcoin;
+}
 
-unsigned int Pion::getNbPropriete() const 	
-{ return nbpropriete;}
+unsigned int Pion::getNbPropriete() const{
+ return nbpropriete;
+}
 
-unsigned int Pion::getPos() const 			
-{ return pos;}
+unsigned int Pion::getPos() const{
+ return pos;
+}
 
-char Pion::getCar() const 					
-{ return car;}
+char Pion::getCar() const{
+ return car;
+}
 
-bool Pion::getPrisonnier() const 			
-{ return prisonnier;}
+bool Pion::getPrisonnier() const{
+ return prisonnier;
+}
 
 Pion * Pion::getPion(){
   return this;
@@ -64,6 +73,15 @@ Des Pion::getDes() const{
 	return d;
 }
 
+//Permet de savoir si le joueur a un ticket
+bool Pion::getTicket() const{
+	return ticket;
+}
+
+//Permet de récupérer une propriété du joueur
+Case * Pion::getPropriete(unsigned int indice) const{
+	return &*propriete[indice];
+}
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
 void Pion::setCar(const char c){
@@ -84,6 +102,29 @@ void Pion::setRang(const unsigned int r){
 
 void Pion::setPos(const unsigned int p){
 	pos = p;
+}
+
+//Permet de modifier la valeur du ticket 
+void Pion::setTicket(bool achat){
+	ticket = achat;
+}
+
+
+void Pion::setKarma(const unsigned int k){
+	karma = k;
+}
+
+void Pion::setPrisonnier(){
+	if(prisonnier){
+		prisonnier = false;
+	}
+	else{
+		prisonnier = true;
+	}
+}
+
+void Pion::donTicket(){
+	ticket = true;
 }
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
@@ -139,14 +180,12 @@ void Pion::avancer()
 
 		if(pos > MAXCASEP)
 		{
-			pos = pos%32;
+			pos = pos%MAXCASEP;
 		}
-
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-
 		salaire();
 	}
 	
@@ -167,7 +206,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin > c->getPrix());
+	assert(bitcoin >= c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;
@@ -176,28 +215,73 @@ void Pion::achete(Case * c)
 	c->estAcheter(rang);
 }
 
-void Pion::vend(unsigned int indP, Case * c)
+void Pion::don(Case * c)
+{
+	propriete[nbpropriete] = c;
+	c->setOccupation(rang);
+	nbpropriete++;
+}
+
+void Pion::vend(string nom)
 {
 	assert(nbpropriete != 0);
-	assert(indP < nbpropriete);
 
-	bitcoin += c->getPrixDeVente();
-	propriete[indP] = NULL;
-	
+	unsigned int i = 0;
+	bool trouver = false;
+	while(!trouver && i < nbpropriete)
+	{
+		if(nom == propriete[i]->getNom())
+		{
+			bitcoin += propriete[i]->getPrixDeVente();
+			propriete[i]->reset();
+			propriete[i] = NULL;
+			trouver = true;
+		}
+		i++;
+	}
+
+	//Le nom ne correspond pas à une case de propriété
+	assert(i<32);
+
 	///Il faut déplacer les propriétés pour qu'il n'y ai pas de case vide entre 2 propriétés
-
 	///On supprime la case vide et on replace les autres propriétés
-	for(unsigned int j = indP; j < nbpropriete; j++)
+	for(unsigned int j = i-1; j < nbpropriete - 1 ; j++)
 	{
 		propriete[j] = propriete[j+1];
 	}
 
-	propriete[nbpropriete] = NULL;
-	nbpropriete -= 1;
-
-	c->reset();
+	propriete[nbpropriete - 1] = NULL;
+	nbpropriete = nbpropriete - 1;
 }
 
+void Pion::estRacheter(string nom){
+	assert(nbpropriete != 0);
+
+	unsigned int i = 0;
+	bool trouver = false;
+	while(!trouver && i < nbpropriete)
+	{
+		if(nom == propriete[i]->getNom())
+		{
+			propriete[i] = NULL;
+			trouver = true;
+		}
+		i++;
+	}
+
+	//Le nom ne correspond pas à une case de propriété
+	assert(i<32);
+
+	///Il faut déplacer les propriétés pour qu'il n'y ai pas de case vide entre 2 propriétés
+	///On supprime la case vide et on replace les autres propriétés
+	for(unsigned int j = i-1; j < nbpropriete - 1 ; j++)
+	{
+		propriete[j] = propriete[j+1];
+	}
+
+	propriete[nbpropriete - 1] = NULL;
+	nbpropriete = nbpropriete - 1;
+}
 
 unsigned int Pion::patrimoineActif(){
 	unsigned int somme = 0;
@@ -243,14 +327,43 @@ void Pion::effacerLettre()
 }
 
 void Pion::investit(int i,Case * c){
+
 	assert(i != 0);
+
 	if(i==-1){
 		bitcoin -= c->getPrixM();
+		karma -= 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma < -100)
+		{
+			karma += 1;
+		}
 	}
 	else{
 		bitcoin -= c->getPrixB();
+		karma += 1;
+
+		/// Le karma doit être entre -100 et 100
+		if(karma > 100)
+		{
+			karma -= 1;
+		}
 	}
+
 	c->investir(i);
+}
+
+void Pion::EstEnFaillite()
+{
+	for(unsigned int i = 0; i < nbpropriete; i++)
+	{
+		propriete[i]->reset();
+
+		propriete[i] = NULL;
+	}
+	nbpropriete = 0;
+	bitcoin = -1;
 }
 
 

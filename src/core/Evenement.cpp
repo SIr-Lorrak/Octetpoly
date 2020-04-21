@@ -23,19 +23,19 @@ bool Evenement::Declenchement(){
 
 	srand (time(NULL));
 
-	/*if((rand()%100)<30){
+	if((rand()%100)<30){
 		int a = (rand()%3);
 		if(a ==0){n = "hack";}
 
-		else if(a == 1){n = "clicker";}
+		//else if(a == 1){n = "clicker";}
 
-		else if(a == 2){n = "escape";}
+		else if(a == 1){n = "escape";}
 		
 
 		tps = 0;
 		tempsD = clock();
 
-	}*/
+	}
 	//n="escape";
 	tps = 0;
 	tempsD = clock();
