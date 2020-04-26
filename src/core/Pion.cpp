@@ -16,7 +16,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin =INITCOIN; 
+	bitcoin = INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
@@ -28,6 +28,7 @@ Pion::Pion(){
 		doubles[i] = false;
 	}
 	ticket = false;
+	tourUn = false;
 
 }
 
@@ -78,6 +79,10 @@ bool Pion::getTicket() const{
 	return ticket;
 }
 
+bool Pion::getTourUn() const{
+	return tourUn;
+}
+
 //Permet de récupérer une propriété du joueur
 Case * Pion::getPropriete(unsigned int indice) const{
 	return &*propriete[indice];
@@ -107,6 +112,28 @@ void Pion::setPos(const unsigned int p){
 //Permet de modifier la valeur du ticket 
 void Pion::setTicket(bool achat){
 	ticket = achat;
+}
+
+
+void Pion::setKarma(const unsigned int k){
+	karma = k;
+}
+
+void Pion::setPrisonnier(){
+	if(prisonnier){
+		prisonnier = false;
+	}
+	else{
+		prisonnier = true;
+	}
+}
+
+void Pion::setTourUn(const unsigned int tour){
+	tourUn = tour;
+}
+
+void Pion::donTicket(){
+	ticket = true;
 }
 
 ///-------------------------------------------------------------Fonctions et Procédures-------------------------------------------------------
@@ -162,13 +189,14 @@ void Pion::avancer()
 
 		if(pos > MAXCASEP)
 		{
-			pos = pos - MAXCASEP - 1;
+			pos = pos%MAXCASEP;
+			salaire();
+			tourUn = true;
 		}
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-		salaire();
 	}
 	
 }
@@ -195,6 +223,13 @@ void Pion::achete(Case * c)
 	nbpropriete++;
 
 	c->estAcheter(rang);
+}
+
+void Pion::don(Case * c)
+{
+	propriete[nbpropriete] = c;
+	c->setOccupation(rang);
+	nbpropriete++;
 }
 
 void Pion::vend(string nom)
@@ -307,22 +342,22 @@ void Pion::investit(int i,Case * c){
 
 	if(i==-1){
 		bitcoin -= c->getPrixM();
-		karma -= 1;
+		karma = karma - c->getKarmaCase();
 
 		/// Le karma doit être entre -100 et 100
 		if(karma < -100)
 		{
-			karma += 1;
+			karma = -100;
 		}
 	}
 	else{
 		bitcoin -= c->getPrixB();
-		karma += 1;
+		karma = karma + c->getKarmaCase();
 
 		/// Le karma doit être entre -100 et 100
 		if(karma > 100)
 		{
-			karma -= 1;
+			karma = 100;
 		}
 	}
 

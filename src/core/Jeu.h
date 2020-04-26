@@ -13,6 +13,8 @@
 
 using namespace std;
 
+bool fichierExiste(const string & file);
+
 /**
 brief permet le fonctionnement du jeu peut importe le type d'affichage
 */
@@ -30,6 +32,7 @@ class Jeu{
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
 		unsigned int prixAPayer;//le prix a payer en mode vente
+		unsigned int Vainqueur;
 
 		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
 		string choix;//Permet de stocker une saisie du joueur
@@ -42,19 +45,24 @@ class Jeu{
 		bool attendreNom;//dans le menu démarrer, permet d'attendre que l'utilisateur est rentrer le nom du joueur
 		bool confirmation;//pour demander une confirmation lors des actions "importante"
 		bool desLance;//dit si le joueur courant a lancé ces dés (a réinitialiser à la fin de chaque tour)
-		bool avance;//dit si le joueur a avancer 
-		bool tourFini;
+		bool avance;//dit si le joueur a avancer
 		bool attendreAmplete;
 		bool actionObligatoire;
 		bool vend;//Permet de savoir si on entre en mode vente (modification d'affichage)
 		bool ad;//Permet de savoir si on entre en mode campagne de pub (modification d'affichage)
-		bool porteO;//Permet de savoir si on entre en mode porte ouvert (modification d'affichage)	
+		bool porteO;//Permet de savoir si on entre en mode porte ouvert (modification d'affichage)
+		bool quitte;
+		bool pause;
+		bool nouvellePartie;
+		bool payePasPrison;
+
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
 		Evenement e;
 		Hacking h;
 		Clicker c;
+		Escape es;
 		
 //-------------------------------------Méthodes------------------------------------------
 
@@ -80,7 +88,7 @@ class Jeu{
 		@brief dans le menu de départ, enleve un joueur
 		@param none
 		*/
-		void enleverJoueur();
+		void enleverJoueur(unsigned int n=0);
 
 		/**
 		@brief 
@@ -134,25 +142,19 @@ class Jeu{
 		*/
 		void remiseZeroEtVente();
 
-		/**
-		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
-		même case
-		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
-		@return true si le joueur l'a déja vendu sinon false
-		*/
-		bool dejaEnVente(unsigned int indice);
+		void victoireMonopole();
 
 		/**
 		@brief sauvegarde le jeu dans un fichier pour reprendre plus tard
 		@param un string : le nom/path du fichier
 		*/
-		void sauver(const string & file) const ;
+		void sauver(const string & file) const;
 
 		/**
 		@brief charge le jeu depuis un fichier
 		@param un string : le nom/path du fichier
 		*/
-		void charger(const string & file);
+		bool charger(const string & file);
 
 		/**
 		@brief fait les actions durant la partie
@@ -171,6 +173,10 @@ class Jeu{
 		@param none
 		*/
 		void actionMenu(const string & touche);
+
+		void actionPause(const string & touche);
+
+		void actionVictoire();
 
 		/**
 		@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi
@@ -205,12 +211,13 @@ class Jeu{
 
 		void impot(const string touche);
 
+		void actionPrison(const string touche);
+
 		/**
 		@brief Détermine l'action possible sur la case
 		@param none
 		*/
 		void actionCase(const string & touche = "");
-
 
 		void resetBool();
 		
@@ -228,6 +235,10 @@ class Jeu{
 		@param un tableau d'entier en résultat (son contenue avant l'appelle sera remplacer par l'ordre des Pion)
 		*/
 		void getOrdre(unsigned int tab[4]) const;
+
+		unsigned int getVainqueur()const;
+
+		void prixKarma();
 
 		/**
 		@brief renvoie le booléen demander
@@ -284,6 +295,8 @@ class Jeu{
 		*/
 		void actionClavier(const string & touche);
 
+		void action(const string & action);
+
 		void actionOrdi();
 
 		/**
@@ -324,6 +337,14 @@ class Jeu{
 		unsigned int totalVente();
 
 		/**
+		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
+		même case
+		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
+		@return true si le joueur l'a déja vendu sinon false
+		*/
+		bool dejaEnVente(unsigned int indice);
+
+		/**
 		brief seteur permetant de mettre à jour l'évenement e
 		param unsigned int n(valeurs qui differents selon ce que l'on veut mettre à jour) 
 		*/
@@ -354,17 +375,28 @@ class Jeu{
 		*/
 		Clicker getc();
 
+		Escape getes();
+
 		/**
 		@brief permet de reset le clicker
 		@param none
 		*/
 		void setc();
 
+
+		void reset();
+
+		void testRegression();
+
 		/**
 		@brief destructeur de Jeu
 		@param none
 		*/
 		~Jeu();
+
+		bool accepteClavier() const;
+
+		void updateMiniJeu();
 		
 
 };

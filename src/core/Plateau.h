@@ -37,14 +37,19 @@ public:
 	@param numCase : unsigned int, on passe en paramètre la case voulue
 	@return L'adresse d'une case
 	*/
-	Case * getCase(unsigned int numCase);
+	Case * getCase(unsigned int numCase) const;
+
+	/**
+	@brief permet de set les different attribut variable d'une case (lors du chargement d'une partie).
+	*/
+	void setCase(unsigned int numCase,unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i);
 
 	/**
 	@brief Permet de récupérer la case qui est actuellement en campagne de pub
 	@param none
 	@return La case qui est en camapagne de pub (sa position sur le plateau)
 	*/
-	unsigned int getcasePub();
+	unsigned int getcasePub() const;
 
 	//---------------------------------Setters-------------------------------------------
 

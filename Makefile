@@ -22,11 +22,28 @@ ifeq ($(OS),Windows_NT)
 	test = if not exist
 	pipe =  
 	rm = del
+
+    INCLUDE_DIR_SDL =     -Iextern/SDL2_mingw/SDL2-2.0.3/include \
+                        -Iextern/SDL2_mingw/SDL2_ttf-2.0.12/i686-w64-mingw32/include/SDL2 \
+                        -Iextern/SDL2_mingw/SDL2_image-2.0.0/i686-w64-mingw32/include/SDL2 \
+                        -Iextern/SDL2_mingw/SDL2_mixer-2.0.1/i686-w64-mingw32/include/SDL2
+
+    LIBS_SDL = -Lextern \
+            -Lextern/SDL2_mingw/SDL2-2.0.3/i686-w64-mingw32/lib \
+            -Lextern/SDL2_mingw/SDL2_ttf-2.0.12/i686-w64-mingw32/lib \
+            -Lextern/SDL2_mingw/SDL2_image-2.0.0/i686-w64-mingw32/lib \
+            -Lextern/SDL2_mingw/SDL2_mixer-2.0.1/i686-w64-mingw32/lib \
+            -lmingw32 -lSDL2main -lSDL2.dll -lSDL2_ttf.dll -lSDL2_image.dll -lSDL2_mixer.dll
 else
 	test = test -d
 	pipe =||
 	rm = rm
+
+    INCLUDE_DIR_SDL = -I/usr/include/SDL2 -I/usr/local/include/SDL2
+    LIBS_SDL = -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer
 endif
+
+INCLUDE_DIR			= -Isrc -Isrc/core -Isrc/SDL -Iobj -lpthread
 
 ALL: mkdir $(exe)
 
@@ -35,7 +52,7 @@ mkdir:
 	$(test) bin $(pipe) mkdir bin
 
 $(bin)/$(exe_SDL): $(src_SDL)
-	$(CC) $+ -o $@
+	$(CC) $+ -o $@ $(LIBS_SDL)
 
 $(bin)/$(exe_TXT): $(src_TXT)
 	$(CC) $+ -o $@
@@ -44,7 +61,7 @@ $(bin)/$(exe_Test): $(src_Test)
 	$(CC) $+ -o $@
 
 $(obj)/%.o: src/%.cpp
-	$(CC) -c $(debug) $< -o $@
+	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
 
 clean:
-	$(rm) -r obj/;echo ok
+	$(rm) -r obj/* data/sauvegarde/* bin/*;echo clean ok.

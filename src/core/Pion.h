@@ -47,6 +47,7 @@ class Pion{
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
 		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
+		bool tourUn;
 
 	public :
 
@@ -128,6 +129,23 @@ class Pion{
 	**/
 	bool getTicket() const;
 
+	bool getTourUn() const;
+
+	void donTicket();
+
+
+	/**
+	@brief met le pion en prison si il est libre et inversement (utiliser a l'exterieur que au chargement d'un fichier de sauvegarde)
+	@param none
+	*/
+	void setPrisonnier();
+
+	/**
+	@brief pour changer le karma (uniquement lors du chargement d'une nouvelle partie)
+	@param un entier k, valeur du karma
+	*/
+	void setKarma(const unsigned int k);
+
 	/**
 	@brief Permet de récupérer une propriété du joueur
 	@param indice : unsigned int, l'indice de la case qu'on veut récupérer
@@ -152,6 +170,8 @@ class Pion{
 	void setRang(const unsigned int r);
 
 	void setPos(const unsigned int p);
+
+	void setTourUn(const unsigned int tour);
 
 	void nomAleatoire();
 
@@ -225,6 +245,8 @@ class Pion{
 	@param c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
 	*/
 	void achete(Case * c);
+
+	void don(Case *c);
 
 	/**
 	@brief Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case

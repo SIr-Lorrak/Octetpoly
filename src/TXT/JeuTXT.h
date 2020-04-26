@@ -28,6 +28,8 @@ private:
 	*/
 	void affichageMenu();
 
+	void affichagePause() const;
+
 	void affichageCampagneDePub();
 
 	void affichagePorteOuvete();
@@ -45,17 +47,21 @@ private:
 
 	void affichageClicker();
 
+	void affichageEscape();
+
 	/**
 	@brief permet l'affichage txt de l'évenement hacking
 	@param none
 	*/
 	void affichageHacking();
 
+	void affichageVictoire();
+
 	/**
 	@brief permet de mettre a jour les objets suite à l'appuie d'une touche
 	@param none
 	*/
-	bool update();
+	void update();
 
 	/**
 	@brief affiche le jeu dans un terminal
