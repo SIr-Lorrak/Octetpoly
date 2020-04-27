@@ -65,6 +65,7 @@ private:
 	Image plateau;
 	Image ange;
 	Image demon;
+	Image DE;
 
 //---different boutons
 	Image button;
@@ -91,7 +92,9 @@ private:
 
 	Image hack;
 
+	bool act;
 	bool animation;
+	bool dees;
 	//quand animation est a true l'utilisateur ne peut rien faire
 	//pour laisser le temps a l'animation de se terminer.
 
@@ -118,6 +121,9 @@ private:
 	void affichage();
 
 	bool update(SDL_Event & events);
+
+	void affichageDees();
+	void affichageInteraction();
 
 
 public:

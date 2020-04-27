@@ -13,12 +13,15 @@
 
 using namespace std;
 
+bool fichierExiste(const string & file);
+
 /**
 brief permet le fonctionnement du jeu peut importe le type d'affichage
 */
 class Jeu{
 	private :
-		Plateau board;
+		
+		
 		//Chance Paquet;//après implémantation des cartes chance.
 		//Evenement e; //après implémantation des minis jeux.
 		Joueur * tabJ[4];
@@ -28,7 +31,12 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
-		float coeffAd;
+		unsigned int prixAPayer;//le prix a payer en mode vente
+		unsigned int Vainqueur;
+
+		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
+		string choix;//Permet de stocker une saisie du joueur
+		string vente[24];//Permet de stocker tout les entreprise ou banque que le joueur veut vendre
 
 		Carte * chance;
 
@@ -37,10 +45,16 @@ class Jeu{
 		bool attendreNom;//dans le menu démarrer, permet d'attendre que l'utilisateur est rentrer le nom du joueur
 		bool confirmation;//pour demander une confirmation lors des actions "importante"
 		bool desLance;//dit si le joueur courant a lancé ces dés (a réinitialiser à la fin de chaque tour)
-		bool avance;//dit si le joueur a avancer 
-		bool tourFini;
+		bool avance;//dit si le joueur a avancer
 		bool attendreAmplete;
 		bool actionObligatoire;
+		bool vend;//Permet de savoir si on entre en mode vente (modification d'affichage)
+		bool ad;//Permet de savoir si on entre en mode campagne de pub (modification d'affichage)
+		bool porteO;//Permet de savoir si on entre en mode porte ouvert (modification d'affichage)
+		bool quitte;
+		bool pause;
+		bool nouvellePartie;
+
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
 
@@ -70,10 +84,22 @@ class Jeu{
 		void ajouterJoueur();
 
 		/**
-		@brief dans le menu de départ, enleve le iéme joueur (si i reste a zero il enleve le dernier)
-		@param un entier non signé i, l'indice du joueur enlevé
+		@brief dans le menu de départ, enleve un joueur
+		@param none
 		*/
 		void enleverJoueur(unsigned int n=0);
+
+		/**
+		@brief 
+		@param none
+		*/
+		void ajouterVente();
+
+		/**
+		@brief 
+		@param none
+		*/
+		void enleverVente();
 
 		/**
 		@brief dans le menu de départ ajoute une lettre au nom d'un Joueur
@@ -82,17 +108,58 @@ class Jeu{
 		*/
 		void ajouterLettre(const unsigned int j, const string lettre);
 
+
+		/**
+		@brief Permet ajouter un nombre à la séléction lors du mode vente ou pour choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		@param un string : le/les nombre a rajouter 
+		*/
+		void ajouterNombre(const string nombre);
+
+		/**
+		@brief Permet effacer un nombre à la selection lors du mode vente ou pour choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		@param none 
+		*/
+		void effacerNombre();
+
+		/**
+		@brief Permet ajouter ou effacer un nombre, permet au joueur de choisir sa destination
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		ou bien quelle quartier veut-il vendre
+		@param touche : string
+		*/
+		void ecrire(const string touche);
+
+		void modeVente(const string touche);
+
+		/**
+		@brief Permet au joueur de récupèré l'argent de ses ventes et de reset toutes les cases
+		qui ont été vendu
+		@param none
+		@return none
+		*/
+		void remiseZeroEtVente();
+
+		/**
+		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
+		même case
+		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
+		@return true si le joueur l'a déja vendu sinon false
+		*/
+		bool dejaEnVente(unsigned int indice);
+
 		/**
 		@brief sauvegarde le jeu dans un fichier pour reprendre plus tard
 		@param un string : le nom/path du fichier
 		*/
-		void sauver(const string & file) const ;
+		void sauver(const string & file) const;
 
 		/**
 		@brief charge le jeu depuis un fichier
 		@param un string : le nom/path du fichier
 		*/
-		void charger(const string & file);
+		bool charger(const string & file);
 
 		/**
 		@brief fait les actions durant la partie
@@ -111,6 +178,10 @@ class Jeu{
 		@param none
 		*/
 		void actionMenu(const string & touche);
+
+		void actionPause(const string & touche);
+
+		void actionVictoire();
 
 		/**
 		@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi
@@ -134,13 +205,7 @@ class Jeu{
 		@brief Procédure qui gére le loyer à payer par un joueur
 		@param none
 		*/
-		void payeLoyerJoueur();
-
-		/**
-		@brief Permet d'augmenter le loyer d'une entreprise
-		@param none
-		*/
-		void campagneDePub(const string touche);
+		void payeLoyerJoueur(const string touche);
 
 		/**
 		@brief Fonction qui prends en paramètre la case sur laque le joueurCourant veux
@@ -148,6 +213,8 @@ class Jeu{
 		@param quelleCase : unsigned int
 		*/
 		void pub(unsigned int quelleCase);
+
+		void impot(const string touche);
 
 		/**
 		@brief Détermine l'action possible sur la case
@@ -157,11 +224,10 @@ class Jeu{
 
 
 		void resetBool();
-
-
 		
 
 	public :
+		Plateau board;
 		/**
 		@brief constructeur par défaut de Jeu
 		@param aucun
@@ -174,6 +240,7 @@ class Jeu{
 		*/
 		void getOrdre(unsigned int tab[4]) const;
 
+		unsigned int getVainqueur()const;
 
 		/**
 		@brief renvoie le booléen demander
@@ -181,7 +248,9 @@ class Jeu{
 		*/
 		bool getBool(const string & type) const;
 
-		Case & getJCase(const unsigned int i) ;
+		Case & getJCase(const unsigned int i);
+
+		unsigned int getNbVente();
 
 		/**
 		@brief renvoie ne nombre de joueur (non-ordi)
@@ -209,19 +278,34 @@ class Jeu{
 
 		Carte * getCarte()const;
 
+		string getVente(unsigned int indice);
+
+		/**
+		@brief revoie le choix du joueur quand le joueur vend un quartier ou
+		choisie son quartier pour la campagne de pub ou lors de son déplacement
+		pour les portes ouvertes
+		@param none
+		@return le choix du joueur : string
+		*/
+		string getChoix() const;
+
+		unsigned int getPrixAPayer();
+		
 		/**
 		@brief choisi l'action correspondante à la touche entrer par l'utilisateur
 		@param un string : touche, c'est la touche entrer par le joueur
 		*/
 		void actionClavier(const string & touche);
 
-		/**
-		@brief choisi l'action correspondante a une action autre que le clavier entrer par l'utilisateur
-		@param un string : action, c'est le nom de l'action entrer par l'utilisateur
-		*/
 		void action(const string & action);
 
 		void actionOrdi();
+
+		/**
+		@brief choisi l'action correspondante au coordonné du clique de l'utilisateur
+		@param deux float : x et y, les coordonnées de la souris
+		*/
+		void actionSouris(const float x,const float y);
 
 		/**
 		@brief Détermine qui joue au tour suivant
@@ -239,14 +323,20 @@ class Jeu{
 		@brief Permet d'augmenter le loyer d'une entreprise
 		@param none
 		*/
-		void campagneDePub();
+		void campagneDePub(const string touche);
 
 		/**
 		@brief Permet de se déplacer sur une entreprises/banques 
 		(pas encore acheté) ou sur une des ses entreprises/banques
 		@param none
 		*/
-		void porteOuverte();
+		void porteOuverte(const string & touche);
+
+		/**
+		@brief indique combien la vente rapportera
+		@return le gain de la vente : unsigned int
+		*/
+		unsigned int totalVente();
 
 		/**
 		brief seteur permetant de mettre à jour l'évenement e
@@ -287,15 +377,20 @@ class Jeu{
 		*/
 		void setc();
 
+
+		void reset();
+
+		void testRegression();
+
 		/**
 		@brief destructeur de Jeu
 		@param none
 		*/
 		~Jeu();
 
-		void updateMiniJeu();
-
 		bool accepteClavier() const;
+
+		void updateMiniJeu();
 		
 
 };

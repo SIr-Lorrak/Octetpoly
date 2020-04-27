@@ -105,6 +105,7 @@ JeuSDL::JeuSDL(){
     plateau.loadFichier("data/images/octopoly.png",renderer);
     ange.loadFichier("data/images/ange.png",renderer);
     demon.loadFichier("data/images/demon.png",renderer);
+    DE.loadFichier("data/images/DE.png",renderer);
 
     button.loadFichier("data/images/button.png",renderer);
     buttonClicked.loadFichier("data/images/buttonClicked.png",renderer);
@@ -139,6 +140,9 @@ JeuSDL::JeuSDL(){
 
     font_color.r = 0;font_color.g = 0;font_color.b = 0;
     m.x=-1;m.y=-1;
+    act = false;
+
+    dees = true;
 }
 
 JeuSDL::~JeuSDL(){
@@ -391,19 +395,41 @@ void JeuSDL::affichageEscape(){//cette fonction doit être adapté !
             }
         }
             
-        dessineTexte("Utilsez les touches Z, Q, S et D pour echapez rapidemant a la police",730,50,12);
+        dessineTexte("Utilsez les touches Z, Q, S et D ",122,110,12);
+        dessineTexte("pour echaper rapidemant a la police",122,130,12);
 
-        dessineTexte("Attention de ne pas quitter la route, ",730,90,9);
+        dessineTexte("Attention de ne pas quitter la route, ",122,565,12);
         
     }
     if(j.getes().getFin()==true) {
+        int ix = 112;
+        int iy = 110;
+        for(int y=0;y<11;y++){
+            for(int x=0;x<11;x++){
+                if(tab_escape[y][x]=="M"){
+                       M.dessineTexture(renderer,ix,iy,45,45);
+
+                       ix+=45;
+                }
+                 else {
+                    H.dessineTexture(renderer,ix,iy,45,45);
+                    ix+=45;
+                }
+                if(x==10){
+                    ix=112;
+                    iy+=45;
+                }
+            }
+        }
+
         if(j.getes().getEchec()==true){
 
-            dessineTexte("Vous n'avez pas reussit a vous echaper!",730,90,9);
-            dessineTexte("direction la prison!",730,115,9);
+            dessineTexte("Vous n'avez pas reussit ",172,245,11);
+            dessineTexte("a vous echaper!",172,265,11);
+            dessineTexte("Direction la prison!",172,300,11);
         }
         else{
-            dessineTexte("Vous avez reussit a vous echaper",730,90,9);
+            dessineTexte("Vous avez reussit a vous echaper",172,245,11);
 
         }
             
@@ -460,38 +486,282 @@ void JeuSDL::affichageMenu(){
     }
 }
 
+
+void JeuSDL::affichageDees(){
+
+    string texte = j.getPion(j.getJoueurCourant())->getNom();
+    if (texte ==""){
+        texte = "anonyme joue.";
+    }
+    else{
+        texte += " joue.";
+    }
+        
+    dessineTexte(texte,125,560,12);
+
+    if(j.getBool("desLance")){
+        newButton("\n",130+(texte.length()*12),560,120,30,BLUE,"Avancer");
+        //dessineRectangle(renderer,130,130,60,60,{241,101,4});
+        //dessineRectangle(renderer,220,130,60,60,{241,101,4});
+        DE.dessineTexture(renderer,130,130,60,60);
+        DE.dessineTexture(renderer,220,130,60,60);
+        int x =130;
+        int y = 130;
+        int val = j.getPion(j.getJoueurCourant())->getDes().D1;
+        //affichageDees(j.getPion(j.getJoueurCourant())->getDes().D1,130,130);
+        //affichageDees(j.getPion(j.getJoueurCourant())->getDes().D2,220,130);
+        for(int i =0;i<2;i++){
+            switch(val){
+                case 1:
+                    dessineTexte("o",x+23,y+19,12);
+                    break;
+                case 2:
+                    dessineTexte("o",x+10,y+5,12);
+                    dessineTexte("o",x+39,y+34,12);
+                    break;
+                case 3:
+                    dessineTexte("o",x+10,y+5,12);
+                    dessineTexte("o",x+23,149,12);
+                    dessineTexte("o",x+39,y+34,12);
+                    break;
+                case 4:
+                    dessineTexte("o",x+10,y+5,12);
+                    dessineTexte("o",x+10,y+34,12);
+                    dessineTexte("o",x+39,y+34,12);
+                    dessineTexte("o",x+39,y+5,12);
+                    break;
+                case 5:
+                    dessineTexte("o",x+10,y+5,12);
+                    dessineTexte("o",x+23,y+19,12);
+                    dessineTexte("o",x+39,y+34,12);
+                    dessineTexte("o",x+39,y+5,12);
+                    dessineTexte("o",x+10,y+34,12);
+                    break;
+                case 6:
+                    dessineTexte("o",x+10,y+5,12);
+                    dessineTexte("o",x+10,y+19,12);
+                    dessineTexte("o",x+39,y+19,12);
+                    dessineTexte("o",x+39,y+34,12);
+                    dessineTexte("o",x+39,y+5,12);
+                    dessineTexte("o",x+10,y+34,12);
+                    break;
+            }
+            val = j.getPion(j.getJoueurCourant())->getDes().D2;
+            x = 220;
+
+        }
+    }
+    else{
+        
+        newButton("\n",130+(texte.length()*12),560,120,30,BLUE,"Lancer les des");
+        }      
+}
+
+void JeuSDL::affichageInteraction(){
+    Pion * p = j.getPion(j.getJoueurCourant());
+    Case * c = j.board.getCase(p->getPos());
+    string texte;
+    switch(c->getType()){
+        case 'E':
+            texte = "Vous etes sur l'entrprise ";
+            texte +=c->getNom();
+            dessineTexte(texte,125,120,12);
+            break;
+
+        case 'B':
+            texte = "Vous etes sur la banque ";
+            texte +=c->getNom();
+            dessineTexte(texte,125,120,12);
+            break;
+
+        case 'D':
+            texte = "Vous etes sur la case Depart ";
+            dessineTexte(texte,125,120,12);
+            break;
+
+        case 'P':
+            texte = "Bienvenue en Prison !";
+            dessineTexte(texte,125,120,12);
+            
+            if(!j.getBool("desLance")){
+                texte = "Faire un double";
+                newButton("1",125,565,120,30,BLUE,texte);
+                //cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+            }
+            break;
+        case 'I':
+            texte = "Il faut payer ses impots monsieur !"; 
+            dessineTexte(texte,125,560,12);
+            break;
+        case 'C':
+            if(j.getCarte()==NULL){
+                string texte = "Piochez une carte chance !";
+                dessineTexte(texte,125,520,12);
+            }
+            else{
+                // ecrire sur la carte cout<<"votre carte : "<<endl<<j.getCarte()->getTitre()<<endl<<j.getCarte()->getTexte()<<endl;
+            }
+            break;
+        case 'A':
+            texte = "vous pouvez organiser une campagne de PUB! Faire de la pub ?";
+            dessineTexte(texte,125,560,12);
+
+            if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+            {
+                //cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
+            }
+            break;
+        case 'O':
+            texte = "Journée porte ouverte! Vous pouvez aller où vous voulez. Acheter un ticket?";
+            dessineTexte(texte,125,560,12);
+            if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+            {
+                //cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+            }
+            break;
+        default:
+            assert(false);
+            //dessineTexte("fin du tour",125,560,12);
+            break;
+    }
+    if(c->getType()=='E'||c->getType()=='B'){
+        texte = "Prix :";
+        texte += to_string(c->getPrix());
+        texte+= "   Loyer :";
+        texte+= to_string(c->getLoyer());
+        dessineTexte(texte,125,170,12);
+        texte = "   Propriétaire : ";
+        
+        if(c->getOccupation()==0){
+            texte+= "personne";
+            dessineTexte(texte,125,145,12);
+            
+        }
+        else{
+            if(j.getPion(c->getOccupation())->getNom()==""){
+                texte += "<anonyme>";
+            }
+            else{
+                texte+= j.getPion(c->getOccupation())->getNom();
+            } 
+            dessineTexte(texte,125,145,12);
+
+            if(c->getType()=='E'){
+                texte = "investissement : niv ";
+                texte+= to_string(c->getInvestissement());
+                dessineTexte(texte,125,450,12);
+            }
+        }
+        if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c->getOccupation() != 0 && c->getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+            texte ="vous devez payer le loyer au joueur ";
+            texte += j.getPion(c->getOccupation())->getNom();
+            texte += " !";
+            dessineTexte(texte,125,165,12);
+            newButton("\n",125,560,120,30,BLUE,"Payer");
+        }
+        if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
+            if(c->getOccupation() == j.getJoueurCourant()){
+                dessineTexte("+ pour investir dans le légal,",125,470,12);
+                dessineTexte("- pour investir dans l'illégal.",125,490,12);
+               texte ="/!\\ si vous avez déjà investit dans le légal,";
+               dessineTexte(texte,125,515,10);
+               texte = "investir dans l'illégal enlèvera vos ";
+               dessineTexte(texte,125,530,10);
+               texte ="investissement précédent et inverssement !";
+               dessineTexte(texte,125,545,10);
+               newButton("+",125,565,30,30,BLUE,"+");
+               newButton("-",175,565,30,30,BLUE,"-");
+               newButton("\n",300,565,120,30,BLUE,"Valider");
+                
+            }
+
+            else if(p->getCoin()>=c->getPrix()){
+                if(c->getOccupation()==0){
+                    newButton("o",125,560,120,30,BLUE,"Acheter");  
+                    newButton("\n",300,560,120,30,BLUE,"Ne pas acheter"); 
+                }
+                else if (!j.getBool("actionObligatoire") && j.board.getCase(p->getPos())->getType() == 'E'){
+                    texte = "voulez vous exproprier cette case ? ";
+                    dessineTexte(texte,125,540,12);
+                    texte = "Payez "; 
+                    texte+= to_string(j.board.getCase(p->getPos())->getPrix());
+                    texte += "$";
+                    newButton("o",125,565,120,30,BLUE,texte);
+                    newButton("\n",300,565,120,30,BLUE,"Ne rien faire");
+                    
+
+                }
+            }
+        }
+    }
+
+}
+
+
 void JeuSDL::affichageJeu(){
     //TODO
     plateau.dessineTexture(renderer,0,0,DIMY,DIMY);
+    
     for(unsigned int i=1;i<=4;i++){
         unsigned int pos = j.getPion(i)->getPos();
         int x,y;
+        unsigned char r,g,b;
+        r=g=b=0;
         if(pos>=0&&pos<8){
-            x = (DIMY-(108+pos*72))+35;
-            y = DIMY-40;
+            x = (DIMY-(108+pos*72))+5;
+            y = DIMY-63;
         }
         else if(pos>=8&&pos<16){
-            x=40;
-            y=(DIMY-(108+(pos-8)*72))+35;
+            x=0;
+            y=(DIMY-(108+(pos-8)*72))+5;
         }
         else if(pos>=16&&pos<24){
-            x=(108+(pos-16)*72)-35;
-            y=40;
+            x=(108+(pos-16)*72)-5;
+            y=0;
         }
         else if(pos>=24&&pos<32){
-            x=DIMY-40;
-            y=(108+(pos-24)*72)-35;
+            x=DIMY-63;
+            y=(108+(pos-24)*72)-5;
         }   
         else{
-            assert(false);//position trop grande
+            //assert(false);//position trop grande
         }
-        dessineRectangle(renderer,x,y,30,30,{rand()%255,rand()%255,rand()%255,rand()%255});
-        if(j.getBool("desLance")){
-            dessineTexte("des lancé !",DIMY,100,16);
+        if(i==1){
+            r=g=255;
         }
+        if(i==2){
+            x+=33;
+            r=255;
+        }
+        if(i==3){  
+            y+=33;
+            g=255;
+
+        }
+        if(i==4){
+            x+=33;
+            y+=33;
+            b=255;
+        }
+        dessineRectangle(renderer,x,y,30,30,{r,g,b});
         //if(j.getBool(''))
     }
+   
+    if (!j.getBool("avance")&&!j.getPion(j.getJoueurCourant())->getPrisonnier()){
+        affichageDees();
+    }
+    else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")){
+        string texte = "Fin du tour. ";
+        dessineTexte(texte,125,560,12);
+        newButton("\n",130+(texte.length()*12),560,120,30,BLUE,"Continuer");
+    }
+    else {
+        affichageInteraction();
+    }
+        
 }
+
+
 
 void JeuSDL::affichage(){
 
@@ -592,8 +862,19 @@ bool JeuSDL::update(SDL_Event & events){
 
                 default: break;
             }
+    }
+    if(j.getBool("tourOrdi")&&!j.getBool("pause")){
+        if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%201<100){
+            if(act){
+                act = false;
+                j.actionOrdi();// a intervalle régulier genre toutes les 5 secondes
+            }
         }
-        
+
+        else{
+            act = true;
+        }
+    }    
         
     return quit;
 }
@@ -612,3 +893,24 @@ void JeuSDL::run(){
 
     }
 }
+
+
+//  getCase(pos du joueur)->getOcupation() savoir si appartient a quelqu'un
+//j.getPion(id du joueur)->getNom() recup le nom du joueur
+//j.getPion(id du joueur)->getPos() recup position
+/*if(c->getOccupation()==0){
+                texte = "L'entreprise ";
+                texte+= c->getNom();
+                texte+= " est libre";
+                dessineTexte(texte,125,520,12);
+                texte = "Prix :";
+                texte += to_string(c->getPrix());
+                texte+= "        Loyer :";
+                texte+= to_string(c->getLoyer());
+                dessineTexte(texte,125,540,12);
+                texte = " Acheter :";
+                texte +=to_string(c->getPrix());
+                texte+="$";
+                newButton("\n",125,560,120,30,BLUE,texte);  
+                newButton("\n",300,560,120,30,BLUE,"Ne pas acheter");
+            }*/
