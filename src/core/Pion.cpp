@@ -178,15 +178,15 @@ void Pion::avancer()
 		pos += d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
-		if(pos > MAXCASEP)
+		if(pos >= MAXCASEP)
 		{
-			pos = pos%MAXCASEP;
+			salaire();
 		}
+		pos = pos%MAXCASEP;
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-		salaire();
 	}
 	
 }

@@ -268,14 +268,14 @@ void affichePion(const Pion & p){
 	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
 }
 
-void JeuTXT::affichageCase(const Case & c){
+void JeuTXT::affichageCase(const Case * c){
 	Pion * p = j.getPion(j.getJoueurCourant());
-	switch(c.getType()){
+	switch(c->getType()){
 		case 'E':
-			cout<<"vous ètes sur l'entreprise : "<<c.getNom()<<endl;
+			cout<<"vous ètes sur l'entreprise : "<<c->getNom()<<endl;
 			break;
 		case 'B':
-			cout<<"vous ètes sur la banque : "<<c.getNom()<<endl;
+			cout<<"vous ètes sur la banque : "<<c->getNom()<<endl;
 			break;
 		case 'D':
 			cout<<"CASE DÉPART !"<<endl;
@@ -315,30 +315,30 @@ void JeuTXT::affichageCase(const Case & c){
 			assert(false);
 			break;
 	}
-	if(c.getType()=='E'||c.getType()=='B'){
-		cout<<"loyer : "<<c.getLoyer()<<endl;
-		cout<<"Prix : "<<c.getPrix()<<endl;
+	if(c->getType()=='E'||c->getType()=='B'){
+		cout<<"loyer : "<<c->getLoyer()<<endl;
+		cout<<"Prix : "<<c->getPrix()<<endl;
 		cout<<"Propriétaire : ";
-		if(c.getOccupation()==0){
+		if(c->getOccupation()==0){
 			cout<<"personne"<<endl;
 		}
 		else{
-			cout<<j.getPion(c.getOccupation())->getNom()<<endl;
-			if(c.getType()=='E'){
-				cout<<"investissement : "<<c.getInvestissement()<<endl;
+			cout<<j.getPion(c->getOccupation())->getNom()<<endl;
+			if(c->getType()=='E'){
+				cout<<"investissement : "<<c->getInvestissement()<<endl;
 			}
 		}
-		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
-			cout<<"vous devez payer le loyer au joueur "<<c.getOccupation()<<" !"<<endl;
+		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c->getOccupation() != 0 && c->getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+			cout<<"vous devez payer le loyer au joueur "<<c->getOccupation()<<" !"<<endl;
 		}
 		if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
-			if(c.getOccupation() == j.getJoueurCourant()){
+			if(c->getOccupation() == j.getJoueurCourant()){
 				cout<<"+ pour investir dans le légal, - pour investir dans l'illégal."<<endl
 				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
 			}
 
-			else if(p->getCoin()>=c.getPrix()){
-				if(c.getOccupation()==0){
+			else if(p->getCoin()>=c->getPrix()){
+				if(c->getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
 				else if (!j.getBool("actionObligatoire") && j.board.getCase(p->getPos())->getType() == 'E'){
@@ -355,7 +355,7 @@ void JeuTXT::affichageJeu(){
 	Pion * joueurCourant;
 	joueurCourant = j.getPion(j.getJoueurCourant());
 	unsigned int pos = joueurCourant->getPos();
-	Case c = j.getJCase(pos);
+	Case * c = j.board.getCase(pos);
 
 	cout<<"case : "<<pos<<endl;
 
@@ -637,7 +637,7 @@ void JeuTXT::update(){
 	}
 
 	if(j.getBool("tourOrdi")&&!j.getBool("pause")){
-		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%401<200){
+		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%101<50){
 			if(action){
 				clear();
 				action = false;

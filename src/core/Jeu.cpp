@@ -61,7 +61,7 @@ Jeu::Jeu(){
 		}while(!estPasDans(alea,ordre,i));
 		ordre[i] = alea;
 	}
-	joueurCourant = ordre[3];
+	joueurCourant = ordre[0];
 }
 
 
@@ -333,10 +333,14 @@ bool Jeu::charger(const string & file)
 	fichier>>recup;
 	if(recup == "OCTETPOLY666"){
 		fichier>>nbJoueur;
-		for(unsigned int i=0;i<4;i++){
+		for(unsigned int i=0;i<nbJoueur;i++){
 			tabJ[i]=new Joueur;
+			tabJ[i]->setRang(i+1);
 		}
 		tabO = new Ordi [4-nbJoueur];
+		for(unsigned int i=0;i<4-nbJoueur;i++){
+			tabO[i].setRang(nbJoueur+i+1);
+		}
 
 		for(unsigned int i= 0; i<4;i++){
 			fichier>>ordre[i];
@@ -399,7 +403,7 @@ bool Jeu::charger(const string & file)
 	}
 
 	fichier.close();
-	commencerPartie();
+	tourSuivant();
 	return valide;
 }
 
@@ -451,6 +455,10 @@ void Jeu::commencerPartie()
 				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
 			}
 		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
+		for(unsigned int i=0;i<4-nbJoueur;i++){
+			tabO[i].setRang(nbJoueur+i+1);
+			tabO[i].setKarma(rand()%4-2);
+		}
 	}
 	tourSuivant();
 }
@@ -667,7 +675,7 @@ void Jeu::actionPartie(const string & touche)
 			}
 		}
 		else{
-			if(touche == "1"||touche=="\n"){
+			if(touche == "1"||touche == "\n"){
 				p->lanceDes();
 				desLance = true;
 			}
@@ -704,12 +712,12 @@ void Jeu::actionPartie(const string & touche)
 				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
 			}
 			else{
-				if(tourOrdi){//si le tour n'a pas été reset alors on ne fini pas le tour
+				if(tourOrdi){
 					tourSuivant();
 				}
 				
 				else{
-					if(touche=="\n"){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
+					if(touche=="\n"){
 						if(!e.Declenchement()){
 							tourSuivant();
 						}
@@ -1174,6 +1182,11 @@ void Jeu::actionCase(const string & touche){
 			attendreAmplete= false;
 			impot(touche);
 			break;
+		default :
+			attendreAmplete = false;
+			actionObligatoire = false;
+			break;
+
 	}
 }
 
@@ -1315,16 +1328,95 @@ void Jeu::actionPause(const string & touche){
 }
 
 void Jeu::actionOrdi(){
-	if(!desLance&&getPion(joueurCourant)->getPrisonnier()){
-		actionClavier("1");
-	}
-	actionClavier("\n");
-	//Ordi o = *getOrdi(joueurCourant);
-	/*if(avance){
-		if(o.AIacheteEntreprise(*board.getCase(o.getPos()))){
-			actionCase("o");
+	Ordi * o = getOrdi(joueurCourant);
+	assert(joueurCourant==o->getRang());
+	if(vend){//quand l'ordi doit vendre
+		if(getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer){//si l'ordi a assez vendu.
+			actionClavier("o");
 		}
-	}*/
+		else{
+			//vente[nbvente] = faire une fonction qui donne un choix.;
+			nbVente++;
+		}
+	}
+	else{
+		if(!avance){//tant que l'ordi n'a pas avancé
+			actionClavier("\n");
+		}
+		else{
+			Case * c = board.getCase(o->getPos());
+			switch(c->getType()){
+				case 'E':
+					if(c->getOccupation()==0){//si elle est a personne
+						if(o->AIacheteEntreprise(c)){
+							actionClavier("o");
+						}
+						else{
+							actionClavier("n");
+						}
+					}
+					else if(c->getOccupation()==joueurCourant){//si elle est a l'ordi
+						int inv = o->AIinvesti(c);
+						if(inv==0){//si l'ordi ne veut pas investir il confirme.
+							actionClavier("\n");
+						}
+						else if(inv < 0){
+							actionClavier("-");
+						}
+						else if(inv > 0){
+							actionClavier("+");
+						}
+					}
+					else{//la case appartient a quelqu'un d'autre
+						if(actionObligatoire){//si doit payer le loyer
+							actionClavier("\n");
+						}
+						else{
+							if(o->AIacheteEntreprise(c)){
+								actionClavier("o");
+							}
+							else{
+								actionClavier("n");
+							}
+						}
+					}
+					break;
+
+				case 'B':
+					if(c->getOccupation()==0){//si elle est a personne
+						if(o->AIacheteEntreprise(c)){
+							actionClavier("o");
+						}
+						else{
+							actionClavier("n");
+						}
+					}
+					else if(c->getOccupation()==joueurCourant){//si elle est a l'ordi
+						actionClavier("\n");//rien a faire sur une banque
+					}
+					else{//la case appartient a quelqu'un d'autre
+						actionClavier("\n");
+					}
+					break;
+
+				case 'C':
+					actionClavier("\n");
+					break;
+
+				case 'A':
+					actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					break;
+
+				case 'O':
+					actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					break;
+
+				case 'I':
+					actionClavier("\n");
+					break;
+			}
+		}
+	}
 }
 
 
