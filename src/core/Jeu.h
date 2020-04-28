@@ -31,7 +31,7 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
-		unsigned int prixAPayer;//le prix a payer en mode vente
+		unsigned int prixAPayer;//le prix a payer 
 		unsigned int Vainqueur;
 
 		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
@@ -54,7 +54,8 @@ class Jeu{
 		bool quitte;
 		bool pause;
 		bool nouvellePartie;
-		bool payePasPrison;
+		bool desLancePrison;
+		bool apresPorteOuverte;//Permet d'empêcher de jouer juste après une porte ouverte
 
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel

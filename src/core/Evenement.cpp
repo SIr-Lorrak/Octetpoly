@@ -27,18 +27,16 @@ bool Evenement::Declenchement(int karma){
 	if((rand()%100)<10){
 		int a = (rand()%3);
 		/*
-		//Accès uniquement au mini-jeu niveau 1 bon et niveau 1 mauvais
-		if(karma  > -25 && karma < 25 )
+		//Accès uniquement au mini-jeu niveau 1 bon
+		if(karma >= 0 && karma < 25 )
 		{
-			randKarma = rand()%2;
-			if(randKarma == 0)
-			{
-				a = 0;
-			}
-			else
-			{ 
-				a = 2;
-			}
+			a = 2;
+		}
+
+		//Accès uniquement au mini-jeu niveau 1 mauvais 
+		else if(karma < 0 && karma > -25)
+		{
+			a = 0;
 		}
 
 		//Accès uniquement au mini-jeu niveau 1 mauvais et niveau 2 mauvais

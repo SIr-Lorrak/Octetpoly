@@ -281,24 +281,45 @@ void JeuTXT::affichageCase(const Case & c){
 			cout<<"CASE DÉPART !"<<endl;
 			break;
 		case 'P':
-			//Met à jour le prix à payer pour l'affichage
-			j.prixKarma();
 			cout<<"bienvenue en Prison !"<<endl;
-			if(!j.getBool("desLance"))
+			if(j.getBool("desLance"))
 			{
-				cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :";
-				cout << endl<<"1. tentez de faire un double"<<endl;
+				cout <<"Appuyez sur entrer"<<endl;
+			}
+
+			if(!j.getBool("desLance") && j.getBool("confirmation"))
+			{
 				if(p->getCoin() >= j.getPrixAPayer())
 				{
+					cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :";
+					if(!j.getBool("desLancePrison"))
+					{
+						cout << endl<<"1. tentez de faire un double"<<endl;
+					}
+					else
+					{
+						cout << endl<<"1. Passez son tour et ne pas payer"<<endl;	
+					}
+
 					cout <<"2 Payer | prix : " << j.getPrixAPayer() << endl << endl;
+				}
+
+				else
+				{
+					cout << endl<<"1. tentez de faire un double"<<endl;
 				}
 			}
 			break;
 		case 'I':
-			//Met à jour le prix à payer pour l'affichage
-			j.prixKarma();
 			cout<<"Faut payer ses impots monsieur !"<<endl;
-			cout << "Vous devez " << j.getPrixAPayer() << " Goldus à l'Etat !" << endl;
+			if(j.getPrixAPayer() > 0)
+			{
+				cout << "Vous devez " << j.getPrixAPayer() << " Goldus à l'Etat !" << endl;
+			}
+			else
+			{
+				cout << "L'état vous remercie d'avoir payé vos impôt" << endl;	
+			}
 			break;
 		case 'C':
 			if(j.getCarte()==NULL){
@@ -317,9 +338,15 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
-			if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+			if (j.board.nbCaseFree() > 0
+				 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix()
+				 && !p->getTicket())
 			{
 				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			}
+			if(p->getTicket())
+			{
+				cout<<"Prêt pour les portes ouverte !"<<endl;
 			}
 			break;
 		default:
@@ -373,15 +400,15 @@ void JeuTXT::affichageJeu(){
 
 	affichageCase(c);
 
-	if(j.getBool("desLance")){
+	if((j.getBool("desLance") || j.getBool("desLancePrison")) && !j.getBool("apresPorteOuverte")){
 		affichageDes(joueurCourant->getDes().D1,joueurCourant->getDes().D2);
 	}
 
-	else{
+	else if (!joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"Lancez les dés avec \"entrer\"!"<<endl;
 	}
-
-	if(j.getBool("avance")){
+	
+	if(j.getBool("avance") && !joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"vous avez avancé..."<<endl;
 	}
 

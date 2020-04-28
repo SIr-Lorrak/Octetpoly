@@ -36,9 +36,9 @@ Jeu::Jeu(){
 	porteO = false;
 	quitte = false;
 	pause = false;
-	payePasPrison = false;
 	Vainqueur=0;
 	nouvellePartie = false;
+	desLancePrison = false;
 	choix = "";
 	nbVente = 0;
 	for (int i = 0; i < 24; ++i)
@@ -169,8 +169,10 @@ bool Jeu::getBool(const string & type) const
 		return pause;
 	else if(type=="nouvellePartie")
 		return nouvellePartie;
-	else if(type=="payePasPrison")
-		return payePasPrison;
+	else if(type=="desLancePrison")
+		return desLancePrison;
+	else if(type=="apresPorteOuverte")
+		return apresPorteOuverte;
 	else
 		assert(false);
 }
@@ -575,6 +577,7 @@ void Jeu::modeVente(const string touche){
 		{	
 			remiseZeroEtVente();
 			prixAPayer = 0;
+			confirmation = false;
 			vend = false;
 		}
 		else if(touche=="n"||touche=="N")
@@ -685,6 +688,7 @@ void Jeu::resetBool()
 	vend = false;
 	ad = false;
 	porteO = false;
+	apresPorteOuverte = false;
 	/////////////////
 }
 
@@ -723,25 +727,61 @@ void Jeu::tourSuivant(){
 
 void Jeu::actionPrison(const string touche){
 	Pion *p = getPion(joueurCourant);
-    prixKarma();
 
-	if(p->getCoin() >= prixAPayer)
+	//Pour mettre à jour les prix pour l'affichage
+	if(touche == "\n")
 	{
-		if(touche=="2")
+		confirmation = true;
+		prixKarma();
+	}
+
+
+	else if(confirmation)
+	{
+		if(p->getCoin() >= prixAPayer)
 		{
-			p->setCoin(p->getCoin() - prixAPayer);
-			p->setPrisonnier();
-			p->lanceDes();
-			desLance = true;
+			if(touche=="2")	
+			{
+				p->setCoin(p->getCoin() - prixAPayer);
+				p->setPrisonnier();
+				p->lanceDes();
+				desLance = true;
+				confirmation = false;
+				desLancePrison = false;
+			}
+		
+			if(touche == "1" && !desLancePrison)
+			{
+				p->lanceDes();
+				desLancePrison = true;
+				if(p->getDes().D1 == p->getDes().D2)
+				{
+					desLance = true;
+					confirmation = false;
+					desLancePrison = false;
+				}
+				
+			}
+
+			//Choisie de ne pas payer après avoir lancer les dés
+			else if(touche == "1" && desLancePrison)
+			{
+				desLance = true;
+				confirmation = false;
+				desLancePrison = false;
+			}
+		}
+		else
+		{
+			if(touche == "1")
+			{
+				p->lanceDes();
+				desLance = true;
+				confirmation = false;
+			}
 		}
 	}
-	if(touche == "1")
-	{
-		p->lanceDes();
-		desLance = true;
-	}
 }
-
 void Jeu::actionPartie(const string & touche)
 {
 	Pion *p = getPion(joueurCourant);
@@ -769,6 +809,7 @@ void Jeu::actionPartie(const string & touche)
 			avance = true;
 			actionObligatoire = true;
 			attendreAmplete = true;
+			apresPorteOuverte = true;
 		}
 		else if(!desLance){
 			if(touche == "\n"){
@@ -779,6 +820,11 @@ void Jeu::actionPartie(const string & touche)
 		else if(!avance){
 			if(touche == "\n"){
 				p->avancer();
+				Case *c = board.getCase(p->getPos());
+				if(c->getType() == 'I' || c->getType() == 'P')
+				{
+					prixKarma();
+				}
 				avance = true;
 			}
 		}
@@ -786,7 +832,7 @@ void Jeu::actionPartie(const string & touche)
 			actionCase(touche);
 		}
 		else{
-			if(p->getDes().D1==p->getDes().D2){
+			if(p->getDes().D1==p->getDes().D2 && !apresPorteOuverte){
 				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
 			}
 			else{
@@ -821,8 +867,8 @@ void Jeu::actionMenu(const string & touche)
 
 			if(touche == "\n"||((touche=="o"||touche=="O")&&confirmation)){
 				if(confirmation){
-					commencerPartie();//si c'est confirmé on commence la partie
 					confirmation=false;
+					commencerPartie();//si c'est confirmé on commence la partie
 				}
 
 				confirmation = true;//on demande confirmation
@@ -1005,6 +1051,7 @@ void Jeu::payeLoyerJoueur(const string touche){
 //C'est un joueur qui joue	
 	//La case où se trouve le joueurCourant
 	Case * c = board.getCase(getPion(joueurCourant)->getPos());
+
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 	//Le joueurCourant paye directement si il a assez d'argent 
 	if(coinCourant >= c->getLoyer() && !vend)
@@ -1096,6 +1143,7 @@ void Jeu::campagneDePub(const string touche){
 				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
 				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 				ad = false;
+				confirmation = false;
 				attendreAmplete = false;
 				choix = "";
 			}
@@ -1232,7 +1280,7 @@ void Jeu::carteChance(const string & touche){
 }
 
 void Jeu::impot(const string touche){
-	prixKarma();
+	prixKarma();	
 
 	if(getPion(joueurCourant)->getCoin() >= prixAPayer)
 	{
@@ -1242,7 +1290,7 @@ void Jeu::impot(const string touche){
 
 	else if((getPion(joueurCourant)->getCoin() + getPion(joueurCourant)->patrimoineActif()) >= prixAPayer)
 	{
-		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
+		//on passe dans l'interface de vente
 		vend = true;
 	}
 
@@ -1285,6 +1333,11 @@ void Jeu::actionCase(const string & touche){
 		case 'I':
 			attendreAmplete= false;
 			impot(touche);
+			break;
+
+		default :
+			attendreAmplete= false;
+			actionObligatoire = false;
 			break;
 	}
 }
