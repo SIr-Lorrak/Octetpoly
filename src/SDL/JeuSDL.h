@@ -90,11 +90,27 @@ private:
 	Image T4;//virage de haut vers la droite
 	Image M;//mur
 
+//---image pour hacker
 	Image hack;
+
+//---image pour cliker
+	Image clicker;
+	Image pub1;
+	Image pub2;
+	Image pub3;
+	Image pub4;
+	Image pub5;
+	Image pub6;
+	Image pub7;
+	Image pub8;
+	Image pub9;
+	Image pub10;
+
 
 	bool act;
 	bool animation;
-	bool dees;
+	int a;
+	bool clique;
 	//quand animation est a true l'utilisateur ne peut rien faire
 	//pour laisser le temps a l'animation de se terminer.
 

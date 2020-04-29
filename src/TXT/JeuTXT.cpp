@@ -268,26 +268,41 @@ void affichePion(const Pion & p){
 	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
 }
 
-void JeuTXT::affichageCase(const Case & c){
+void JeuTXT::affichageCase(const Case * c){
 	Pion * p = j.getPion(j.getJoueurCourant());
-	switch(c.getType()){
+	switch(c->getType()){
 		case 'E':
-			cout<<"vous ètes sur l'entreprise : "<<c.getNom()<<endl;
+			cout<<"vous ètes sur l'entreprise : "<<c->getNom()<<endl;
 			break;
 		case 'B':
-			cout<<"vous ètes sur la banque : "<<c.getNom()<<endl;
+			cout<<"vous ètes sur la banque : "<<c->getNom()<<endl;
 			break;
 		case 'D':
 			cout<<"CASE DÉPART !"<<endl;
 			break;
 		case 'P':
 			cout<<"bienvenue en Prison !"<<endl;
-			if(!j.getBool("desLance")){
-				cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+			if(j.getBool("desLance"))
+			{
+				cout <<"Appuyez sur entrer"<<endl;
+			}
+			else if(p->getPrisonnier()){
+				cout <<"1. tentez de faire un double"<<endl;
+				if(p->getCoin() >= j.getPrixAPayer()){
+					cout <<"2. payez la cotion de "<<j.getPrixAPayer() <<" $"<<endl;
+				}
 			}
 			break;
 		case 'I':
-			cout<<"faut payer ses impots monsieur !"<<endl;
+			cout<<"Faut payer ses impots monsieur !"<<endl;
+			if(j.getPrixAPayer() > 0)
+			{
+				cout << "Vous devez " << j.getPrixAPayer() << " Goldus à l'Etat !" << endl;
+			}
+			else
+			{
+				cout << "L'état vous remercie d'avoir payé vos impôt" << endl;	
+			}
 			break;
 		case 'C':
 			if(j.getCarte()==NULL){
@@ -306,39 +321,46 @@ void JeuTXT::affichageCase(const Case & c){
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
-			if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+			if (j.board.nbCaseFree() > 0
+				 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix()
+				 && !p->getTicket())
 			{
 				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			}
+			if(p->getTicket())
+			{
+				cout<<"Prêt pour les portes ouverte !"<<endl;
 			}
 			break;
 		default:
 			assert(false);
 			break;
 	}
-	if(c.getType()=='E'||c.getType()=='B'){
-		cout<<"loyer : "<<c.getLoyer()<<endl;
-		cout<<"Prix : "<<c.getPrix()<<endl;
+	if(c->getType()=='E'||c->getType()=='B'){
+		cout<<"groupe : " << c->getGroup() << endl;
+		cout<<"loyer : "<<c->getLoyer()<<endl;
+		cout<<"Prix : "<<c->getPrix()<<endl;
 		cout<<"Propriétaire : ";
-		if(c.getOccupation()==0){
+		if(c->getOccupation()==0){
 			cout<<"personne"<<endl;
 		}
 		else{
-			cout<<j.getPion(c.getOccupation())->getNom()<<endl;
-			if(c.getType()=='E'){
-				cout<<"investissement : "<<c.getInvestissement()<<endl;
+			cout<<j.getPion(c->getOccupation())->getNom()<<endl;
+			if(c->getType()=='E'){
+				cout<<"investissement : "<<c->getInvestissement()<<endl;
 			}
 		}
-		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c.getOccupation() != 0 && c.getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
-			cout<<"vous devez payer le loyer au joueur "<<c.getOccupation()<<" !"<<endl;
+		if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c->getOccupation() != 0 && c->getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
+			cout<<"vous devez payer le loyer au joueur "<<c->getOccupation()<<" !"<<endl;
 		}
 		if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
-			if(c.getOccupation() == j.getJoueurCourant()){
+			if(c->getOccupation() == j.getJoueurCourant()){
 				cout<<"+ pour investir dans le légal, - pour investir dans l'illégal."<<endl
 				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
 			}
 
-			else if(p->getCoin()>=c.getPrix()){
-				if(c.getOccupation()==0){
+			else if(p->getCoin()>=c->getPrix()){
+				if(c->getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
 				else if (!j.getBool("actionObligatoire") && j.board.getCase(p->getPos())->getType() == 'E'){
@@ -355,21 +377,21 @@ void JeuTXT::affichageJeu(){
 	Pion * joueurCourant;
 	joueurCourant = j.getPion(j.getJoueurCourant());
 	unsigned int pos = joueurCourant->getPos();
-	Case c = j.getJCase(pos);
+	Case * c = j.board.getCase(pos);
 
 	cout<<"case : "<<pos<<endl;
 
 	affichageCase(c);
 
-	if(j.getBool("desLance")){
+	if((j.getBool("desLance") || j.getBool("desLancePrison")) && !j.getBool("apresPorteOuverte")){
 		affichageDes(joueurCourant->getDes().D1,joueurCourant->getDes().D2);
 	}
 
-	else{
+	else if (!joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"Lancez les dés avec \"entrer\"!"<<endl;
 	}
-
-	if(j.getBool("avance")){
+	
+	if(j.getBool("avance") && !joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"vous avez avancé..."<<endl;
 	}
 
@@ -540,12 +562,20 @@ void JeuTXT::affichageVente(){
 	cout << "Voici votre/vos propriété(s) : " << endl;
 	for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
 	{
-		cout << i << " " << (p->getPropriete(i))->getNom() << endl;
+		if(!j.dejaEnVente(i))
+		{
+		cout << i << " " << p->getPropriete(i)->getNom() << " | Prix de vente : " << p->getPropriete(i)->getPrixDeVente() << " Goldus" << endl;
+		}
+		else
+		{
+			cout << i << " " << p->getPropriete(i)->getNom() << " | VENDU" << endl;
+		}
 	}
 	
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
-	cout << "Appuyer sur + pour valider le quartier entré" << endl;
+	cout << "Appuyer sur + pour valider le quartier saisi" << endl;
+	cout << "Appuyer sur - pour retirer le dernier quartier saisi" << endl;
 
 	cout << "En prenant en compte la vente vous possédé : " 
 			<< (p->getCoin() + j.totalVente()) << " Goldus" << endl;
@@ -637,7 +667,7 @@ void JeuTXT::update(){
 	}
 
 	if(j.getBool("tourOrdi")&&!j.getBool("pause")){
-		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%401<200){
+		if(int((float(clock())/float(CLOCKS_PER_SEC))*100)%101<50){
 			if(action){
 				clear();
 				action = false;

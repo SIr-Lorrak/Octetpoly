@@ -10,7 +10,7 @@ using namespace std;
 
 class Ordi : public Pion{
 	private : 
-		unsigned int risque; //en pourcentage, ça correspond au risque que vas prendre l'Ordi
+		int risque; //en pourcentage, ça correspond au risque que vas prendre l'Ordi
 	public :
 
 		/**
@@ -31,21 +31,21 @@ class Ordi : public Pion{
 		@brief renvoie true si l'Ordi décide d'acheté la banque false sinon
 		@param une Case banque : la banque en question
 		*/
-		bool AIacheteBanque(const Case & banque) const;
+		bool AIacheteBanque(const Case * banque) const;
 
 
 		/**
 		@brief renvoie true si l'Ordi souhaite acheté l'entreprise false sinon
 		@param une Case entreprise : l'entreprise en question
 		*/
-		bool AIacheteEntreprise(const Case & entreprise) const;
+		bool AIacheteEntreprise(const Case * entreprise) const;
 
 
 		/**
 		@brief renvoie in entier correspondant a l'investissement choisit (-1 dans l'illégal +1 dans le légal et 0 si rien n'est choisi)
 		@param une Case entreprise : l'entreprise dans laquel il vas investir (ça doit être la case sur laquel il se tient)
 		*/
-		int AIinvesti(const Case & entreprise) const;
+		int AIinvesti(const Case * entreprise) const;
 
 		/**
 		@brief renvoie l'indice de la case sur laquel il veut organisé les championa du monde (0 si il ne veut rien faire)

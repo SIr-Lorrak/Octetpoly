@@ -38,6 +38,7 @@ Jeu::Jeu(){
 	pause = false;
 	Vainqueur=0;
 	nouvellePartie = false;
+	desLancePrison = false;
 	choix = "";
 	nbVente = 0;
 	for (int i = 0; i < 24; ++i)
@@ -61,7 +62,7 @@ Jeu::Jeu(){
 		}while(!estPasDans(alea,ordre,i));
 		ordre[i] = alea;
 	}
-	joueurCourant = ordre[3];
+	joueurCourant = ordre[0];
 }
 
 
@@ -168,6 +169,10 @@ bool Jeu::getBool(const string & type) const
 		return pause;
 	else if(type=="nouvellePartie")
 		return nouvellePartie;
+	else if(type=="desLancePrison")
+		return desLancePrison;
+	else if(type=="apresPorteOuverte")
+		return apresPorteOuverte;
 	else
 		assert(false);
 }
@@ -333,10 +338,14 @@ bool Jeu::charger(const string & file)
 	fichier>>recup;
 	if(recup == "OCTETPOLY666"){
 		fichier>>nbJoueur;
-		for(unsigned int i=0;i<4;i++){
+		for(unsigned int i=0;i<nbJoueur;i++){
 			tabJ[i]=new Joueur;
+			tabJ[i]->setRang(i+1);
 		}
 		tabO = new Ordi [4-nbJoueur];
+		for(unsigned int i=0;i<4-nbJoueur;i++){
+			tabO[i].setRang(nbJoueur+i+1);
+		}
 
 		for(unsigned int i= 0; i<4;i++){
 			fichier>>ordre[i];
@@ -451,6 +460,10 @@ void Jeu::commencerPartie()
 				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
 			}
 		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
+		for(unsigned int i=0;i<4-nbJoueur;i++){
+			tabO[i].setRang(nbJoueur+i+1);
+			tabO[i].setKarma(rand()%4-2);
+		}
 	}
 	tourSuivant();
 }
@@ -572,22 +585,85 @@ void Jeu::modeVente(const string touche){
 		{	
 			remiseZeroEtVente();
 			prixAPayer = 0;
+			confirmation = false;
 			vend = false;
 		}
 		else if(touche=="n"||touche=="N")
 		{
 			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-		}
+		}	
 	}
 }
 
- void Jeu::remiseZeroEtVente(){
+void Jeu::remiseZeroEtVente(){
 	for (unsigned int i = 0; i < nbVente; ++i)
 	{
 		getPion(joueurCourant)->vend(vente[i]);
 		vente[i] = "";
 	}
 	nbVente = 0;
+}
+
+void Jeu::prixKarma(){
+	Case * c = board.getCase(getPion(joueurCourant)->getPos());
+	prixAPayer = c->getPrix();
+
+	//Avec un karma positif, on paye entre 0% et 90% moins cher 
+	if(getPion(joueurCourant)->getKarma() > 0)
+	{
+		prixAPayer = prixAPayer*(1+ (0.1-1)*(getPion(joueurCourant)->getKarma()-1)/(100-1));
+	}
+	//Avec un karma negatif, on paye entre 0% et 100% plus cher 
+	else
+	{
+		prixAPayer = prixAPayer*(1+ (2-1)*(getPion(joueurCourant)->getKarma()-1)/(100-1));	
+	}
+}
+
+void Jeu::victoireMonopole(){
+	//Le joueur qui joue le tour
+	Pion * p = getPion(joueurCourant);
+
+	//Tableau des groupe de case
+	//De 0 à 7 les groupes d'entreprises
+	//8 le groupe banque
+	unsigned int group[9] = {0,0,0,0,0,0,0,0,0};
+
+	//On compte les monopole que posséde le joueur
+	unsigned int nbMonopole = 0;
+	unsigned int i = 0;
+
+	//On parcourt les propriétés du joueur
+	while(i < p->getNbPropriete())
+	{
+		if(p->getPropriete(i)->getGroup() == 42)
+		{
+			group[8]++;
+		}
+		else
+		{
+	 		group[p->getPropriete(i)->getGroup() - 1]++;
+		}
+	 	i++;
+	}
+
+	//Groupes composé de trois entreprises
+	if(group[0] == 3){nbMonopole++;}	
+	if(group[1] == 3){nbMonopole++;}	
+	if(group[2] == 3){nbMonopole++;}	
+	if(group[5] == 3){nbMonopole++;}	
+
+
+	//Groupes composé de deux entreprises
+	if(group[3] == 2){nbMonopole++;}	
+	if(group[4] == 2){nbMonopole++;}	
+	if(group[6] == 2){nbMonopole++;}	
+	if(group[7] == 2){nbMonopole++;}	
+
+	if(nbMonopole == 3 || group[8] == 4)
+	{
+		Vainqueur = joueurCourant;
+	}
 }
 
 bool Jeu::dejaEnVente(unsigned int indice){
@@ -620,12 +696,14 @@ void Jeu::resetBool()
 	vend = false;
 	ad = false;
 	porteO = false;
+	apresPorteOuverte = false;
 	/////////////////
 }
 
 void Jeu::tourSuivant(){
 	unsigned int nbFaillite,vainqueur;
 	nbFaillite = 0;
+	victoireMonopole();
 	for(unsigned int i=1; i<=4;i++){//on vérifie d'abbord si un joueur a gagné ici on vérifie juste si il y a un seul joueur survivant.
 		if(getPion(i)->getCoin()<0){
 			nbFaillite++;
@@ -652,6 +730,21 @@ void Jeu::tourSuivant(){
 		if(joueurCourant>nbJoueur) tourOrdi = true ;
 		else tourOrdi = false ;
 	}while(getPion(joueurCourant)->getCoin()<0);
+
+
+	prixKarma();
+}
+
+void Jeu::actionPrison(const string touche){
+	Pion * p = getPion(joueurCourant);
+	if(!desLance&&(touche=="1"||touche=="\n")){
+		desLance = true;
+		p->lanceDes();
+	}
+	else if(touche=="2"&&p->getCoin()>prixAPayer&&!desLance){
+		p->setCoin(p->getCoin()-prixAPayer);
+		p->setPrisonnier();
+	}
 }
 
 void Jeu::actionPartie(const string & touche)
@@ -666,11 +759,9 @@ void Jeu::actionPartie(const string & touche)
 				tourSuivant();
 			}
 		}
-		else{
-			if(touche == "1"||touche=="\n"){
-				p->lanceDes();
-				desLance = true;
-			}
+		else
+		{
+			actionPrison(touche);
 		}
 	}
 
@@ -683,6 +774,7 @@ void Jeu::actionPartie(const string & touche)
 			avance = true;
 			actionObligatoire = true;
 			attendreAmplete = true;
+			apresPorteOuverte = true;
 		}
 		else if(!desLance){
 			if(touche == "\n"){
@@ -693,6 +785,12 @@ void Jeu::actionPartie(const string & touche)
 		else if(!avance){
 			if(touche == "\n"){
 				p->avancer();
+				prixKarma();
+				Case *c = board.getCase(p->getPos());
+				if(c->getType() == 'I' || c->getType() == 'P')
+				{
+					prixKarma();
+				}
 				avance = true;
 			}
 		}
@@ -700,7 +798,7 @@ void Jeu::actionPartie(const string & touche)
 			actionCase(touche);
 		}
 		else{
-			if(p->getDes().D1==p->getDes().D2){
+			if(p->getDes().D1==p->getDes().D2 && !apresPorteOuverte){
 				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
 			}
 			else{
@@ -710,7 +808,7 @@ void Jeu::actionPartie(const string & touche)
 				
 				else{
 					if(touche=="\n"){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
-						if(!e.Declenchement()){
+						if(!e.Declenchement(p->getKarma())){
 							tourSuivant();
 						}
 					}
@@ -735,8 +833,8 @@ void Jeu::actionMenu(const string & touche)
 
 			if(touche == "\n"||((touche=="o"||touche=="O")&&confirmation)){
 				if(confirmation){
-					commencerPartie();//si c'est confirmé on commence la partie
 					confirmation=false;
+					commencerPartie();//si c'est confirmé on commence la partie
 				}
 
 				confirmation = true;//on demande confirmation
@@ -817,15 +915,21 @@ void Jeu::investirEJoueur(const string touche){
 
 	//Est-ce que le joueurCourant veux investir
 	//Est-ce que le joueurCourant a assez d'argent
-	if(touche == "+" && p->getCoin() >= c->getPrixB())
+	if(touche == "+" && p->getCoin() >= c->getPrixB() && c->getInvestissement() < 5)
 	{
-		p->investit(1,c);//si oui il investit
+		if(c->getInvestissement() < 3 || p->getTourUn())
+		{
+			p->investit(1,c);//si oui il investit
+		}
 	}
 
 	//Est-ce que le joueurCourant a assez d'argent
-	else if (touche == "-" && p->getCoin() >= c->getPrixM())
+	else if (touche == "-" && p->getCoin() >= c->getPrixM() && c->getInvestissement() > -5)
 	{
-		p->investit(-1,c);//si oui il investit
+		if(c->getInvestissement() > -3 || p->getTourUn())
+		{
+			p->investit(-1,c);//si oui il investit
+		}
 	}
 
 	else if (touche == "\n"){
@@ -860,6 +964,7 @@ void Jeu::actionBE(const string touche){
 			    paye(joueurCourant,occupant,c->getPrix());
 			    getPion(c->getOccupation())->estRacheter(c->getNom());
 				getPion(joueurCourant)->don(c);	//le joueur a payer 
+				victoireMonopole();
 			}
 			else
 			{
@@ -876,6 +981,7 @@ void Jeu::actionBE(const string touche){
 			if((touche == "o" ||touche == "O") && coinCourant >= c->getPrix())
 			{
 				getPion(joueurCourant)->achete(c);
+				victoireMonopole();
 
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
 					attendreAmplete = false;
@@ -911,6 +1017,7 @@ void Jeu::payeLoyerJoueur(const string touche){
 //C'est un joueur qui joue	
 	//La case où se trouve le joueurCourant
 	Case * c = board.getCase(getPion(joueurCourant)->getPos());
+
 	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
 	//Le joueurCourant paye directement si il a assez d'argent 
 	if(coinCourant >= c->getLoyer() && !vend)
@@ -925,7 +1032,6 @@ void Jeu::payeLoyerJoueur(const string touche){
 		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
 		vend = true;
 		prixAPayer = c->getLoyer();
-		modeVente(touche);
 	}
 
 	//Le joueurCourant n'as pas assez d'argent pour s'acquitter du loyer
@@ -933,8 +1039,8 @@ void Jeu::payeLoyerJoueur(const string touche){
 	else 
 	{
 		paye(joueurCourant,c->getOccupation(),coinCourant + getPion(joueurCourant)->patrimoineActif());	
-		tourSuivant(); 
 		getPion(joueurCourant)->EstEnFaillite();
+		tourSuivant(); 
 	}
 }
 
@@ -1003,6 +1109,7 @@ void Jeu::campagneDePub(const string touche){
 				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
 				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 				ad = false;
+				confirmation = false;
 				attendreAmplete = false;
 				choix = "";
 			}
@@ -1095,10 +1202,31 @@ void Jeu::carteChance(const string & touche){
 		gain = chance->getgain();
 		casePlus3 = chance->getcasePlus3();
 		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
-			joueur->setCoin(joueur->getCoin() + gain);//le gain peut aussi être une perte.
-			if(id_Case == 0)
+			if(gain != 0)
+			{
+				joueur->setCoin(joueur->getCoin() + gain);//le gain peut aussi être une perte.
+				if(joueur->getCoin() < 0)
+				{
+					 if((joueur->getCoin() + getPion(joueurCourant)->patrimoineActif()) >= 0)
+					{
+						//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
+						vend = true;
+						prixAPayer = -gain;
+					}
+
+					//Le joueurCourant n'as pas assez d'argent pour s'acquitter du loyer
+					//il est en faillite (fin du jeu pour lui)
+					else 
+					{
+						getPion(joueurCourant)->EstEnFaillite();
+						tourSuivant(); 
+					}
+				}
+			}
+			else if(id_Case == 0)
 			{
 				joueur->setPos(0);
+				joueur->setTourUn(true);
 				joueur->salaire();
 			}
 			else if(casePlus3)
@@ -1117,22 +1245,18 @@ void Jeu::carteChance(const string & touche){
 	}
 }
 
-void Jeu::impot(const string touche){
-	//La case où se trouve le joueurCourant
-	Case * c = board.getCase(getPion(joueurCourant)->getPos());
+void Jeu::impot(const string touche){	
 
-	if(getPion(joueurCourant)->getCoin() > c->getPrix())
+	if(getPion(joueurCourant)->getCoin() >= prixAPayer)
 	{
-		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - prixAPayer);
 		actionObligatoire = false;
 	}
 
-	else if((getPion(joueurCourant)->getCoin() + getPion(joueurCourant)->patrimoineActif()) >= c->getPrix())
+	else if((getPion(joueurCourant)->getCoin() + getPion(joueurCourant)->patrimoineActif()) >= prixAPayer)
 	{
-		//on passe dans l'interface de vente (c'est-a-dire on passe le booléen vend a true)
+		//on passe dans l'interface de vente
 		vend = true;
-		prixAPayer = c->getPrix();
-		modeVente(touche);
 	}
 
 	//Le joueurCourant n'as pas assez d'argent pour s'acquitter des impôt
@@ -1142,6 +1266,7 @@ void Jeu::impot(const string touche){
 		getPion(joueurCourant)->EstEnFaillite();
 		tourSuivant(); 
 	}
+	prixAPayer = 0;
 }
 
 void Jeu::actionCase(const string & touche){
@@ -1174,6 +1299,11 @@ void Jeu::actionCase(const string & touche){
 			attendreAmplete= false;
 			impot(touche);
 			break;
+		default :
+			attendreAmplete = false;
+			actionObligatoire = false;
+			break;
+
 	}
 }
 
@@ -1197,7 +1327,7 @@ void Jeu::actionMiniJeu(const string touche){
 		else{
 
 			if (touche == "\n"){
-				//TODO : faire les gains / pertes avant de passer au tour suivant.
+				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin()+e.getgain());
 				e.reset();
 				h.resetHack();
 				tourSuivant();
@@ -1216,7 +1346,7 @@ void Jeu::actionMiniJeu(const string touche){
 		}
 		if((c.getFin()==true)&&(touche == "\n")){
 			
-			//TODO : faire les gains / pertes avant de passer au tour suivant.
+			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin()+e.getgain());
 			e.reset();
 			c.resetClicker();
 			tourSuivant();
@@ -1227,7 +1357,8 @@ void Jeu::actionMiniJeu(const string touche){
 		
 		if((es.getFin()==true)&&(touche=="\n")){
 			if(es.getEchec()==true){
-				//TODO : faire aller en prison
+				getPion(joueurCourant)->setPos(8);
+				getPion(joueurCourant)->setPrisonnier();
 			}
 			e.reset();
 			es.resetEscape();
@@ -1315,16 +1446,95 @@ void Jeu::actionPause(const string & touche){
 }
 
 void Jeu::actionOrdi(){
-	if(!desLance&&getPion(joueurCourant)->getPrisonnier()){
-		actionClavier("1");
-	}
-	actionClavier("\n");
-	//Ordi o = *getOrdi(joueurCourant);
-	/*if(avance){
-		if(o.AIacheteEntreprise(*board.getCase(o.getPos()))){
-			actionCase("o");
+	Ordi * o = getOrdi(joueurCourant);
+	assert(joueurCourant==o->getRang());
+	if(vend){//quand l'ordi doit vendre
+		if(getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer){//si l'ordi a assez vendu.
+			actionClavier("o");
 		}
-	}*/
+		else{
+			//vente[nbvente] = faire une fonction qui donne un choix.;
+			nbVente++;
+		}
+	}
+	else{
+		if(!avance){//tant que l'ordi n'a pas avancé
+			actionClavier("\n");
+		}
+		else{
+			Case * c = board.getCase(o->getPos());
+			switch(c->getType()){
+				case 'E':
+					if(c->getOccupation()==0){//si elle est a personne
+						if(o->AIacheteEntreprise(c)){
+							actionClavier("o");
+						}
+						else{
+							actionClavier("n");
+						}
+					}
+					else if(c->getOccupation()==joueurCourant){//si elle est a l'ordi
+						int inv = o->AIinvesti(c);
+						if(inv==0){//si l'ordi ne veut pas investir il confirme.
+							actionClavier("\n");
+						}
+						else if(inv < 0){
+							actionClavier("-");
+						}
+						else if(inv > 0){
+							actionClavier("+");
+						}
+					}
+					else{//la case appartient a quelqu'un d'autre
+						if(actionObligatoire){//si doit payer le loyer
+							actionClavier("\n");
+						}
+						else{
+							if(o->AIacheteEntreprise(c)){
+								actionClavier("o");
+							}
+							else{
+								actionClavier("n");
+							}
+						}
+					}
+					break;
+
+				case 'B':
+					if(c->getOccupation()==0){//si elle est a personne
+						if(o->AIacheteEntreprise(c)){
+							actionClavier("o");
+						}
+						else{
+							actionClavier("n");
+						}
+					}
+					else if(c->getOccupation()==joueurCourant){//si elle est a l'ordi
+						actionClavier("\n");//rien a faire sur une banque
+					}
+					else{//la case appartient a quelqu'un d'autre
+						actionClavier("\n");
+					}
+					break;
+
+				case 'C':
+					actionClavier("\n");
+					break;
+
+				case 'A':
+					actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					break;
+
+				case 'O':
+					actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					break;
+
+				case 'I':
+					actionClavier("\n");
+					break;
+			}
+		}
+	}
 }
 
 
@@ -1335,7 +1545,7 @@ void Jeu::sete(unsigned int n){
 	switch(n){
 
 		case 1:
-			e.Declenchement();
+			e.Declenchement(getPion(joueurCourant)->getKarma());
 			break;
 
 		case 2:

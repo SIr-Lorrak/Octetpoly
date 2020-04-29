@@ -19,24 +19,50 @@ Evenement::Evenement(){
 
 
 //permet de déclancher un événément lors d'un déplacement en fonction du karma 
-bool Evenement::Declenchement(){
+bool Evenement::Declenchement(int karma){
 
 	srand (time(NULL));
+	//unsigned int randKarma;
 
 	if((rand()%100)<30){
 		int a = (rand()%3);
+		/*
+		//Accès uniquement au mini-jeu niveau 1 bon
+		if(karma >= 0 && karma < 25 )
+		{
+			a = 2;
+		}
+
+		//Accès uniquement au mini-jeu niveau 1 mauvais 
+		else if(karma < 0 && karma > -25)
+		{
+			a = 0;
+		}
+
+		//Accès uniquement au mini-jeu niveau 1 mauvais et niveau 2 mauvais
+		else if(karma <= -25)
+		{
+			a = rand()%2;
+		}
+
+		//Accès uniquement au mini-jeu niveau 1 bon et niveau 2 bon
+		else if(karma >= 25)
+		{
+			a = (rand()%2)+2;
+		}*/
+
 		/*if(a ==0){n = "hack";}
 
-		//else if(a == 1){n = "clicker";}
+		else if(a == 1){n = "clicker";}
 
-		else if(a == 1){n = "escape";}*/
+		else if(a == 2){n = "escape";}
 		
-		n = "escape";
+
 		tps = 0;
-		tempsD = clock();
+		tempsD = clock();*/
 
 	}
-	//n="escape";
+	n="escape";
 	tps = 0;
 	tempsD = clock();
 	return n != "rien";

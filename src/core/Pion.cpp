@@ -16,7 +16,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin =INITCOIN; 
+	bitcoin = INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
@@ -28,6 +28,7 @@ Pion::Pion(){
 		doubles[i] = false;
 	}
 	ticket = false;
+	tourUn = false;
 
 }
 
@@ -78,6 +79,10 @@ bool Pion::getTicket() const{
 	return ticket;
 }
 
+bool Pion::getTourUn() const{
+	return tourUn;
+}
+
 //Permet de récupérer une propriété du joueur
 Case * Pion::getPropriete(unsigned int indice) const{
 	return &*propriete[indice];
@@ -121,6 +126,10 @@ void Pion::setPrisonnier(){
 	else{
 		prisonnier = true;
 	}
+}
+
+void Pion::setTourUn(const unsigned int tour){
+	tourUn = tour;
 }
 
 void Pion::donTicket(){
@@ -175,20 +184,19 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos += d.D1 + d.D2;
+		pos +=d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
-		if(pos > MAXCASEP)
+		if(pos >= MAXCASEP)
 		{
-			pos = pos%MAXCASEP;
+			salaire();
 		}
+		pos = pos%MAXCASEP;
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-		salaire();
 	}
-	
 }
 
 
@@ -328,30 +336,30 @@ void Pion::effacerLettre()
 
 void Pion::investit(int i,Case * c){
 
-	assert(i != 0);
+    assert(i != 0);
 
-	if(i==-1){
-		bitcoin -= c->getPrixM();
-		karma -= 1;
+    if(i==-1){
+        bitcoin -= c->getPrixM();
+        karma = karma - c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma < -100)
-		{
-			karma += 1;
-		}
-	}
-	else{
-		bitcoin -= c->getPrixB();
-		karma += 1;
+        /// Le karma doit être entre -100 et 100
+        if(karma < -100)
+        {
+            karma = -100;
+        }
+    }
+    else{
+        bitcoin -= c->getPrixB();
+        karma = karma + c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma > 100)
-		{
-			karma -= 1;
-		}
-	}
+        /// Le karma doit être entre -100 et 100
+        if(karma > 100)
+        {
+            karma = 100;
+        }
+    }
 
-	c->investir(i);
+    c->investir(i);
 }
 
 void Pion::EstEnFaillite()

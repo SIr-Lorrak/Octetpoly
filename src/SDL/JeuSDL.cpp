@@ -136,6 +136,19 @@ JeuSDL::JeuSDL(){
 
     hack.loadFichier("data/images/hack.png",renderer);
 
+    clicker.loadFichier("data/images/clicker.png",renderer);
+    pub1.loadFichier("data/images/pub1.png",renderer);
+    pub2.loadFichier("data/images/pub2.png",renderer);
+    pub3.loadFichier("data/images/pub3.png",renderer);
+    pub4.loadFichier("data/images/pub4.png",renderer);
+    pub5.loadFichier("data/images/pub5.jpg",renderer);
+    pub6.loadFichier("data/images/pub6.png",renderer);
+    pub7.loadFichier("data/images/pub7.png",renderer);
+    pub8.loadFichier("data/images/pub8.png",renderer);
+    pub9.loadFichier("data/images/pub9.png",renderer);
+    pub10.loadFichier("data/images/pub10.png",renderer);
+
+
     Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
     if (Police == NULL) {
             cout << "Failed to load DejaVuSansCondensed.ttf! SDL_TTF Error: " << TTF_GetError() << endl; SDL_Quit(); exit(1);
@@ -145,7 +158,8 @@ JeuSDL::JeuSDL(){
     m.x=-1;m.y=-1;
     act = false;
 
-    dees = true;
+    a = 3;
+    clique = true;
 }
 
 
@@ -247,12 +261,95 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
     else if(c2!=NULL){
         im_contenue = * c2;
         im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
+        cout<<SDL_GetError()<<endl;
+
     }
 }
 
 
 void JeuSDL::affichageClicker(){
-    //TODO
+    clicker.dessineTexture(renderer,112,110,495,495);
+    string texte;
+    if (j.getc().getFin()==false){
+        texte = "Timer : ";
+        texte+=to_string(10-((clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC)));
+        texte+=" seconde";
+        dessineTexte(texte,122,110,12);
+        texte ="Appuyez à répétion sur la pub ";
+        dessineTexte(texte,135,135,12);
+        texte ="pour faire de la pub!";
+        dessineTexte(texte,135,155,12);
+        texte ="nombre de pub réalisé : ";
+        texte+=to_string(j.getc().getnbclique());
+        dessineTexte(texte,135,180,12);
+
+        switch(a){
+                case 1:
+                pub1.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 2:
+                pub2.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 3:
+                pub3.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 4:
+                pub4.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 5:
+                pub5.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 6:
+                pub6.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 7:
+                pub7.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 8:
+                pub8.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 9:
+                pub9.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 10:
+                pub10.dessineTexture(renderer,200,230,300,300);
+                break;
+            }
+
+        newButton(" ",400,550,120,30,BLUE,"pubber");
+        if( action ==" "&& clique){
+            int temp = a;
+            srand (time(NULL));
+            while(a == temp){
+                a = (rand()%10)+1;
+            }
+            clique = false;
+        }
+        else if (action ==""&& !clique){
+            clique = true;
+        }
+
+        
+    }   
+    else{
+        texte = "TERMINER! Vous avez réalisé ";
+        texte+=to_string(j.getc().getnbclique());
+        dessineTexte(texte,135,135,12);
+        texte ="Vous gagner ";
+        texte+=to_string(j.gete().getgain());
+        texte+="$";
+        dessineTexte(texte,135,155,12);
+        newButton("\n",300,500,120,30,BLUE,"Continuer");
+    }
 }
 
 
@@ -594,7 +691,10 @@ void JeuSDL::affichageInteraction(){
             if(!j.getBool("desLance")){
                 texte = "Faire un double";
                 newButton("1",125,565,120,30,BLUE,texte);
-                //cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+                texte = "Payer ";
+                texte+= to_string(j.getPrixAPayer());
+                texte+="$";
+                newButton("2",300,565,120,30,BLUE,texte);
             }
             if(j.getBool("desLance")){
                 affichageDees();
@@ -672,7 +772,7 @@ void JeuSDL::affichageInteraction(){
             texte += j.getPion(c->getOccupation())->getNom();
             texte += " !";
             dessineTexte(texte,125,475,12);
-            newButton("\n",125,560,120,30,BLUE,"Payer");
+            newButton("\n",125,560,120,30,BLUE,"   Payer   ");
         }
         if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
             if(c->getOccupation() == j.getJoueurCourant()){
@@ -817,7 +917,7 @@ void JeuSDL::affichageJeu(){
         
         
     }
-    else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")){
+    else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")&&j.gete().getn()=="rien"){
         string texte = "Fin du tour. ";
         dessineTexte(texte,125,560,12);
         newButton("\n",130+(texte.length()*12),560,120,30,BLUE,"Continuer");

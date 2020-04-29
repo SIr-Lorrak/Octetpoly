@@ -52,7 +52,7 @@ class Evenement{
 		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma renvoie true si une un mini jeu est lancé
 		@param none
 		*/
-		bool Declenchement();
+		bool Declenchement(int karma);
 
 		/**
 		@brief retourne n (nous de l'évenement en court)

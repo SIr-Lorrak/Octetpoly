@@ -16,6 +16,8 @@ private:
 	unsigned int occupation;//Qui occupe la case
 	char type; //Type une entreprise, une banque, un case chance,...
 	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
+	unsigned int groupe; //Groupe au quelle appartient la case
+	unsigned int karmaCase; //Le karma que rapporte ou retire la case au joueur
 
 	unsigned int loyer; //Prix à donner au joueur à qui appartient l'entreprise
 	unsigned int loyerInitial;
@@ -123,6 +125,10 @@ public:
 	char getType() const;
 
 	bool getAd() const;
+
+	unsigned int getGroup() const;
+
+	unsigned int getKarmaCase() const;
 	//----------------------------------Setters------------------------------------------
 
 	void setOccupation(unsigned int r);
@@ -130,12 +136,14 @@ public:
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie 
 	(prix de base,type,nom de la case,etc)
-	@param char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l
+	@param prends en paramètre le groupe au quelle la case appartient, la catégorie de la case, 
+	le prix, son nom,son influence sur le karma, le prix de vente, le prix mauvais investissement, 
+	le prix bon investissement et le loyer 
 	*/ 
-	void initCase(char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l);
+	void initCase(unsigned int group,char categorie,unsigned int p,string n,unsigned int karma,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l);
 
 	/**
-	@brief Initialise le prix de base d'une entreprise ou d'une banque
+	@brief Initialise les prix initiaux d'une entreprise ou d'une banque
 	@param none
 	*/ 
 	void initPrixInitial();
