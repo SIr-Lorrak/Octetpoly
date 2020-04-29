@@ -24,7 +24,7 @@ bool Evenement::Declenchement(int karma){
 	srand (time(NULL));
 	//unsigned int randKarma;
 
-	if((rand()%100)<10){
+	if((rand()%100)<30){
 		int a = (rand()%3);
 		/*
 		//Accès uniquement au mini-jeu niveau 1 bon
@@ -53,9 +53,9 @@ bool Evenement::Declenchement(int karma){
 
 		if(a ==0){n = "hack";}
 
-		//else if(a == 1){n = "clicker";}
+		else if(a == 1){n = "clicker";}
 
-		else if(a == 1){n = "escape";}
+		else if(a == 2){n = "escape";}
 		
 
 		tps = 0;

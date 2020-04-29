@@ -1370,7 +1370,7 @@ void Jeu::actionMiniJeu(const string touche){
 		else{
 
 			if (touche == "\n"){
-				//TODO : faire les gains / pertes avant de passer au tour suivant.
+				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin()+e.getgain());
 				e.reset();
 				h.resetHack();
 				tourSuivant();
@@ -1389,7 +1389,7 @@ void Jeu::actionMiniJeu(const string touche){
 		}
 		if((c.getFin()==true)&&(touche == "\n")){
 			
-			//TODO : faire les gains / pertes avant de passer au tour suivant.
+			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin()+e.getgain());
 			e.reset();
 			c.resetClicker();
 			tourSuivant();
@@ -1400,7 +1400,8 @@ void Jeu::actionMiniJeu(const string touche){
 		
 		if((es.getFin()==true)&&(touche=="\n")){
 			if(es.getEchec()==true){
-				//TODO : faire aller en prison
+				getPion(joueurCourant)->setPos(8);
+				getPion(joueurCourant)->setPrisonnier();
 			}
 			e.reset();
 			es.resetEscape();
