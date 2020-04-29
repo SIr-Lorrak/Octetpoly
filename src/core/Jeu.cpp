@@ -1122,6 +1122,7 @@ void Jeu::campagneDePub(const string touche){
 		&& (!ad)
 		&& ((getPion(joueurCourant)->getNbPropriete()>0)))
 	{
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 		ad = true;
 	}
 
@@ -1180,6 +1181,7 @@ void Jeu::porteOuverte(const string & touche){
 		&&!(getPion(joueurCourant)->getTicket()))
 	{
 		getPion(joueurCourant)->setTicket(true);
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 		attendreAmplete = false;
 		tourSuivant();
 	}

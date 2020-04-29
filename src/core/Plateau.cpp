@@ -17,7 +17,7 @@ Plateau::Plateau(){
 	tabC[4].initCase(42,'B',5,"Crédit agricole",0,4,0,0,5);
 	tabC[5].initCase(2,'E',20,"Arkane Studio",10,4,1,1,5);
 	tabC[6].initCase(2,'E',25,"Ankama",10,4,1,1,50);
-	tabC[7].initCase(2,'E',30,"Ubisof",10,4,1,1,2);
+	tabC[7].initCase(2,'E',30,"Ubisoft",10,4,1,1,2);
 	tabC[8].initCase(0,'P',15,"Prison",0,0,0,0,0);
 
 	tabC[9].initCase(3,'E',35,"Shell",15,4,1,1,2);
