@@ -10,41 +10,41 @@ Plateau::Plateau(){
 
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
-	tabC[0].initCase('D',0,"Depart",0,0,0,0);
-	tabC[1].initCase('E',5,"Auchan",10,1,1,5);
-	tabC[2].initCase('E',5,"Aldi",10,1,1,5);
-	tabC[3].initCase('E',15,"Carrefour",1,1,1,5);
-	tabC[4].initCase('B',5,"Crédit agricole",4,0,0,5);
-	tabC[5].initCase('E',20,"Arkane Studio",4,1,1,5);
-	tabC[6].initCase('E',25,"Ankama",4,1,1,50);
-	tabC[7].initCase('E',30,"Ubisof",4,1,1,2);
-	tabC[8].initCase('P',15,"Prison",0,0,0,0);
+	tabC[0].initCase(0,'D',0,"Depart",0,0,0,0,0);
+	tabC[1].initCase(1,'E',5,"Auchan",5,1000,1,1,5);
+	tabC[2].initCase(1,'E',25,"Aldi",5,5,1,1,5);
+	tabC[3].initCase(1,'E',15,"Carrefour",5,1,1,1,5);
+	tabC[4].initCase(42,'B',5,"Crédit agricole",0,4,0,0,5);
+	tabC[5].initCase(2,'E',20,"Arkane Studio",10,4,1,1,5);
+	tabC[6].initCase(2,'E',25,"Ankama",10,4,1,1,50);
+	tabC[7].initCase(2,'E',30,"Ubisof",10,4,1,1,2);
+	tabC[8].initCase(0,'P',15,"Prison",0,0,0,0,0);
 
-	tabC[9].initCase('E',35,"Shell",4,1,1,2);
-	tabC[10].initCase('E',40,"Total",4,1,1,2);
-	tabC[11].initCase('E',45,"Exxon",4,1,1,2);
-	tabC[12].initCase('C',0,"Chance",0,0,0,0);
-	tabC[13].initCase('E',50,"Peugeot",4,1,1,2);
-	tabC[14].initCase('B',5,"BNB Paribas",4,1,1,2);
-	tabC[15].initCase('E',55,"Toyota",4,1,1,2);
+	tabC[9].initCase(3,'E',35,"Shell",15,4,1,1,2);
+	tabC[10].initCase(3,'E',40,"Total",15,4,1,1,2);
+	tabC[11].initCase(3,'E',45,"Exxon",15,4,1,1,2);
+	tabC[12].initCase(0,'C',0,"Chance",0,0,0,0,0);
+	tabC[13].initCase(4,'E',50,"Peugeot",20,4,1,1,2);
+	tabC[14].initCase(42,'B',5,"BNB Paribas",0,4,1,1,2);
+	tabC[15].initCase(4,'E',55,"Toyota",20,4,1,1,2);
 
-	tabC[16].initCase('A',15,"Campagne de pub",0,0,0,0);
-	tabC[17].initCase('E',60,"Bayer",4,1,1,2);
-	tabC[18].initCase('B',5,"HSBC",4,1,1,2);
-	tabC[19].initCase('E',65,"Sanofi",4,1,1,2);
-	tabC[20].initCase('C',0,"Chance",0,0,0,0);
-	tabC[21].initCase('E',70,"Nintendo",4,1,1,2);
-	tabC[22].initCase('E',75,"Sony",4,1,1,2);
-	tabC[23].initCase('E',80,"Microsoft",4,1,1,2);
-	tabC[24].initCase('O',15,"Porte Ouverte",0,0,0,0);
+	tabC[16].initCase(0,'A',15,"Campagne de pub",0,0,0,0,0);
+	tabC[17].initCase(5,'E',60,"Bayer",25,4,1,1,2);
+	tabC[18].initCase(42,'B',5,"HSBC",0,4,1,1,2);
+	tabC[19].initCase(5,'E',65,"Sanofi",25,4,1,1,2);
+	tabC[20].initCase(0,'C',0,"Chance",0,0,0,0,0);
+	tabC[21].initCase(6,'E',70,"Nintendo",30,4,1,1,2);
+	tabC[22].initCase(6,'E',75,"Sony",30,4,1,1,2);
+	tabC[23].initCase(6,'E',80,"Microsoft",30,4,1,1,2);
+	tabC[24].initCase(0,'O',15,"Porte Ouverte",0,0,0,0,0);
 
-	tabC[25].initCase('B',5,"Bank of china",4,1,1,2);
-	tabC[26].initCase('E',85,"Samsung",4,1,1,2);
-	tabC[27].initCase('E',90,"Apple",4,1,1,2);
-	tabC[28].initCase('C',0,"Chance",4,1,1,2);
-	tabC[29].initCase('E',95,"Amazon",4,1,1,2);
-	tabC[30].initCase('I',0,"Impot",50,0,0,0);
-	tabC[31].initCase('E',100,"Google",4,1,1,2);
+	tabC[25].initCase(42,'B',5,"Bank of china",0,4,1,1,2);
+	tabC[26].initCase(7,'E',85,"Samsung",35,4,1,1,2);
+	tabC[27].initCase(7,'E',90,"Apple",35,4,1,1,2);
+	tabC[28].initCase(0,'C',0,"Chance",0,4,1,1,2);
+	tabC[29].initCase(8,'E',95,"Amazon",40,4,1,1,2);
+	tabC[30].initCase(0,'I',5,"Impot",0,50,0,0,0);
+	tabC[31].initCase(8,'E',100,"Google",40,4,1,1,2);
 
 	casePub = 0;
 }
@@ -92,7 +92,7 @@ void Plateau::setcasePub(unsigned int numCase){
 		return nbcase;
 	}
 
-	//Permet de recupérer l'indice d'une case entreprise ou banque par l'intermédiaire
+	//Permet de recupérer l'indice d'une case entreprise ou banque par l'intermédiaire de son nom
 	unsigned int Plateau::getIndice(const string & nom) const{
     	unsigned int i=0;
     	while(tabC[i].getNom()!=nom){

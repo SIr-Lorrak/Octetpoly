@@ -8,6 +8,9 @@ Case::Case(){
 	occupation = 0;
 	type = '0';
 	investissement = 0;
+	groupe = 0;
+	karmaCase = 0;
+
 	ad = false;
 	coeffAd = 1.0;
 	nom="";
@@ -96,6 +99,13 @@ bool Case::getAd() const{
 	return ad;
 }
 
+unsigned int Case::getGroup() const{
+	return groupe;
+}
+
+unsigned int Case::getKarmaCase() const{
+	return karmaCase;
+}
 
 //-------------------------------------Setters-------------------------------------------
 
@@ -105,9 +115,15 @@ void Case::setOccupation(unsigned int r){
 
 //-------------------------------------Méthodes------------------------------------------
 
-void Case::initCase(char categorie,unsigned int p,string n,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l){
+// Permet l'initialisation d'une case au lancement d'une partie 
+//(prix de base,type,nom de la case,etc)
+void Case::initCase(unsigned int group,char categorie,unsigned int p,
+					string n,unsigned karma,unsigned int pV,
+					unsigned int pM,unsigned int pB,unsigned int l){
 	nom = n;
 	type = categorie;
+	groupe = group;
+	karmaCase = karma;
 
 	prixInitial = p;
 	prix = prixInitial;
@@ -126,7 +142,7 @@ void Case::initCase(char categorie,unsigned int p,string n,unsigned int pV,unsig
 
 }
 
-
+//Initialise les prix initiaux d'une entreprise ou d'une banque
 void Case::initPrixInitial(){
 	//Utile pour la fonction investissement car quand on investit, c'est qu'on posséde
 	//la case ainsi le loyer initial est égal au prixInitial*2 après achat
@@ -148,7 +164,7 @@ void Case::initPrixInitial(){
 	loyer = loyerInitial; 
 }
 
-
+//Change l'investissment, le prix,le loyer,le prix de vente,le prixB, le prixM
 void Case::investir(int i){
 	assert(i != 0);
 	//Vérifie si l'entreprise n'a pas changé de politique
@@ -276,6 +292,8 @@ void Case::affichageRegression(){
 	cout << "occupation : " << occupation << endl;
 	cout << "type : " << type << endl; ; 
 	cout << "investissement : " << investissement << endl; 
+	cout << "groupe : " << groupe << endl;
+	cout << "karma : " << karmaCase << endl;
 
 	cout << "loyer : " << loyer << endl; 
 	cout << "loyerInitial : " << loyerInitial << endl;
@@ -296,7 +314,7 @@ void Case::affichageRegression(){
 void Case::testRegressionCase(){
 	cout << endl << endl;
 	cout << "Appel initCase() : ....." << endl;
-	initCase('E',35,"testEntreprise",45,7,42,69);
+	initCase(1,'E',35,"testEntreprise",10,45,7,42,69);
 	affichageRegression();
 
 	cout << endl << "Appel estAcheter() : ....." << endl;

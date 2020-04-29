@@ -31,7 +31,7 @@ class Jeu{
 		unsigned int joueurCourant;//donne le rang du joueur en train de jouer 
 		unsigned int nbTour;//si a 0 la partie n'a pas encore débuté alors on est encore dans le menu avant le jeu.
 		unsigned int ordre[4];//donne l'ordre des joueur (ex 4>2>3>1>4>2 etc)
-		unsigned int prixAPayer;//le prix a payer en mode vente
+		unsigned int prixAPayer;//le prix a payer 
 		unsigned int Vainqueur;
 
 		unsigned int nbVente;//donne le nombre de propriété vendu par le jouer en mode vente
@@ -54,6 +54,8 @@ class Jeu{
 		bool quitte;
 		bool pause;
 		bool nouvellePartie;
+		bool desLancePrison;
+		bool apresPorteOuverte;//Permet d'empêcher de jouer juste après une porte ouverte
 
 
 		bool tourOrdi;//dit si le joueur courrant est un ordi ou un joueur réel
@@ -141,13 +143,7 @@ class Jeu{
 		*/
 		void remiseZeroEtVente();
 
-		/**
-		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
-		même case
-		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
-		@return true si le joueur l'a déja vendu sinon false
-		*/
-		bool dejaEnVente(unsigned int indice);
+		void victoireMonopole();
 
 		/**
 		@brief sauvegarde le jeu dans un fichier pour reprendre plus tard
@@ -216,12 +212,13 @@ class Jeu{
 
 		void impot(const string touche);
 
+		void actionPrison(const string touche);
+
 		/**
 		@brief Détermine l'action possible sur la case
 		@param none
 		*/
 		void actionCase(const string & touche = "");
-
 
 		void resetBool();
 		
@@ -241,6 +238,8 @@ class Jeu{
 		void getOrdre(unsigned int tab[4]) const;
 
 		unsigned int getVainqueur()const;
+
+		void prixKarma();
 
 		/**
 		@brief renvoie le booléen demander
@@ -337,6 +336,14 @@ class Jeu{
 		@return le gain de la vente : unsigned int
 		*/
 		unsigned int totalVente();
+
+		/**
+		@brief Permet de vérifier si le joueur n'essaye pas de vendre deux fois de suite la
+		même case
+		@param indice : unsigned int, l'indice de la propriété que le joueur veut vendre
+		@return true si le joueur l'a déja vendu sinon false
+		*/
+		bool dejaEnVente(unsigned int indice);
 
 		/**
 		brief seteur permetant de mettre à jour l'évenement e

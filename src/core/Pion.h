@@ -47,6 +47,7 @@ class Pion{
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
 		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
+		bool tourUn;
 
 	public :
 
@@ -128,6 +129,8 @@ class Pion{
 	**/
 	bool getTicket() const;
 
+	bool getTourUn() const;
+
 	void donTicket();
 
 
@@ -167,6 +170,8 @@ class Pion{
 	void setRang(const unsigned int r);
 
 	void setPos(const unsigned int p);
+
+	void setTourUn(const unsigned int tour);
 
 	void nomAleatoire();
 

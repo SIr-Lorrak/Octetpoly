@@ -282,12 +282,44 @@ void JeuTXT::affichageCase(const Case * c){
 			break;
 		case 'P':
 			cout<<"bienvenue en Prison !"<<endl;
-			if(!j.getBool("desLance")){
-				cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
+			if(j.getBool("desLance"))
+			{
+				cout <<"Appuyez sur entrer"<<endl;
+			}
+
+			if(!j.getBool("desLance") && j.getBool("confirmation"))
+			{
+				if(p->getCoin() >= j.getPrixAPayer())
+				{
+					cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :";
+					if(!j.getBool("desLancePrison"))
+					{
+						cout << endl<<"1. tentez de faire un double"<<endl;
+					}
+					else
+					{
+						cout << endl<<"1. Passez son tour et ne pas payer"<<endl;	
+					}
+
+					cout <<"2 Payer | prix : " << j.getPrixAPayer() << endl << endl;
+				}
+
+				else
+				{
+					cout << endl<<"1. tentez de faire un double"<<endl;
+				}
 			}
 			break;
 		case 'I':
-			cout<<"faut payer ses impots monsieur !"<<endl;
+			cout<<"Faut payer ses impots monsieur !"<<endl;
+			if(j.getPrixAPayer() > 0)
+			{
+				cout << "Vous devez " << j.getPrixAPayer() << " Goldus à l'Etat !" << endl;
+			}
+			else
+			{
+				cout << "L'état vous remercie d'avoir payé vos impôt" << endl;	
+			}
 			break;
 		case 'C':
 			if(j.getCarte()==NULL){
@@ -306,9 +338,15 @@ void JeuTXT::affichageCase(const Case * c){
 			break;
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
-			if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+			if (j.board.nbCaseFree() > 0
+				 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix()
+				 && !p->getTicket())
 			{
 				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
+			}
+			if(p->getTicket())
+			{
+				cout<<"Prêt pour les portes ouverte !"<<endl;
 			}
 			break;
 		default:
@@ -316,6 +354,7 @@ void JeuTXT::affichageCase(const Case * c){
 			break;
 	}
 	if(c->getType()=='E'||c->getType()=='B'){
+		cout<<"groupe : " << c->getGroup() << endl;
 		cout<<"loyer : "<<c->getLoyer()<<endl;
 		cout<<"Prix : "<<c->getPrix()<<endl;
 		cout<<"Propriétaire : ";
@@ -361,15 +400,15 @@ void JeuTXT::affichageJeu(){
 
 	affichageCase(c);
 
-	if(j.getBool("desLance")){
+	if((j.getBool("desLance") || j.getBool("desLancePrison")) && !j.getBool("apresPorteOuverte")){
 		affichageDes(joueurCourant->getDes().D1,joueurCourant->getDes().D2);
 	}
 
-	else{
+	else if (!joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"Lancez les dés avec \"entrer\"!"<<endl;
 	}
-
-	if(j.getBool("avance")){
+	
+	if(j.getBool("avance") && !joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"vous avez avancé..."<<endl;
 	}
 
@@ -540,12 +579,20 @@ void JeuTXT::affichageVente(){
 	cout << "Voici votre/vos propriété(s) : " << endl;
 	for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
 	{
-		cout << i << " " << (p->getPropriete(i))->getNom() << endl;
+		if(!j.dejaEnVente(i))
+		{
+		cout << i << " " << p->getPropriete(i)->getNom() << " | Prix de vente : " << p->getPropriete(i)->getPrixDeVente() << " Goldus" << endl;
+		}
+		else
+		{
+			cout << i << " " << p->getPropriete(i)->getNom() << " | VENDU" << endl;
+		}
 	}
 	
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
-	cout << "Appuyer sur + pour valider le quartier entré" << endl;
+	cout << "Appuyer sur + pour valider le quartier saisi" << endl;
+	cout << "Appuyer sur - pour retirer le dernier quartier saisi" << endl;
 
 	cout << "En prenant en compte la vente vous possédé : " 
 			<< (p->getCoin() + j.totalVente()) << " Goldus" << endl;
