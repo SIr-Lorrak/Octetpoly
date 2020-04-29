@@ -111,19 +111,60 @@ private:
 	*/
 	void newButton(const string & effet,const int x,const int y,const int w,const int h,const unsigned int type=DEFAULT,const string & c1="",const Image * c2=NULL,const int margin=5,const SDL_Color couleur={255,255,255});
 
+	/**
+	@brief permet d'affiche du texte 
+	*/
 	void dessineTexte(const string & texte,int x,int y,unsigned int taille=14,const SDL_Color couleur = {0,0,0});
 
+	/**
+	@brief permet l'affichage du mini-jeu Escape
+	*/
 	void affichageEscape();
+
+	/**
+	@brief permet l'affichage du Menu
+	*/
 	void affichageMenu();
+
+	/**
+	@brief permet l'affichage l'affichage du plateau de jeu
+	*/
 	void affichageJeu();
+
+	/**
+	@brief permet l'affichage du mini-jeu Hacking
+	*/
 	void affichageHacking();
+
+	/**
+	@brief permet l'affichage du mini-jeu Cliker
+	*/
 	void affichageClicker();
+
+	/**
+	@brief permet l'affichage du jeu de base (menu ou minijeu ou plateau)
+	*/
 	void affichage();
 
+	/**
+	@brief permet de mettre a jour les affichage
+	*/
 	bool update(SDL_Event & events);
 
+	/**
+	@brief permet d'afficher les dées
+	*/
 	void affichageDees();
+
+	/**
+	@brief permet d'afficher les interaction quand on se trouve sur une case
+	*/
 	void affichageInteraction();
+
+	/**
+	@brief permet d'afficher les propriete de chaque joueur
+	*/
+	void affichageProrpiete(Pion *p,int h);
 
 
 public:
