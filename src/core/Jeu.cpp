@@ -302,7 +302,7 @@ void Jeu::sauver(const string & file) const
 	}
 	fichier<<endl;
 	for(unsigned int i = 1;i<=4;i++){
-		fichier<<getPion(i)->getCar()<<" ";
+		fichier<<char(int('a')+int(getPion(i)->getCar()))<<" ";
 	}
 	fichier<<endl;
 	fichier<<0<<endl;
@@ -379,7 +379,7 @@ bool Jeu::charger(const string & file)
 		}
 		for(unsigned int i=1;i<=4;i++){
 			fichier>>recup;
-			getPion(i)->setCar(recup[0]);
+			getPion(i)->setCar(char(int(recup[0])-int('a')));
 		}
 		fichier>>recupint;
 		if(recupint!=0){
@@ -406,7 +406,7 @@ bool Jeu::charger(const string & file)
 	}
 
 	fichier.close();
-	commencerPartie();
+	tourSuivant();
 	return valide;
 }
 
@@ -446,7 +446,7 @@ bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
 
 void Jeu::commencerPartie()
 {	
-	
+	attendreNom = false;
 	if(nbJoueur<4){
 		delete [] tabO;
 		tabO = new Ordi [4-nbJoueur];
@@ -789,7 +789,6 @@ void Jeu::actionPartie(const string & touche)
 					attendreAmplete=false;
 					actionObligatoire=false;
 				}
-				if(c->getType()=='B')
 				avance = true;
 			}
 		}
@@ -874,6 +873,10 @@ void Jeu::actionMenu(const string & touche)
 		}
 		if(touche=="\e"){
 			nouvellePartie=false;//passe dans le menu précédent
+			if(attendreNom){
+				enleverJoueur();
+				attendreNom=false;
+			}
 		}
 	}
 	else{
@@ -893,6 +896,7 @@ void Jeu::actionMenu(const string & touche)
 				if(fichierExiste("data/sauvegarde/"+touche+".save")){
 					if(charger("data/sauvegarde/"+touche+".save")){
 						//invalidSave = false;
+						attendreNom=false;
 					}
 
 					else{
@@ -953,6 +957,9 @@ void Jeu::actionBE(const string touche){
 			if(touche == "\n"){
 				payeLoyerJoueur(touche);
 			}
+			if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
+				attendreAmplete = false;
+			}
 		}
 
 		//Cas de l'expropriation
@@ -964,6 +971,7 @@ void Jeu::actionBE(const string touche){
 			    getPion(c->getOccupation())->estRacheter(c->getNom());
 				getPion(joueurCourant)->don(c);	//le joueur a payer 
 				victoireMonopole();
+				
 			}
 			else
 			{
@@ -981,7 +989,6 @@ void Jeu::actionBE(const string touche){
 			{
 				getPion(joueurCourant)->achete(c);
 				victoireMonopole();
-
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
 					attendreAmplete = false;
 				}
@@ -992,7 +999,10 @@ void Jeu::actionBE(const string touche){
 			}
 		}
 	}
-
+	else if(c->getType()=='B'){
+		attendreAmplete=false;
+		actionObligatoire=false;
+	}
 	//La case appartient au JOUEUR	
 	//Si c'est une entreprise, il pourra peut-être investir
 	else if (c->getType() == 'E' && attendreAmplete)
