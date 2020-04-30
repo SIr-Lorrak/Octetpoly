@@ -55,6 +55,8 @@ class Ordi : public Pion{
 
 
 		unsigned int AIporteOuverte(const Plateau & board)const;
+
+		string AIvend(const string dejaVendu[],unsigned int nbVente)const;
 };
 
 #endif

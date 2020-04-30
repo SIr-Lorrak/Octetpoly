@@ -286,27 +286,10 @@ void JeuTXT::affichageCase(const Case * c){
 			{
 				cout <<"Appuyez sur entrer"<<endl;
 			}
-
-			if(!j.getBool("desLance") && j.getBool("confirmation"))
-			{
-				if(p->getCoin() >= j.getPrixAPayer())
-				{
-					cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :";
-					if(!j.getBool("desLancePrison"))
-					{
-						cout << endl<<"1. tentez de faire un double"<<endl;
-					}
-					else
-					{
-						cout << endl<<"1. Passez son tour et ne pas payer"<<endl;	
-					}
-
-					cout <<"2 Payer | prix : " << j.getPrixAPayer() << endl << endl;
-				}
-
-				else
-				{
-					cout << endl<<"1. tentez de faire un double"<<endl;
+			else if(p->getPrisonnier()){
+				cout <<"1. tentez de faire un double"<<endl;
+				if(p->getCoin() >= j.getPrixAPayer()){
+					cout <<"2. payez la cotion de "<<j.getPrixAPayer() <<" $"<<endl;
 				}
 			}
 			break;

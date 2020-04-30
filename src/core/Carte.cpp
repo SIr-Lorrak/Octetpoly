@@ -121,7 +121,7 @@ void Carte::randomCarte(){
 			break;
 
 		case 14:
-			id_case = 0;
+			id_case = 14;
 			gain = 0;
 			casePlus3 = false;
 			break;
@@ -139,7 +139,7 @@ void Carte::randomCarte(){
 			break;
 
 		case 17:
-			id_case = 0;
+			id_case = 8;
 			gain = 0;
 			casePlus3 = false;
 			break;

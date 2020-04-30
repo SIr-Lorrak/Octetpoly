@@ -7,8 +7,6 @@ using namespace std;
 
 const string KONAMI_CODE[10] = {"^","^","v","v","<",">","<",">","b","a"};//suite de 10 touches pour activer le konami code
 
-//-------------------------------------Constructeurs--------------------------------------
-
 bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned int taille = 4){
 	if(taille == 0) return true;
 	for(unsigned int i=0;i<taille;i++){
@@ -62,7 +60,7 @@ Jeu::Jeu(){
 		}while(!estPasDans(alea,ordre,i));
 		ordre[i] = alea;
 	}
-	joueurCourant = ordre[3];
+	joueurCourant = ordre[0];
 }
 
 
@@ -453,14 +451,10 @@ void Jeu::commencerPartie()
 		delete [] tabO;
 		tabO = new Ordi [4-nbJoueur];
 	
-		do{
-			for(unsigned int i = 0;i<4-nbJoueur;i++){
-				do{
-					tabO[i].nomAleatoire();
-				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
-			}
-		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
-		for(unsigned int i=0;i<4-nbJoueur;i++){
+		for(unsigned int i = 0;i<4-nbJoueur;i++){
+			do{
+				tabO[i].nomAleatoire();
+			}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
 			tabO[i].setRang(nbJoueur+i+1);
 			tabO[i].setKarma(rand()%4-2);
 		}
@@ -473,6 +467,7 @@ void Jeu::ajouterJoueur()
 {
 	tabJ[nbJoueur] = new Joueur;
 	tabJ[nbJoueur]->setRang(nbJoueur+1);
+	tabJ[nbJoueur]->setCar(rand()%16);
 	nbJoueur++;
 	attendreNom = true;
 }
@@ -565,7 +560,7 @@ void Jeu::modeVente(const string touche){
 			choix = "";
 		}
 
-		if((touche=="o"|| touche=="O") 
+		if((touche=="o"|| touche=="O"||touche=="\n") 
 		&& getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer)
 		{
 			confirmation = true;
@@ -703,6 +698,7 @@ void Jeu::resetBool()
 void Jeu::tourSuivant(){
 	unsigned int nbFaillite,vainqueur;
 	nbFaillite = 0;
+	victoireMonopole();
 	for(unsigned int i=1; i<=4;i++){//on vérifie d'abbord si un joueur a gagné ici on vérifie juste si il y a un seul joueur survivant.
 		if(getPion(i)->getCoin()<0){
 			nbFaillite++;
@@ -730,66 +726,22 @@ void Jeu::tourSuivant(){
 		else tourOrdi = false ;
 	}while(getPion(joueurCourant)->getCoin()<0);
 
-	victoireMonopole();
+
+	prixKarma();
 }
 
 void Jeu::actionPrison(const string touche){
-	Pion *p = getPion(joueurCourant);
-
-	//Pour mettre à jour les prix pour l'affichage
-	if(touche == "\n")
-	{
-		confirmation = true;
-		prixKarma();
+	Pion * p = getPion(joueurCourant);
+	if(!desLance&&(touche=="1"||touche=="\n")){
+		desLance = true;
+		p->lanceDes();
 	}
-
-
-	else if(confirmation)
-	{
-		if(p->getCoin() >= prixAPayer)
-		{
-			if(touche=="2")	
-			{
-				p->setCoin(p->getCoin() - prixAPayer);
-				p->setPrisonnier();
-				p->lanceDes();
-				desLance = true;
-				confirmation = false;
-				desLancePrison = false;
-			}
-		
-			if(touche == "1" && !desLancePrison)
-			{
-				p->lanceDes();
-				desLancePrison = true;
-				if(p->getDes().D1 == p->getDes().D2)
-				{
-					desLance = true;
-					confirmation = false;
-					desLancePrison = false;
-				}
-				
-			}
-
-			//Choisie de ne pas payer après avoir lancer les dés
-			else if(touche == "1" && desLancePrison)
-			{
-				desLance = true;
-				confirmation = false;
-				desLancePrison = false;
-			}
-		}
-		else
-		{
-			if(touche == "1")
-			{
-				p->lanceDes();
-				desLance = true;
-				confirmation = false;
-			}
-		}
+	else if(touche=="2"&&p->getCoin()>prixAPayer&&!desLance){
+		p->setCoin(p->getCoin()-prixAPayer);
+		p->setPrisonnier();
 	}
 }
+
 void Jeu::actionPartie(const string & touche)
 {
 	Pion *p = getPion(joueurCourant);
@@ -833,6 +785,11 @@ void Jeu::actionPartie(const string & touche)
 				{
 					prixKarma();
 				}
+				if(c->getType() == 'D'){//si c'est la case départ il n'y a rien a faire donc on passe imédiatement à la fin du tour.
+					attendreAmplete=false;
+					actionObligatoire=false;
+				}
+				if(c->getType()=='B')
 				avance = true;
 			}
 		}
@@ -1122,8 +1079,8 @@ void Jeu::campagneDePub(const string touche){
 		&& (!ad)
 		&& ((getPion(joueurCourant)->getNbPropriete()>0)))
 	{
-		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 		ad = true;
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 	}
 
 	else if(ad)
@@ -1289,8 +1246,7 @@ void Jeu::carteChance(const string & touche){
 	}
 }
 
-void Jeu::impot(const string touche){
-	prixKarma();	
+void Jeu::impot(const string touche){	
 
 	if(getPion(joueurCourant)->getCoin() >= prixAPayer)
 	{
@@ -1461,6 +1417,10 @@ void Jeu::action(const string & action){
 			enleverJoueur(action[1]);
 			confirmation=false;
 		}
+
+		if(action[0]=='c'&&action[1]=='a'&&action[2]=='r'){
+			getPion(action[3])->setCar(action[4]);
+		}
 	}
 }
 
@@ -1495,10 +1455,12 @@ void Jeu::actionOrdi(){
 	assert(joueurCourant==o->getRang());
 	if(vend){//quand l'ordi doit vendre
 		if(getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer){//si l'ordi a assez vendu.
-			actionClavier("o");
+			remiseZeroEtVente();
+			prixAPayer = 0;
+			vend = false;
 		}
 		else{
-			//vente[nbvente] = faire une fonction qui donne un choix.;
+			vente[nbVente] = o->AIvend(vente,nbVente);
 			nbVente++;
 		}
 	}
@@ -1562,19 +1524,25 @@ void Jeu::actionOrdi(){
 					}
 					break;
 
-				case 'C':
-					actionClavier("\n");
-					break;
-
 				case 'A':
-					actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					if(attendreAmplete){
+						actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					}
+					else{
+						actionClavier("\n");
+					}
 					break;
 
 				case 'O':
-					actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					if(attendreAmplete){
+						actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					}
+					else{
+						actionClavier("\n");
+					}
 					break;
 
-				case 'I':
+				default:
 					actionClavier("\n");
 					break;
 			}

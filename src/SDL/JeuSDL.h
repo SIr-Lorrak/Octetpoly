@@ -30,7 +30,7 @@ public:
 	~Image();
 	void loadFichier(const char* nom_fichier, SDL_Renderer * renderer);
 	void loadSurface (SDL_Renderer * renderer);
-	void dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h);
+	void dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h) const;
 	void dessineTextureCo(SDL_Renderer * renderer,int x,int y,int x2,int y2);
 	SDL_Texture * getTexture();
 	void setSurface(SDL_Surface * surf);
@@ -76,6 +76,11 @@ private:
 	Image green_buttonClicked;
 	Image blue_button;
 	Image blue_buttonClicked;
+
+	Image poubelle;
+
+//---differents pions
+	Image pions[16];
 
 //---image pour l'escape
 	Image ARRIVEE;
@@ -166,6 +171,10 @@ private:
 	*/
 	void affichageProrpiete(Pion *p,int h);
 
+	/**
+	@brief permet d'afficher l'écran de pause au centre du plateau.
+	*/
+	void affichagePause();
 
 public:
 //---constructeur/destructeur

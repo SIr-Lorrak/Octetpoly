@@ -51,7 +51,7 @@ void Image::loadSurface (SDL_Renderer * renderer) {
 }
 
 
-void Image::dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h){
+void Image::dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h)const{
     SDL_Rect r;
     r.x = x;
     r.y = y;
@@ -110,6 +110,24 @@ JeuSDL::JeuSDL(){
     demon.loadFichier("data/images/demon.png",renderer);
     DE.loadFichier("data/images/DE.png",renderer);
 
+    //Pions :
+    pions[0].loadFichier("data/images/Alex.png",renderer);
+    pions[1].loadFichier("data/images/Citronnelle.png",renderer);
+    pions[2].loadFichier("data/images/Carrouf.png",renderer);
+    pions[3].loadFichier("data/images/Demonetisation.png",renderer);
+    pions[4].loadFichier("data/images/Elon.png",renderer);
+    pions[5].loadFichier("data/images/Finn.png",renderer);
+    pions[6].loadFichier("data/images/Fox.png",renderer);
+    pions[7].loadFichier("data/images/Guitare.png",renderer);
+    pions[8].loadFichier("data/images/Guy.png",renderer);
+    pions[9].loadFichier("data/images/Hamid.png",renderer);
+    pions[10].loadFichier("data/images/Jo.png",renderer);
+    pions[11].loadFichier("data/images/Laetitia.png",renderer);
+    pions[12].loadFichier("data/images/Naintendo_Swift.png",renderer);
+    pions[13].loadFichier("data/images/Pouce.png",renderer);
+    pions[14].loadFichier("data/images/Seb.png",renderer);
+    pions[15].loadFichier("data/images/Taupiqueur.png",renderer);
+
     button.loadFichier("data/images/button.png",renderer);
     buttonClicked.loadFichier("data/images/buttonClicked.png",renderer);
     red_button.loadFichier("data/images/red_button.png",renderer);
@@ -119,7 +137,7 @@ JeuSDL::JeuSDL(){
     blue_button.loadFichier("data/images/blue_button.png",renderer);
     blue_buttonClicked.loadFichier("data/images/blue_buttonClicked.png",renderer);
 
-
+    poubelle.loadFichier("data/images/Poubelle.png",renderer);
 
 
     ARRIVEE.loadFichier("data/images/ARRIVEE.png",renderer);
@@ -158,7 +176,7 @@ JeuSDL::~JeuSDL(){
 
 
 void JeuSDL::dessineTexte(const string & texte,int x,int y, unsigned int taille,const SDL_Color couleur){
-    inputTexte.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),couleur));
+    inputTexte.setSurface(TTF_RenderUTF8_Solid(Police,texte.c_str(),couleur));
     inputTexte.loadSurface(renderer);
     inputTexte.dessineTexture(renderer,x,y,taille*texte.length(),taille*1.8);
 }
@@ -240,13 +258,12 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
 
     Image im_contenue;
     if(c1!=""){
-        im_contenue.setSurface(TTF_RenderText_Solid(Police,c1.c_str(),couleur));
+        im_contenue.setSurface(TTF_RenderUTF8_Solid(Police,c1.c_str(),couleur));
         im_contenue.loadSurface(renderer);
         im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
     }
     else if(c2!=NULL){
-        im_contenue = * c2;
-        im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
+        c2->dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
     }
 }
 
@@ -458,43 +475,78 @@ void JeuSDL::affichageMenu(){
     inputTexte.setSurface(TTF_RenderText_Solid(Police,"OctetPoly !",rouge));
     inputTexte.loadSurface(renderer);
     inputTexte.dessineTexture(renderer,(DIMX/2)-250,0,500,100);
-    unsigned int n = j.getNbJoueur();
-    if(j.getBool("attendreNom")){
-        n-=1;
-    }
-    for(unsigned int i=1;i<=n;i++){
-        string nom = "1.";
-        nom[0]=int('0')+j.getPion(i)->getRang();
-        nom+=j.getPion(i)->getNom();
-        if(j.getPion(i)->getNom().length()==0){
-            nom+="<anonyme>";
+    if(j.getBool("nouvellePartie")){
+        unsigned int n = j.getNbJoueur();
+        if(j.getBool("attendreNom")){
+            n-=1;
         }
-        dessineTexte(nom.c_str(),35+(i-1)*250,200,14);
-        string act = "- ";
-        act[1]=1;
-        newButton(act,35+i*250-30,250,30,30,RED,"X");
+        for(unsigned int i=1;i<=n;i++){
+            string nom = "1.";
+            nom[0]=int('0')+j.getPion(i)->getRang();
+            nom+=j.getPion(i)->getNom();
+            if(j.getPion(i)->getNom().length()==0){
+                nom+="<anonyme>";
+            }
+            dessineTexte(nom.c_str(),35+(i-1)*250,200,14);
+            string act = "- ";
+            act[1]=i;
+            newButton(act,110+(i-1)*250,460,40,40,RED,"",&poubelle);
+            for(int k = 0;k<16;k++){
+                string car = "car  ";
+                car[3]=i;
+                car[4]=k;
+                if(j.getPion(i)->getCar()==k){
+                    newButton(car,(35+(i-1)*250)+k%4*50,250+int(k/4)*50,45,45,GREEN,"",&pions[k],5);
+                }
+                else{
+                    newButton(car,(35+(i-1)*250)+k%4*50,250+int(k/4)*50,40,40,BLUE,"",&pions[k],5);
+                }
+            }
 
-    }
-    if(j.getBool("attendreNom")){
-
-        dessineTexte("nom :",35+(j.getNbJoueur()-1)*250,200,14);
-
-        string nom = j.getPion(j.getNbJoueur())->getNom();
-
-        if(nom.length()>0){
-            dessineTexte(nom.c_str(),40+(j.getNbJoueur()-1)*250,230,14);
         }
-        afficheCursor(renderer,50+(j.getNbJoueur()-1)*250+nom.length()*16,230,2,20);
-        newButton("\n",120+(j.getNbJoueur()-1)*250+150,230,30,30,GREEN,"V");
+        if(j.getBool("attendreNom")){
+
+            dessineTexte("nom :",35+(j.getNbJoueur()-1)*250,200,14);
+    
+            string nom = j.getPion(j.getNbJoueur())->getNom();
+
+            if(nom.length()>0){
+                dessineTexte(nom.c_str(),40+(j.getNbJoueur()-1)*250,230,14);
+            }
+            afficheCursor(renderer,50+(j.getNbJoueur()-1)*250+nom.length()*16,230,2,20);
+            newButton("\n",120+(j.getNbJoueur()-1)*250+150,230,70,70,GREEN,"V",NULL,10);
+        }
+        else if(j.getBool("confirmation")){
+            dessineTexte("Commencer avec ces Joueurs ? ",80,DIMY-70,22);
+            newButton("\n",DIMX-300,DIMY-100,90,80,GREEN,"oui",NULL,10);
+            newButton("n",DIMX-150,DIMY-100,90,80,RED,"non",NULL,10);
+        }
+        else{
+            newButton("+",40+(j.getNbJoueur())*250+30,200,150,150,BLUE," + ",NULL,25);
+            newButton("\n",DIMX-300,DIMY-100,240,80,BLUE,"Commencer !",NULL,10);
+        }
     }
-    else if(j.getBool("confirmation")){
-        dessineTexte("Commencer avec ces Joueurs ? ",80,DIMY-70,22);
-        newButton("\n",DIMX-300,DIMY-100,90,80,GREEN,"oui",NULL,10);
-        newButton("n",DIMX-150,DIMY-100,90,80,RED,"non",NULL,10);
+    else if(j.getBool("attendreNom")){
+        for(unsigned int i = 1;i<=3;i++){
+            string nom;
+            string act = "";
+            act+=char(int('0')+i);
+            if(fichierExiste("data/sauvegarde/"+act+".save")){
+                nom = " fichier "+act+" ";
+            }
+            else{
+                nom = "<empty file>";
+            }
+            newButton(act,DIMX/2-100,250+100*(i-1),200,50,DEFAULT,nom,NULL,10);
+        }
     }
     else{
-        newButton("+",40+(j.getNbJoueur())*250,200,30,30,BLUE,"+");
-        newButton("\n",DIMX-300,DIMY-100,240,80,BLUE,"Commencer !",NULL,10);
+        newButton("1",DIMX/2-220,230,440,100,DEFAULT,"  Nouvelle Partie !  ",NULL,10);
+        newButton("2",DIMX/2-220,360,440,100,DEFAULT," Charger une Partie !",NULL,10);
+        newButton("3",DIMX/2-220,490,440,100,RED    ,"       Quitter       ",NULL,10);
+    }
+    if(j.getBool("attendreNom")||j.getBool("nouvellePartie")){
+        newButton("\e",DIMX-120,50,100,50,RED,"<-retour",NULL,10);
     }
 }
 
@@ -749,49 +801,41 @@ void JeuSDL::affichageJeu(){
     for(unsigned int i=1;i<=4;i++){
         unsigned int pos = j.getPion(i)->getPos();
         int x,y;
-        unsigned char r,g,b;
-        r=g=b=0;
         
         affichageProrpiete(j.getPion(i),h);
         h+=30+20*j.getPion(i)->getNbPropriete();
         
         if(pos>=0&&pos<8){
             x = (DIMY-(108+pos*72))+5;
-            y = DIMY-63;
+            y = DIMY-73;
         }
         else if(pos>=8&&pos<16){
-            x=0;
-            y=(DIMY-(108+(pos-8)*72))+5;
+            x=5;
+            y=(DIMY-(108+(pos-8)*72));
         }
         else if(pos>=16&&pos<24){
-            x=(108+(pos-16)*72)-5;
-            y=0;
+            x=(108+(pos-16)*72)-70;
+            y=5;
         }
         else if(pos>=24&&pos<32){
             x=DIMY-63;
-            y=(108+(pos-24)*72)-5;
+            y=(108+(pos-24)*72)-70;
         }   
         else{
             //assert(false);//position trop grande
         }
-        if(i==1){
-            r=g=255;
-        }
         if(i==2){
-            x+=33;
-            r=255;
+            x+=35;
         }
         if(i==3){  
-            y+=33;
-            g=255;
+            y+=35;
 
         }
         if(i==4){
-            x+=33;
-            y+=33;
-            b=255;
+            x+=35;
+            y+=35;
         }
-        dessineRectangle(renderer,x,y,30,30,{r,g,b});
+        pions[int(j.getPion(i)->getCar())].dessineTexture(renderer,x,y,35,35);
         //if(j.getBool(''))
     }
    
@@ -824,10 +868,44 @@ void JeuSDL::affichageJeu(){
     }
     else {
         affichageInteraction();
+
     }
         
 }
 
+void JeuSDL::affichagePause(){
+    SDL_Color rouge;
+    rouge.r = 255;
+    rouge.g = 0;
+    rouge.b = 0;
+    inputTexte.setSurface(TTF_RenderText_Solid(Police,"PAUSE !",rouge));
+    inputTexte.loadSurface(renderer);
+
+
+    dessineRectangle(renderer,112,110,495,495,COL_WINDOW);
+    inputTexte.dessineTexture(renderer,(110+(495/2))-150,115,300,80);
+    if(!j.getBool("attendreNom")){
+        newButton("1",(110+(495/2))-200,220,400,65,DEFAULT,"        Reprendre       ",NULL,10);
+        newButton("2",(110+(495/2))-200,300,400,65,DEFAULT,"       Sauvegarder      ",NULL,10);
+        newButton("3",(110+(495/2))-200,380,400,65,DEFAULT,"Retour au menu de départ",NULL,10);
+        newButton("4",(110+(495/2))-200,460,400,65,RED    ,"         Quitter        ",NULL,10);
+    }
+    else{
+        for(unsigned int i=1;i<=3;i++){
+            string nom;
+            string act = "";
+            act+=char(int('0')+i);
+            if(fichierExiste("data/sauvegarde/"+act+".save")){
+                nom = " fichier "+act+" ";
+            }
+            else{
+                nom = "<empty file>";
+            }
+            newButton(act,(110+(495/2))-100,250+80*(i-1),200,65,DEFAULT,nom,NULL,10);
+        }
+        newButton("\e",545,120,50,50,RED,"X",NULL,10);
+    }
+}
 
 void JeuSDL::affichage(){
 
@@ -846,7 +924,9 @@ void JeuSDL::affichage(){
 
         affichageJeu();
 
-    
+        if(j.getBool("pause")){
+            affichagePause();
+        }   
 
         if(j.gete().getn()=="escape"){
            affichageEscape();
@@ -883,7 +963,6 @@ bool JeuSDL::update(SDL_Event & events){
                             break;
                         case SDL_SCANCODE_ESCAPE:
                             input = "\e";
-                            quit = true;
                             break;
                         case SDL_SCANCODE_RETURN:
                             input = "\n";
@@ -898,7 +977,7 @@ bool JeuSDL::update(SDL_Event & events){
                 case SDL_TEXTINPUT: //detecter une touche sous forme de texte (comme ça pas besoin de scancode pour toutes les touches qu'on utilise)
                     
                     input = events.text.text;
-                    if(j.accepteClavier()&&!j.getBool("tourOrdi")){//si le jeu accepte les input de type clavier
+                    if((j.accepteClavier()&&!j.getBool("tourOrdi"))||j.getBool("pause")){//si le jeu accepte les input de type clavier
                         j.actionClavier(input);
                     }
                     break;
@@ -919,7 +998,7 @@ bool JeuSDL::update(SDL_Event & events){
                         //lancer l'action donner par un bouton lors du relachement de la souris
                         cout<<m.x<<"-"<<m.y<<endl;
                         cout<<action<<endl;
-                        if(!j.getBool("tourOrdi")||action=="\e"){
+                        if(!j.getBool("tourOrdi")||j.getBool("pause")){
                             j.action(action);
                         }
                         m.x=-1;
@@ -954,7 +1033,7 @@ void JeuSDL::run(){
     SDL_StartTextInput();
 
     //cout<<1;
-    while(!quit){
+    while(!j.getBool("quitte")&&!quit){
         
         affichage();
         quit = update(events);

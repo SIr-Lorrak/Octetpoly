@@ -15,10 +15,10 @@ const int INITCOIN = 500; ///Argent initial
 const int MAXCARTE = 20;  ///Max cartes du pion
 
 
-const string noms[20] = {"Tom Pousse","Haaaamid","Pedro","Sabrina","SaBine",
-						 "Jessica","Nathan","Aspifion","Mais il est fou lui enfin","M. Pronost le meilleur prof de la terre",
+const string noms[20] = {"Tom Pousse","Haaamid","Pedro","Sabrina","SaBine",
+						 "Jessica","Nathan","Aspifion","MIEFLE","M. Pronost",
 						 "Granolax","M. Pujo","Corrine","Alexandra","Jus d'huitre",
-						 "Guy the Boomer","José Pélouze","BITENTRONC","Patoche","Nabil"};
+						 "GuyZeBoomer","M. Pélouze","BITENTRONC","Patoche","Nabil"};
 
 
 /**

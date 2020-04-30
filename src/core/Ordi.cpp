@@ -45,6 +45,13 @@ unsigned int Ordi::AIchampionat() const
 int Ordi::AIinvesti(const Case * entreprise) const
 {
 	assert(entreprise->getOccupation() == getRang());
+	int limite;
+	if(getTourUn()){
+		limite = 16;
+	}
+	else{
+		limite = 4;
+	}
 	if(entreprise->getInvestissement() == 0){
 		if(getKarma()>risque-50){
 			if(entreprise->getPrixM()<getCoin()) return -1;
@@ -53,7 +60,7 @@ int Ordi::AIinvesti(const Case * entreprise) const
 			if(entreprise->getPrixB()<getCoin()) return 1;
 		}
 	}
-	else if(entreprise->getInvestissement()*entreprise->getInvestissement()<=16){
+	else if(entreprise->getInvestissement()*entreprise->getInvestissement()<=limite){
 		if(entreprise->getInvestissement()<0){
 			if(entreprise->getPrixM()<getCoin()) return -1;
 		}
@@ -62,4 +69,29 @@ int Ordi::AIinvesti(const Case * entreprise) const
 		}
 	}
 	return 0;
+}
+
+bool estPasDans(const string & nom,const string tabDeNom[],const unsigned int n){
+	for(unsigned int i=0;i<n;i++){
+		if(nom==tabDeNom[i]){
+			return false;
+		}
+	}
+	return true;
+}
+
+string Ordi::AIvend(const string dejaVendu[],unsigned int nbVente)const{
+	Case * meilleurTaux = NULL;
+	for(unsigned int i=0;i<getNbPropriete();i++){
+		if(estPasDans(getPropriete(i)->getNom(),dejaVendu,nbVente)){
+			Case * c = getPropriete(i);
+			if(meilleurTaux == NULL){
+				meilleurTaux = c;
+			}
+			else if((c->getPrixDeVente()/c->getLoyer())>(meilleurTaux->getPrixDeVente()/meilleurTaux->getLoyer())){
+				meilleurTaux = c;
+			}
+		}
+	}
+	return meilleurTaux->getNom();
 }

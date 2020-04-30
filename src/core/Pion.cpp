@@ -85,7 +85,7 @@ bool Pion::getTourUn() const{
 
 //Permet de récupérer une propriété du joueur
 Case * Pion::getPropriete(unsigned int indice) const{
-	return &*propriete[indice];
+	return propriete[indice];
 }
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
@@ -141,7 +141,46 @@ void Pion::donTicket(){
 
 void Pion::nomAleatoire(){
 	//srand(time(NULL));
-	nom = "[bot] "+noms[rand()%20];
+	int alea = rand()%20;
+	nom = "[bot] "+noms[alea];
+	switch(alea){
+		case 0: 
+			car = 13;
+			break;
+		case 1:
+			car = 9;
+			break;
+		case 2:
+			car = 11;
+			break;
+		case 3:
+			car = 8;
+			break;
+		case 4:
+			car = 14;
+			break;
+		case 5:
+			car = 10;
+			break;
+		case 10:
+			car = 8;
+			break;
+		case 12:
+			car = 3;
+			break;
+		case 13:
+			car = 0;
+			break;
+		case 15:
+			car = 8;
+			break;
+		case 17:
+			car = 15;
+			break;
+		default:
+			car = rand()%16;
+			break;
+	}
 }
 
 void Pion::lanceDes()
@@ -184,10 +223,6 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos += d.D1 + d.D2;
-		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
-	if(prisonnier == false)
-	{
 		pos +=d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
@@ -201,19 +236,6 @@ void Pion::avancer()
 			prisonnier = true;
 		}
 	}
-	
-		if(pos >= MAXCASEP)
-		{
-			pos = pos%MAXCASEP;
-			salaire();
-			tourUn = true;
-		}
-
-		if(pos == 8)
-		{
-			prisonnier = true;
-		}
-	}	
 }
 
 
@@ -353,52 +375,30 @@ void Pion::effacerLettre()
 
 void Pion::investit(int i,Case * c){
 
-	assert(i != 0);
+    assert(i != 0);
 
-	if(i==-1){
-		bitcoin -= c->getPrixM();
-		karma -= 1;
+    if(i==-1){
+        bitcoin -= c->getPrixM();
+        karma = karma - c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma < -100)
-		{
-			karma += 1;
-		}
-	}
-	else{
-		bitcoin -= c->getPrixB();
-		karma += 1;
+        /// Le karma doit être entre -100 et 100
+        if(karma < -100)
+        {
+            karma = -100;
+        }
+    }
+    else{
+        bitcoin -= c->getPrixB();
+        karma = karma + c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma > 100)
-		{
-			karma -= 1;
-		}
-	}
+        /// Le karma doit être entre -100 et 100
+        if(karma > 100)
+        {
+            karma = 100;
+        }
+    }
 
-	c->investir(i);
-	if(i==-1){
-		bitcoin -= c->getPrixM();
-		karma = karma - c->getKarmaCase();
-
-		/// Le karma doit être entre -100 et 100
-		if(karma < -100)
-		{
-			karma = -100;
-		}
-	}
-	else{
-		bitcoin -= c->getPrixB();
-		karma = karma + c->getKarmaCase();
-
-		/// Le karma doit être entre -100 et 100
-		if(karma > 100)
-		{
-			karma = 100;
-		}
-	}
-
-	c->investir(i);
+    c->investir(i);
 }
 
 void Pion::EstEnFaillite()
