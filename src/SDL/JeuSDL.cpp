@@ -1,5 +1,6 @@
 #include "JeuSDL.h"
 #include <assert.h>
+#include <sstream>
 
 using namespace std;
 
@@ -717,9 +718,7 @@ void JeuSDL::affichageInteraction(){
                 newButton("\n",300,560,120,30,BLUE,"Piocher");
             }
             else{
-                Carte.dessineTexture(renderer,150,210,400,240);
-                dessineTexte(j.getCarte()->getTitre(),150+(400-(j.getCarte()->getTitre().length()*10))/2,230,10,{255,0,0});
-                dessineTexte(j.getCarte()->getTexte(),150+(400-(j.getCarte()->getTexte().length()*8))/2,330,8,{255,0,0});
+                affichageCarteChance();
                 newButton("\n",300,565,120,30,BLUE,"Continuer");
             }
             break;
@@ -819,6 +818,29 @@ void JeuSDL::affichageInteraction(){
         }
     }
 
+}
+
+void JeuSDL::affichageCarteChance(){
+    Carte.dessineTexture(renderer,150,210,400,240);
+    dessineTexte(j.getCarte()->getTitre(),150+(400-(j.getCarte()->getTitre().length()*10))/2,230,10,{255,0,0});
+                
+    int h =330;
+    string texte =j.getCarte()->getTexte();
+    istringstream iss(texte);
+    string mot; 
+    string tmp;
+    while ( getline( iss, mot, ' ' ) ) 
+    { 
+        if((tmp.length()*8)+(mot.length()*8)+8<312){
+            tmp+=" "+mot;
+        }
+        else{
+            dessineTexte(tmp,150+(400-(tmp.length()*8))/2,h,8,{255,0,0});
+            h+=15;
+            tmp = mot;
+        }                    
+    } 
+    dessineTexte(tmp,150+(400-(tmp.length()*8))/2,h,8,{255,0,0});
 }
 
 

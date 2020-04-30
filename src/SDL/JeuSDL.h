@@ -183,6 +183,8 @@ private:
 	*/
 	void affichageProrpiete(Pion *p,int h,bool jc);
 
+	void affichageCarteChance();
+
 
 public:
 //---constructeur/destructeur
