@@ -34,7 +34,7 @@ string Carte::getTexte() const{
 void Carte::randomCarte(){
 
 	srand (time(NULL));
-	id_carte = rand()%2;
+	id_carte = rand()%25;
 	switch(id_carte){
 		case 0:
 			id_case = 0;

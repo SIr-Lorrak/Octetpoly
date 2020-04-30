@@ -1101,22 +1101,17 @@ void Jeu::campagneDePub(const string touche){
 		{
 			ecrire(touche);
 		}
-		else if(confirmation)
+		if(confirmation)
 		{
-			//Deuxième confirmation
-			if(touche=="o"|| touche=="O")
-			{
+			
 				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
 				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 				ad = false;
 				confirmation = false;
 				attendreAmplete = false;
 				choix = "";
-			}
-			else if(touche=="n"||touche=="N")
-			{
-				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-			}
+				confirmation=false;
+			
 		}
 	}
 
@@ -1157,11 +1152,10 @@ void Jeu::porteOuverte(const string & touche){
 		{
 			ecrire(touche);
 		}
-		else if(confirmation)
+		if(confirmation)
 		{
 			//Deuxième confirmation
-			if(touche=="o"|| touche=="O")
-			{
+	
 				getPion(joueurCourant)->setPos(stoul(choix));
 				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 				getPion(joueurCourant)->setTicket(false);	
@@ -1169,11 +1163,8 @@ void Jeu::porteOuverte(const string & touche){
 				choix = "";
 				porteO = false;
 				confirmation=false;
-			}
-			else if(touche=="n"||touche=="N")
-			{
-				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-			}
+				confirmation=false;
+			
 		}
 	}
 
@@ -1409,12 +1400,26 @@ void Jeu::actionClavier(const string & touche)
 void Jeu::action(const string & action){
 	if(action.length()==1){
 		actionClavier(action);
+
 	}
 	else{
 		//ici rajouté des actions personalisée
 		if(action[0]=='-'){
 			enleverJoueur(action[1]);
 			confirmation=false;
+		}
+		if(action[0]=='c'){
+			if(action.length()==3){
+				string act="  ";
+				act[0]=action[1];
+				act[1]=action[2];
+				choix=act;
+			}
+			else{
+				string act=" ";
+				act[0]=action[1];
+				choix=act;
+			}
 		}
 	}
 }

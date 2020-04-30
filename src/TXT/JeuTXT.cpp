@@ -314,6 +314,7 @@ void JeuTXT::affichageCase(const Case * c){
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
+
 			if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
 			{
 				cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
@@ -520,12 +521,9 @@ void JeuTXT::affichageCampagneDePub(){
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
 	if(!j.getBool("confirmation")){
-		cout<<"Confirmer (o/n) ";Endl();	
+		cout<<"Confirmer (o/n) ";	
 	}
 
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
-	}
 }
 
 void JeuTXT::affichagePorteOuvete(){
@@ -546,11 +544,7 @@ void JeuTXT::affichagePorteOuvete(){
 	cout <<endl<< "Entrez le numéro du quartier : " << j.getChoix() << endl; 
 
 	if(!j.getBool("confirmation")){
-		cout<<"Confirmer (o/n) ";Endl();	
-	}
-
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
+		cout<<"Confirmer (o/n) ";	
 	}
 }
 

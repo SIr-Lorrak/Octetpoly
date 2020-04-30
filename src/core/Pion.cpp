@@ -184,7 +184,7 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos +=d.D1 + d.D2;
+		pos +=/*d.D1 + d.D2;*/1;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
 		if(pos >= MAXCASEP)

@@ -135,55 +135,87 @@ private:
 
 	/**
 	@brief permet l'affichage du mini-jeu Escape
+	@param none
 	*/
 	void affichageEscape();
 
 	/**
 	@brief permet l'affichage du Menu
+	@param none
 	*/
 	void affichageMenu();
 
 	/**
 	@brief permet l'affichage l'affichage du plateau de jeu
+	@param none
 	*/
 	void affichageJeu();
 
 	/**
 	@brief permet l'affichage du mini-jeu Hacking
+	@param none
 	*/
 	void affichageHacking();
 
 	/**
 	@brief permet l'affichage du mini-jeu Cliker
+	@param none
 	*/
 	void affichageClicker();
 
 	/**
 	@brief permet l'affichage du jeu de base (menu ou minijeu ou plateau)
+	@param none
 	*/
 	void affichage();
 
 	/**
 	@brief permet de mettre a jour les affichage
+	@param none
 	*/
 	bool update(SDL_Event & events);
 
 	/**
 	@brief permet d'afficher les dées
+	@param none
 	*/
 	void affichageDees();
 
 	/**
 	@brief permet d'afficher les interaction quand on se trouve sur une case
+	@param none
 	*/
 	void affichageInteraction();
 
 	/**
 	@brief permet d'afficher les propriete de chaque joueur
+	@param none
 	*/
 	void affichageProrpiete(Pion *p,int h,bool jc);
 
+	/**
+	@brief permet d'afficher les cartes chances
+	@param none
+	*/
 	void affichageCarteChance();
+
+	/**
+	@brief permet d'aficher la campagne de pub
+	@param un pointeur vers pion, un pointeur vers case
+	*/
+	void affichageCampagnePub(Pion *p,Case *c);
+
+	/**
+	@brief permet d'afficher la prison
+	@param un pointeur vers pion
+	*/
+	void affichagePrison(Pion *p);
+
+	/**
+	@brief permet d'afficher la porte ouverte
+	@param un pointeur vers pion, un pointeur vers case
+	*/
+	void affichagePorteOuverte(Pion *p,Case *c);
 
 
 public:
