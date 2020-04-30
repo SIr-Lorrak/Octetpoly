@@ -109,6 +109,7 @@ JeuSDL::JeuSDL(){
     ange.loadFichier("data/images/ange.png",renderer);
     demon.loadFichier("data/images/demon.png",renderer);
     DE.loadFichier("data/images/DE.png",renderer);
+    Carte.loadFichier("data/images/CarteChance.png",renderer);
 
     button.loadFichier("data/images/button.png",renderer);
     buttonClicked.loadFichier("data/images/buttonClicked.png",renderer);
@@ -172,7 +173,7 @@ JeuSDL::~JeuSDL(){
 
 
 void JeuSDL::dessineTexte(const string & texte,int x,int y, unsigned int taille,const SDL_Color couleur){
-    inputTexte.setSurface(TTF_RenderText_Solid(Police,texte.c_str(),couleur));
+    inputTexte.setSurface(TTF_RenderUTF8_Solid(Police,texte.c_str(),couleur));
     inputTexte.loadSurface(renderer);
     inputTexte.dessineTexture(renderer,x,y,taille*texte.length(),taille*1.8);
 }
@@ -703,15 +704,23 @@ void JeuSDL::affichageInteraction(){
             break;
         case 'I':
             texte = "Il faut payer ses impots monsieur !"; 
-            dessineTexte(texte,125,560,12);
+            dessineTexte(texte,125,120,12);
+            texte = "Payer ";
+            texte+=to_string(j.getPrixAPayer());
+            texte+="$";
+            newButton("\n",300,565,120,30,BLUE,texte);
             break;
         case 'C':
             if(j.getCarte()==NULL){
                 string texte = "Piochez une carte chance !";
                 dessineTexte(texte,125,520,12);
+                newButton("\n",300,560,120,30,BLUE,"Piocher");
             }
             else{
-                // ecrire sur la carte cout<<"votre carte : "<<endl<<j.getCarte()->getTitre()<<endl<<j.getCarte()->getTexte()<<endl;
+                Carte.dessineTexture(renderer,150,210,400,240);
+                dessineTexte(j.getCarte()->getTitre(),150+(400-(j.getCarte()->getTitre().length()*10))/2,230,10,{255,0,0});
+                dessineTexte(j.getCarte()->getTexte(),150+(400-(j.getCarte()->getTexte().length()*8))/2,330,8,{255,0,0});
+                newButton("\n",300,565,120,30,BLUE,"Continuer");
             }
             break;
         case 'A':
@@ -786,7 +795,7 @@ void JeuSDL::affichageInteraction(){
                dessineTexte(texte,125,545,10);
                newButton("+",125,565,30,30,BLUE,"+");
                newButton("-",175,565,30,30,BLUE,"-");
-               newButton("\n",300,565,120,30,BLUE,"Valider");
+               newButton("\n",300,565,120,30,BLUE,"Continuer");
                 
             }
 
@@ -813,7 +822,7 @@ void JeuSDL::affichageInteraction(){
 }
 
 
-void JeuSDL::affichageProrpiete(Pion * p,int h){
+void JeuSDL::affichageProrpiete(Pion * p,int h,bool jc){
     int hp = h;
     string texte;
     if(p->getNom()==""){
@@ -825,7 +834,12 @@ void JeuSDL::affichageProrpiete(Pion * p,int h){
     texte+= " : ";
     texte+=to_string(p->getCoin());
     texte+="$";
-    dessineTexte(texte,740,h,11);
+    if(jc == 1){
+        dessineTexte(texte,740,h,11,{255,0,0});
+    }
+    else{
+         dessineTexte(texte,740,h,11);
+    }
     for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
         {   
             texte = p->getPropriete(i)->getNom();
@@ -851,8 +865,14 @@ void JeuSDL::affichageJeu(){
         int x,y;
         unsigned char r,g,b;
         r=g=b=0;
-        
-        affichageProrpiete(j.getPion(i),h);
+        bool jc;
+        if(j.getPion(i)==j.getPion(j.getJoueurCourant())){
+            jc = 1;
+        }
+        else{
+            jc = 0;
+        }
+        affichageProrpiete(j.getPion(i),h,jc);
         h+=30+20*j.getPion(i)->getNbPropriete();
         
         if(pos>=0&&pos<8){

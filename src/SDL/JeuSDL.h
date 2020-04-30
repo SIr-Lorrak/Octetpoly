@@ -66,6 +66,7 @@ private:
 	Image ange;
 	Image demon;
 	Image DE;
+	Image Carte;
 
 //---different boutons
 	Image button;
@@ -180,7 +181,7 @@ private:
 	/**
 	@brief permet d'afficher les propriete de chaque joueur
 	*/
-	void affichageProrpiete(Pion *p,int h);
+	void affichageProrpiete(Pion *p,int h,bool jc);
 
 
 public:
