@@ -8,3 +8,5 @@ doc/html
 src/mainTest.cpp
 
 *BAKCUP
+
+data/sauvegarde/*

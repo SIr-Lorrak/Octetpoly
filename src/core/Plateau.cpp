@@ -60,7 +60,7 @@ Case * Plateau::getCase(unsigned int numCase) const{
 }
 
 void Plateau::setCase(unsigned int numCase,unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i){
-	tabC[i].set(p,l,prixdevente,pM,pB,prop,i);
+	tabC[numCase].set(p,l,prixdevente,pM,pB,prop,i);
 }
 
 

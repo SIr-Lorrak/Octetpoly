@@ -50,6 +50,7 @@ ALL: mkdir $(exe)
 mkdir:
 	$(test) $(obj) $(pipe) mkdir $(obj) ; $(test) $(obj)/core $(pipe) mkdir $(obj)/core ; $(test) $(obj)/TXT $(pipe) mkdir $(obj)/TXT ;$(test) $(obj)/SDL $(pipe) mkdir $(obj)/SDL
 	$(test) bin $(pipe) mkdir bin
+	$(test) data/sauvegarde $(pipe) mkdir data/sauvegarde
 
 $(bin)/$(exe_SDL): $(src_SDL) $(obj)/GetSet.o $(obj)/Touche.o $(obj)/Sauvegarde.o $(obj)/Action.o
 	$(CC) $+ -o $@ $(LIBS_SDL)

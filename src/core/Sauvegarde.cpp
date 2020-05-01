@@ -94,7 +94,6 @@ void Jeu::sauver(const string & file) const
 		fichier<<char(int('a')+int(getPion(i)->getCar()))<<" ";
 	}
 	fichier<<endl;
-	fichier<<0<<endl;
 	fichier<<board.getcasePub()<<endl;
 	for(unsigned int i = 0;i<32;i++){
 		const Case * c = board.getCase(i);
