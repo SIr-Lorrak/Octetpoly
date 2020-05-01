@@ -61,12 +61,15 @@ private:
 
 	Image inputTexte;//image pour le texte
 
+	Image GrosTitre;
+
 //---image pour le plateau
 	Image plateau;
 	Image ange;
 	Image demon;
 	Image DE;
 	Image Carte;
+	Image Drapeau;
 
 //---different boutons
 	Image button;
@@ -195,7 +198,7 @@ private:
 	@brief permet d'afficher les cartes chances
 	@param none
 	*/
-	void affichageCarteChance();
+	void affichageCarteChance(int H,string Titre, string Texte);
 
 	/**
 	@brief permet d'aficher la campagne de pub
@@ -223,6 +226,9 @@ private:
 	@brief permet d'afficher l'écran de pause au centre du plateau.
 	*/
 	void affichagePause();
+
+
+	void affichageLucky();
 
 public:
 //---constructeur/destructeur

@@ -106,11 +106,13 @@ JeuSDL::JeuSDL(){
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
 
     //---> ici rajouter les image a charger.
+    GrosTitre.loadFichier("data/images/OctetPoly.png",renderer);
     plateau.loadFichier("data/images/octopoly.png",renderer);
     ange.loadFichier("data/images/ange.png",renderer);
     demon.loadFichier("data/images/demon.png",renderer);
     DE.loadFichier("data/images/DE.png",renderer);
     Carte.loadFichier("data/images/CarteChance.png",renderer);
+    Drapeau.loadFichier("data/images/DrapeauRouge.png",renderer);
 
     //Pions :
     pions[0].loadFichier("data/images/Alex.png",renderer);
@@ -289,6 +291,31 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
 }
 
 
+void JeuSDL::affichageLucky(){
+    string texte;
+    if(!j.getlu().getCartePiocher()){
+        dessineRectangle(renderer,110,112,495,130,COL_WINDOW);
+        texte = "Quelle chance vous venez d'apercevoir";
+        dessineTexte(texte,125,120,12);
+        texte =" deux cartes chances sur le sol";
+        dessineTexte(texte,125,145,12);
+        newButton("\n",300,500,120,30,BLUE,"Ramasser");
+    }
+    else{
+        dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+
+        affichageCarteChance(115,j.getlu().getCarteUn()->getTitre(),j.getlu().getCarteUn()->getTexte());
+        affichageCarteChance(365,j.getlu().getCarteDeux()->getTitre(),j.getlu().getCarteDeux()->getTexte());
+
+        newButton("1",290,300,120,30,BLUE,"Utiliser la 1");
+        newButton("2",290,548,120,30,BLUE,"Utiliser la 2");
+        newButton("3",560,565,30,30,RED,"",&poubelle);
+
+    }
+
+}
+
+
 void JeuSDL::affichageClicker(){
     clicker.dessineTexture(renderer,112,110,495,495);
     string texte;
@@ -307,64 +334,64 @@ void JeuSDL::affichageClicker(){
 
         switch(a){
                 case 1:
-                pub1.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub1);
                 break;
 
                 case 2:
-                pub2.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub2);
                 break;
 
                 case 3:
-                pub3.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub3);
                 break;
 
                 case 4:
-                pub4.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub4);
                 break;
 
                 case 5:
-                pub5.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub5);
                 break;
 
                 case 6:
-                pub6.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub6);
                 break;
 
                 case 7:
-                pub7.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub7);
                 break;
 
                 case 8:
-                pub8.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub8);
                 break;
 
                 case 9:
-                pub9.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub9);
                 break;
 
                 case 10:
-                pub10.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub10);
                 break;
 
                 case 11:
-                pub11.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub11);
                 break;
 
                 case 12:
-                pub12.dessineTexture(renderer,200,230,300,300);
+                newButton(" ",190,220,310,310,INVISIBLE,"",&pub12);
                 break;
             }
 
-        newButton(" ",400,550,120,30,BLUE,"pubber");
         if( action ==" "&& clique){
+            
+            clique = false;
+        }
+        else if (action ==""&& !clique){
             int temp = a;
             srand (time(NULL));
             while(a == temp){
                 a = (rand()%12)+1;
             }
-            clique = false;
-        }
-        else if (action ==""&& !clique){
             clique = true;
         }
 
@@ -578,13 +605,7 @@ void JeuSDL::affichageEscape(){//cette fonction doit être adapté !
 
 
 void JeuSDL::affichageMenu(){
-    SDL_Color rouge;
-    rouge.r = 255;
-    rouge.g = 0;
-    rouge.b = 0;
-    inputTexte.setSurface(TTF_RenderText_Solid(Police,"OctetPoly !",rouge));
-    inputTexte.loadSurface(renderer);
-    inputTexte.dessineTexture(renderer,(DIMX/2)-250,0,500,100);
+    GrosTitre.dessineTexture(renderer,(DIMX/2)-350,-30,700,250);
     if(j.getBool("nouvellePartie")){
         unsigned int n = j.getNbJoueur();
         if(j.getBool("attendreNom")){
@@ -632,7 +653,7 @@ void JeuSDL::affichageMenu(){
             newButton("n",DIMX-150,DIMY-100,90,80,RED,"non",NULL,10);
         }
         else{
-            newButton("+",40+(j.getNbJoueur())*250+30,200,150,150,BLUE," + ",NULL,25);
+            newButton("+",40+(j.getNbJoueur())*250+30,230,150,150,BLUE," + ",NULL,25);
             newButton("\n",DIMX-300,DIMY-100,240,80,BLUE,"Commencer !",NULL,10);
         }
     }
@@ -908,12 +929,12 @@ void JeuSDL::affichagePrison(Pion *p){
 }
 
 
-void JeuSDL::affichageCarteChance(){
-    Carte.dessineTexture(renderer,150,210,400,240);
-    dessineTexte(j.getCarte()->getTitre(),150+(400-(j.getCarte()->getTitre().length()*10))/2,230,10,{255,0,0});
+void JeuSDL::affichageCarteChance(int H,string Titre, string Texte){
+    Carte.dessineTexture(renderer,150,H,400,240);
+    dessineTexte(Titre,150+(400-(Titre.length()*10))/2,H+20,10,{255,0,0});
                 
-    int h =330;
-    string texte =j.getCarte()->getTexte();
+    int h =H+120;
+    string texte =Texte;
     istringstream iss(texte);
     string mot; 
     string tmp;
@@ -971,7 +992,7 @@ void JeuSDL::affichageInteraction(){
                 newButton("\n",300,560,120,30,BLUE,"Piocher");
             }
             else{
-                affichageCarteChance();
+                affichageCarteChance(210,j.getCarte()->getTitre(),j.getCarte()->getTexte());
                 newButton("\n",300,565,120,30,BLUE,"Continuer");
             }
             break;
@@ -1012,11 +1033,12 @@ void JeuSDL::affichageInteraction(){
                 texte+= j.getPion(c->getOccupation())->getNom();
             } 
             dessineTexte(texte,125,145,12);
-
             if(c->getType()=='E'){
-                texte = "investissement : niv ";
-                texte+= to_string(c->getInvestissement());
-                dessineTexte(texte,125,450,12);
+                if(c->getType()=='E'){
+                    texte = "investissement : niv ";
+                    texte+= to_string(c->getInvestissement());
+                    dessineTexte(texte,125,450,12);
+                }
             }
         }
         if(j.getBool("actionObligatoire")&&j.getBool("avance")&&c->getOccupation() != 0 && c->getOccupation()!=p->getRang()){//si il viens d'avancer et que la case est a quelqu'un d'autre
@@ -1027,7 +1049,7 @@ void JeuSDL::affichageInteraction(){
             newButton("\n",125,560,120,30,BLUE,"   Payer   ");
         }
         if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
-            if(c->getOccupation() == j.getJoueurCourant()){
+            if(c->getOccupation() == j.getJoueurCourant()&&c->getType()=='E'){
                 texte = "coût + :";
                 texte +=to_string(c->getPrixB());
                 texte+="$         coût - :";
@@ -1047,7 +1069,11 @@ void JeuSDL::affichageInteraction(){
                 newButton("\n",300,565,120,30,BLUE,"Continuer");
                 
             }
+            else if(c->getType()=='B'&&c->getOccupation()==j.getJoueurCourant()){
+                dessineTexte("Bienvenue chez vous !",125,470,12);
+                newButton("\n",300,565,120,30,BLUE,"Continuer");
 
+            }
             else if(p->getCoin()>=(int)c->getPrix()){
                 if(c->getOccupation()==0){
                     newButton("o",125,560,120,30,BLUE,"Acheter");  
@@ -1067,7 +1093,7 @@ void JeuSDL::affichageInteraction(){
             }
         }
     }
-
+    
 }
 
 
@@ -1085,11 +1111,12 @@ void JeuSDL::affichageProrpiete(Pion * p,int h,bool jc){
     texte+=to_string(p->getCoin());
     texte+="$";
     if(jc == 1){
-        dessineTexte(texte,740,h,11,{255,0,0});
+        dessineTexte(texte,750,h,11,{255,0,0});
     }
     else{
-         dessineTexte(texte,740,h,11);
+         dessineTexte(texte,750,h,11);
     }
+    pions[int(p->getCar())].dessineTexture(renderer,725,h-5,20,20);
     for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
         {   
             texte = p->getPropriete(i)->getNom();
@@ -1099,33 +1126,38 @@ void JeuSDL::affichageProrpiete(Pion * p,int h,bool jc){
             texte += to_string(p->getPropriete(i)->getLoyer());
             texte +="$ )";
             hp =h+20+20*i;
+            if(j.board.getcasePub()!=0){
+                if(j.board.getCase(j.board.getcasePub())->getNom() == p->getPropriete(i)->getNom()){
+                    Drapeau.dessineTexture(renderer,725,hp,20,20);
+                }
+            }
             switch(p->getPropriete(i)->getGroup()){
                 case 1:
-                    dessineTexte(texte,730,hp,10,{148,72,40});
+                    dessineTexte(texte,760,hp,10,{148,72,40});
                     break;
                 case 2:
-                    dessineTexte(texte,730,hp,10,{ 255 , 43 , 149});
+                    dessineTexte(texte,760,hp,10,{ 255 , 43 , 149});
                     break;
                 case 3:
-                    dessineTexte(texte,730,hp,10,{173 , 33 , 106});
+                    dessineTexte(texte,760,hp,10,{173 , 33 , 106});
                     break;
                 case 4:
-                    dessineTexte(texte,730,hp,10,{ 245 , 143 , 0});
+                    dessineTexte(texte,760,hp,10,{ 245 , 143 , 0});
                     break;
                 case 5:
-                    dessineTexte(texte,730,hp,10,{ 225, 0 , 15});
+                    dessineTexte(texte,760,hp,10,{ 225, 0 , 15});
                     break;
                 case 6:
-                    dessineTexte(texte,730,hp,10,{252 , 235 , 1});
+                    dessineTexte(texte,760,hp,10,{252 , 235 , 1});
                     break;
                 case 7:
-                    dessineTexte(texte,730,hp,10,{31 , 164 , 74});
+                    dessineTexte(texte,760,hp,10,{31 , 164 , 74});
                     break;
                 case 8:
-                    dessineTexte(texte,730,hp,10,{1 , 104 , 179});
+                    dessineTexte(texte,760,hp,10,{1 , 104 , 179});
                     break;
                 case 42:
-                    dessineTexte(texte,730,hp,10,{124,122,120});
+                    dessineTexte(texte,760,hp,10,{124,122,120});
                     break;
             }
             
@@ -1137,6 +1169,7 @@ void JeuSDL::affichageProrpiete(Pion * p,int h,bool jc){
 
 void JeuSDL::affichageJeu(){
     plateau.dessineTexture(renderer,0,0,DIMY,DIMY);
+    GrosTitre.dessineTexture(renderer,DIMX-100,DIMY-50,90,50);
     int h= 30 ;
     for(unsigned int i=1;i<=4;i++){
         unsigned int pos = j.getPion(i)->getPos();
@@ -1179,8 +1212,10 @@ void JeuSDL::affichageJeu(){
             x+=35;
             y+=35;
         }
-        pions[int(j.getPion(i)->getCar())].dessineTexture(renderer,x,y,35,35);
-        //if(j.getBool(''))
+        if(j.getPion(i)->getCoin()!=-1){
+            pions[int(j.getPion(i)->getCar())].dessineTexture(renderer,x,y,35,35);
+        }
+        
     }
    
     if (!j.getBool("avance")&&!j.getPion(j.getJoueurCourant())->getPrisonnier()){
@@ -1209,10 +1244,16 @@ void JeuSDL::affichageJeu(){
     {
             affichageVente();
     }
-    else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")){
+    else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")&&j.getPion(j.getJoueurCourant())->getCoin()>=0&&j.gete().getn()=="rien"){
         string texte = "Fin du tour. ";
         dessineTexte(texte,125,560,12);
         newButton("\n",130+(texte.length()*12),560,120,30,BLUE,"Continuer");
+    }
+    else if(j.getPion(j.getJoueurCourant())->getCoin()<0){
+        dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+        string texte ="Vous avez fait faillite!";
+        dessineTexte(texte,125,520,12);
+        newButton("\n",300,565,120,30,BLUE,"Continuer");
     }
     else {
         affichageInteraction();
@@ -1334,6 +1375,9 @@ void JeuSDL::affichage(){
         }
         else if(j.gete().getn()=="hack"){
             affichageHacking();
+        }
+        else if(j.gete().getn()=="lucky"){
+            affichageLucky();
         }
     }
 

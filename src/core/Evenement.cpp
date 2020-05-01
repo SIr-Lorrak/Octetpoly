@@ -61,7 +61,6 @@ bool Evenement::Declenchement(int karma){
 		tps = 0;
 		tempsD = clock();
 	}
-	n="clicker";
 	tps = 0;
 	tempsD = clock();
 	return n != "rien";
