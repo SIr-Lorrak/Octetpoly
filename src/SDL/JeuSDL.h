@@ -30,7 +30,7 @@ public:
 	~Image();
 	void loadFichier(const char* nom_fichier, SDL_Renderer * renderer);
 	void loadSurface (SDL_Renderer * renderer);
-	void dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h);
+	void dessineTexture(SDL_Renderer * renderer,int x, int y, int w, int h) const;
 	void dessineTextureCo(SDL_Renderer * renderer,int x,int y,int x2,int y2);
 	SDL_Texture * getTexture();
 	void setSurface(SDL_Surface * surf);
@@ -67,6 +67,7 @@ private:
 	Image demon;
 	Image DE;
 	Image Carte;
+	Image Drapeau;
 
 //---different boutons
 	Image button;
@@ -78,7 +79,12 @@ private:
 	Image blue_button;
 	Image blue_buttonClicked;
 
-//---image pour l'escape
+	Image poubelle;
+
+//---differents pions
+	Image pions[16];
+
+//---images pour l'escape
 	Image ARRIVEE;
 	Image DEPART;
 	Image H;//herbe
@@ -94,7 +100,8 @@ private:
 //---image pour hacker
 	Image hack;
 
-//---image pour cliker
+
+//---images pour cliker
 	Image clicker;
 	Image pub1;
 	Image pub2;
@@ -109,9 +116,9 @@ private:
 	Image pub11;
 	Image pub12;
 
-
 	bool act;
 	bool animation;
+	//pour le cliquer le a stock l'id de l'image de pub
 	int a;
 	bool clique;
 	//quand animation est a true l'utilisateur ne peut rien faire
@@ -137,69 +144,59 @@ private:
 
 	/**
 	@brief permet l'affichage du mini-jeu Escape
-	@param none
 	*/
 	void affichageEscape();
 
 	/**
 	@brief permet l'affichage du Menu
-	@param none
 	*/
 	void affichageMenu();
 
 	/**
 	@brief permet l'affichage l'affichage du plateau de jeu
-	@param none
 	*/
 	void affichageJeu();
 
 	/**
 	@brief permet l'affichage du mini-jeu Hacking
-	@param none
 	*/
 	void affichageHacking();
 
 	/**
 	@brief permet l'affichage du mini-jeu Cliker
-	@param none
 	*/
 	void affichageClicker();
 
 	/**
 	@brief permet l'affichage du jeu de base (menu ou minijeu ou plateau)
-	@param none
 	*/
 	void affichage();
 
 	/**
 	@brief permet de mettre a jour les affichage
-	@param none
 	*/
 	bool update(SDL_Event & events);
 
 	/**
 	@brief permet d'afficher les dées
-	@param none
 	*/
 	void affichageDees();
 
 	/**
 	@brief permet d'afficher les interaction quand on se trouve sur une case
-	@param none
 	*/
 	void affichageInteraction();
 
 	/**
 	@brief permet d'afficher les propriete de chaque joueur
-	@param none
 	*/
-	void affichageProrpiete(Pion *p,int h,bool jc);
+	void affichageProrpiete(Pion * p,int h,bool jc);
 
 	/**
 	@brief permet d'afficher les cartes chances
 	@param none
 	*/
-	void affichageCarteChance();
+	void affichageCarteChance(int H,string Titre, string Texte);
 
 	/**
 	@brief permet d'aficher la campagne de pub
@@ -223,6 +220,13 @@ private:
 
 	void affichageVictoire();
 
+	/**
+	@brief permet d'afficher l'écran de pause au centre du plateau.
+	*/
+	void affichagePause();
+
+
+	void affichageLucky();
 
 public:
 //---constructeur/destructeur

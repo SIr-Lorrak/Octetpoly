@@ -16,7 +16,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin = /*INITCOIN*/250; 
+	bitcoin = INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
@@ -85,7 +85,7 @@ bool Pion::getTourUn() const{
 
 //Permet de récupérer une propriété du joueur
 Case * Pion::getPropriete(unsigned int indice) const{
-	return &*propriete[indice];
+	return propriete[indice];
 }
 
 ///-------------------------------------------------------------------Mutateurs---------------------------------------------------------------
@@ -141,7 +141,46 @@ void Pion::donTicket(){
 
 void Pion::nomAleatoire(){
 	//srand(time(NULL));
-	nom = "[bot] "+noms[rand()%20];
+	int alea = rand()%20;
+	nom = "[bot] "+noms[alea];
+	switch(alea){
+		case 0: 
+			car = 13;
+			break;
+		case 1:
+			car = 9;
+			break;
+		case 2:
+			car = 11;
+			break;
+		case 3:
+			car = 8;
+			break;
+		case 4:
+			car = 14;
+			break;
+		case 5:
+			car = 10;
+			break;
+		case 10:
+			car = 8;
+			break;
+		case 12:
+			car = 3;
+			break;
+		case 13:
+			car = 0;
+			break;
+		case 15:
+			car = 8;
+			break;
+		case 17:
+			car = 15;
+			break;
+		default:
+			car = rand()%16;
+			break;
+	}
 }
 
 void Pion::lanceDes()
@@ -184,7 +223,8 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		pos +=/*d.D1 + d.D2;*/1;
+		//pos +=d.D1 + d.D2;
+		pos+=1;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
 		if(pos >= MAXCASEP)
@@ -323,7 +363,7 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-    if(nom.length()<=20)
+    if(nom.length()<=14)
         nom+=lettre;
 }
 

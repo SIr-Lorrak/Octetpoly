@@ -7,8 +7,6 @@ using namespace std;
 
 const string KONAMI_CODE[10] = {"^","^","v","v","<",">","<",">","b","a"};//suite de 10 touches pour activer le konami code
 
-//-------------------------------------Constructeurs--------------------------------------
-
 bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned int taille = 4){
 	if(taille == 0) return true;
 	for(unsigned int i=0;i<taille;i++){
@@ -304,7 +302,7 @@ void Jeu::sauver(const string & file) const
 	}
 	fichier<<endl;
 	for(unsigned int i = 1;i<=4;i++){
-		fichier<<getPion(i)->getCar()<<" ";
+		fichier<<char(int('a')+int(getPion(i)->getCar()))<<" ";
 	}
 	fichier<<endl;
 	fichier<<0<<endl;
@@ -381,7 +379,7 @@ bool Jeu::charger(const string & file)
 		}
 		for(unsigned int i=1;i<=4;i++){
 			fichier>>recup;
-			getPion(i)->setCar(recup[0]);
+			getPion(i)->setCar(char(int(recup[0])-int('a')));
 		}
 		fichier>>recupint;
 		if(recupint!=0){
@@ -408,7 +406,7 @@ bool Jeu::charger(const string & file)
 	}
 
 	fichier.close();
-	commencerPartie();
+	tourSuivant();
 	return valide;
 }
 
@@ -448,19 +446,15 @@ bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
 
 void Jeu::commencerPartie()
 {	
-	
+	attendreNom = false;
 	if(nbJoueur<4){
 		delete [] tabO;
 		tabO = new Ordi [4-nbJoueur];
 	
-		do{
-			for(unsigned int i = 0;i<4-nbJoueur;i++){
-				do{
-					tabO[i].nomAleatoire();
-				}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
-			}
-		}while(!nomExiste("[bot] M. Pronost le meilleur prof de la terre",tabO,4-nbJoueur));
-		for(unsigned int i=0;i<4-nbJoueur;i++){
+		for(unsigned int i = 0;i<4-nbJoueur;i++){
+			do{
+				tabO[i].nomAleatoire();
+			}while(nomExiste(tabO[i].getNom(),tabO,i));//tant que deux Ordi on le même nom on relance la tirage au sort des nom
 			tabO[i].setRang(nbJoueur+i+1);
 			tabO[i].setKarma(rand()%4-2);
 		}
@@ -473,6 +467,7 @@ void Jeu::ajouterJoueur()
 {
 	tabJ[nbJoueur] = new Joueur;
 	tabJ[nbJoueur]->setRang(nbJoueur+1);
+	tabJ[nbJoueur]->setCar(rand()%16);
 	nbJoueur++;
 	attendreNom = true;
 }
@@ -565,7 +560,7 @@ void Jeu::modeVente(const string touche){
 			choix = "";
 		}
 
-		if((touche=="o"|| touche=="O") 
+		if((touche=="o"|| touche=="O"||touche=="\n") 
 		&& getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer)
 		{
 			confirmation = true;
@@ -578,16 +573,12 @@ void Jeu::modeVente(const string touche){
 		}
 	}
 
-	if(confirmation)
-	{
-		//Deuxième confirmation
-			
-			remiseZeroEtVente();
-			prixAPayer = 0;
-			confirmation = false;
-			vend = false;
-			confirmation=false;
-			
+	if(confirmation) 
+	{	
+		remiseZeroEtVente();
+		prixAPayer = 0;
+		confirmation = false;
+		vend = false;	
 	}
 }
 
@@ -781,11 +772,14 @@ void Jeu::actionPartie(const string & touche)
 		else if(!avance){
 			if(touche == "\n"){
 				p->avancer();
-				prixKarma();
 				Case *c = board.getCase(p->getPos());
 				if(c->getType() == 'I' || c->getType() == 'P')
 				{
 					prixKarma();
+				}
+				if(c->getType() == 'D'){//si c'est la case départ il n'y a rien a faire donc on passe imédiatement à la fin du tour.
+					attendreAmplete=false;
+					actionObligatoire=false;
 				}
 				avance = true;
 			}
@@ -794,7 +788,7 @@ void Jeu::actionPartie(const string & touche)
 			actionCase(touche);
 		}
 		else{
-			if(p->getDes().D1==p->getDes().D2 && !apresPorteOuverte){
+			if(p->getDes().D1==p->getDes().D2 && !apresPorteOuverte&&p->getCoin()>=0){
 				resetBool();//si le pion a fait un double on reset le tour a zero et il rejoue sans passer au tour suivant
 			}
 			else{
@@ -803,10 +797,13 @@ void Jeu::actionPartie(const string & touche)
 				}
 				
 				else{
-					if(touche=="\n"){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
+					if(touche=="\n"&&p->getCoin()>=0){// de même si le tour est pas reset on declenche un mini jeu et on termine le tour
 						if(!e.Declenchement(p->getKarma())){
 							tourSuivant();
 						}
+					}
+					else{
+						tourSuivant();
 					}
 				}
 			}
@@ -871,6 +868,10 @@ void Jeu::actionMenu(const string & touche)
 		}
 		if(touche=="\e"){
 			nouvellePartie=false;//passe dans le menu précédent
+			if(attendreNom){
+				enleverJoueur();
+				attendreNom=false;
+			}
 		}
 	}
 	else{
@@ -890,6 +891,7 @@ void Jeu::actionMenu(const string & touche)
 				if(fichierExiste("data/sauvegarde/"+touche+".save")){
 					if(charger("data/sauvegarde/"+touche+".save")){
 						//invalidSave = false;
+						attendreNom=false;
 					}
 
 					else{
@@ -950,6 +952,9 @@ void Jeu::actionBE(const string touche){
 			if(touche == "\n"){
 				payeLoyerJoueur(touche);
 			}
+			if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
+				attendreAmplete = false;
+			}
 		}
 
 		//Cas de l'expropriation
@@ -961,6 +966,7 @@ void Jeu::actionBE(const string touche){
 			    getPion(c->getOccupation())->estRacheter(c->getNom());
 				getPion(joueurCourant)->don(c);	//le joueur a payer 
 				victoireMonopole();
+				
 			}
 			else
 			{
@@ -978,7 +984,6 @@ void Jeu::actionBE(const string touche){
 			{
 				getPion(joueurCourant)->achete(c);
 				victoireMonopole();
-
 				if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
 					attendreAmplete = false;
 				}
@@ -989,7 +994,10 @@ void Jeu::actionBE(const string touche){
 			}
 		}
 	}
-
+	else if(c->getType()=='B'){
+		attendreAmplete=false;
+		actionObligatoire=false;
+	}
 	//La case appartient au JOUEUR	
 	//Si c'est une entreprise, il pourra peut-être investir
 	else if (c->getType() == 'E' && attendreAmplete)
@@ -1036,7 +1044,8 @@ void Jeu::payeLoyerJoueur(const string touche){
 	{
 		paye(joueurCourant,c->getOccupation(),coinCourant + getPion(joueurCourant)->patrimoineActif());	
 		getPion(joueurCourant)->EstEnFaillite();
-		tourSuivant(); 
+		attendreAmplete = false;
+		actionObligatoire = false;
 	}
 }
 
@@ -1077,6 +1086,7 @@ void Jeu::campagneDePub(const string touche){
 		&& ((getPion(joueurCourant)->getNbPropriete()>0)))
 	{
 		ad = true;
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 	}
 
 	else if(ad)
@@ -1099,15 +1109,12 @@ void Jeu::campagneDePub(const string touche){
 		}
 		if(confirmation)
 		{
-			
-				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
-				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
-				ad = false;
-				confirmation = false;
-				attendreAmplete = false;
-				choix = "";
-				confirmation=false;
-			
+			pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
+			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
+			ad = false;
+			confirmation = false;
+			attendreAmplete = false;
+			choix = "";
 		}
 	}
 
@@ -1129,6 +1136,7 @@ void Jeu::porteOuverte(const string & touche){
 		&&!(getPion(joueurCourant)->getTicket()))
 	{
 		getPion(joueurCourant)->setTicket(true);
+		getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 		attendreAmplete = false;
 		tourSuivant();
 	}
@@ -1150,17 +1158,13 @@ void Jeu::porteOuverte(const string & touche){
 		}
 		if(confirmation)
 		{
-			//Deuxième confirmation
-	
-				getPion(joueurCourant)->setPos(stoul(choix));
-				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
-				getPion(joueurCourant)->setTicket(false);	
-				attendreAmplete = false;
-				choix = "";
-				porteO = false;
-				confirmation=false;
-				confirmation=false;
-			
+			getPion(joueurCourant)->setPos(stoul(choix));
+			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+			getPion(joueurCourant)->setTicket(false);	
+			attendreAmplete = false;
+			choix = "";
+			porteO = false;
+			confirmation=false;
 		}
 	}
 
@@ -1170,25 +1174,16 @@ void Jeu::porteOuverte(const string & touche){
 	}
 }
 
-void Jeu::carteChance(const string & touche){
+void Jeu::carteChance(){
 	Pion * joueur = getPion(joueurCourant); 
-	int id_Case;
-	int gain;
-	bool casePlus3;
-	attendreAmplete = false; //le joueur ne fera pas d'amplete sur une carte chance.
-	if(chance == NULL){//si une la carte n'a pas encore été tirée.{
-		if(touche == "\n")//le joueur pioche une carte avec entrer 
-		{
-			chance = new Carte;
-			chance->randomCarte();
-		}
-	}
-	else{//si la carte est déjà tirée
+		int id_Case;
+		int gain;
+		bool casePlus3;
 
 		id_Case = chance->getid_case();
 		gain = chance->getgain();
 		casePlus3 = chance->getcasePlus3();
-		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
+		
 			if(gain != 0)
 			{
 				joueur->setCoin(joueur->getCoin() + gain);//le gain peut aussi être une perte.
@@ -1206,7 +1201,8 @@ void Jeu::carteChance(const string & touche){
 					else 
 					{
 						getPion(joueurCourant)->EstEnFaillite();
-						tourSuivant(); 
+						actionObligatoire = false;
+						attendreAmplete =false;
 					}
 				}
 			}
@@ -1216,6 +1212,17 @@ void Jeu::carteChance(const string & touche){
 				joueur->setTourUn(true);
 				joueur->salaire();
 			}
+			else if(id_Case > 0)
+			{
+				if((int)joueur->getPos() > id_Case)
+				{
+					joueur->salaire();
+					joueur->setTourUn(true);
+				}
+				actionObligatoire = true;
+				attendreAmplete = true;
+				joueur->setPos(id_Case);
+			}
 			else if(casePlus3)
 			{
 				joueur->setPos(joueur->getPos() + 3);
@@ -1223,11 +1230,32 @@ void Jeu::carteChance(const string & touche){
 				{
 					joueur->setPos(joueur->getPos() - 32);
 				}
+				if(board.getCase(getPion(joueurCourant)->getPos())->getType() == 'E'	
+					|| board.getCase(getPion(joueurCourant)->getPos())->getType() == 'B')
+				{
+					actionObligatoire = true;
+					attendreAmplete = true;
+				}
 			}
-			
 			actionObligatoire = false; //si le joueur a pu payer il a fini ses action obligatoire	
-			delete chance;//puis on delete la carte chance
-			chance = NULL;//<-- très important
+			//delete chance;//puis on delete la carte chance
+			//chance = NULL;//<-- très important
+}
+
+void Jeu::actionChance(const string & touche){
+	attendreAmplete = false; //le joueur ne fera pas d'amplete sur une carte chance.
+	if(chance == NULL){//si une la carte n'a pas encore été tirée.{
+		if(touche == "\n")//le joueur pioche une carte avec entrer 
+		{
+			chance = new Carte;
+			chance->randomCarte();
+		}
+	}
+	else{//si la carte est déjà tirée
+		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
+		carteChance();
+		delete chance;
+		chance = NULL;
 		}
 	}
 }
@@ -1251,7 +1279,8 @@ void Jeu::impot(const string touche){
 	else 
 	{
 		getPion(joueurCourant)->EstEnFaillite();
-		tourSuivant(); 
+		attendreAmplete=false;
+		actionObligatoire=false; 
 	}
 	prixAPayer = 0;
 }
@@ -1271,7 +1300,7 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'C':
-			carteChance(touche);
+			actionChance(touche);
 			break;
 
 		case 'A':
@@ -1356,6 +1385,49 @@ void Jeu::actionMiniJeu(const string touche){
 		}
 		
 	}
+	if(e.getn() == "lucky"){
+
+		if(!lu.getCartePiocher()){//si les cartes n'ont pas encore été tirées.
+
+			if(touche == "\n")//le joueur pioche deux cartes avec entrer 
+			{
+				lu.pioche();
+			}
+		}
+
+		else{//si la carte est déjà tirée
+
+			//1 pour saisir la première carte
+			if(touche == "1")
+			{
+				chance = lu.getCarteUn();
+				carteChance();
+				e.reset();
+				lu.reset();
+				chance = NULL;
+			}
+
+			//2 pour saisir la seconde carte
+			if(touche == "2")
+			{
+				chance = lu.getCarteDeux();	
+				carteChance();
+				e.reset();
+				lu.reset();
+				chance = NULL;
+			}
+
+			//3 pour ne choisir aucune des deux cartes
+			if(touche == "3")
+			{
+				e.reset();
+				lu.reset();
+				chance = NULL;
+				tourSuivant();
+			}
+
+		}
+	}
 }
 
 void Jeu::actionVictoire(){
@@ -1396,7 +1468,6 @@ void Jeu::actionClavier(const string & touche)
 void Jeu::action(const string & action){
 	if(action.length()==1){
 		actionClavier(action);
-
 	}
 	else{
 		//ici rajouté des actions personalisée
@@ -1404,7 +1475,11 @@ void Jeu::action(const string & action){
 			enleverJoueur(action[1]);
 			confirmation=false;
 		}
-		if(action[0]=='c'){
+
+		else if(action[0]=='c'&&action[1]=='a'&&action[2]=='r'){
+			getPion(action[3])->setCar(action[4]);
+		}
+		else if(action[0]=='c'){
 			if(action.length()==3){
 				string act="  ";
 				act[0]=action[1];
@@ -1451,10 +1526,12 @@ void Jeu::actionOrdi(){
 	assert(joueurCourant==o->getRang());
 	if(vend){//quand l'ordi doit vendre
 		if(getPion(joueurCourant)->getCoin() + totalVente() >= prixAPayer){//si l'ordi a assez vendu.
-			actionClavier("o");
+			remiseZeroEtVente();
+			prixAPayer = 0;
+			vend = false;
 		}
 		else{
-			//vente[nbvente] = faire une fonction qui donne un choix.;
+			vente[nbVente] = o->AIvend(vente,nbVente);
 			nbVente++;
 		}
 	}
@@ -1518,19 +1595,25 @@ void Jeu::actionOrdi(){
 					}
 					break;
 
-				case 'C':
-					actionClavier("\n");
-					break;
-
 				case 'A':
-					actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					if(attendreAmplete){
+						actionClavier("n");//pour l'instant les ordis n'organisent pas de campagne de pub
+					}
+					else{
+						actionClavier("\n");
+					}
 					break;
 
 				case 'O':
-					actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					if(attendreAmplete){
+						actionClavier("n");//pour l'instant les ordis ne font pas de porte ouverte
+					}
+					else{
+						actionClavier("\n");
+					}
 					break;
 
-				case 'I':
+				default:
 					actionClavier("\n");
 					break;
 			}
@@ -1588,6 +1671,10 @@ Clicker Jeu::getc(){
 
 Escape Jeu::getes(){
 	return es;
+}
+
+Lucky Jeu::getlu(){
+	return lu;
 }
 
 //seteur permettant de mettre à jour clicker c
