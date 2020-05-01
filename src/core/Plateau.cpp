@@ -11,9 +11,9 @@ Plateau::Plateau(){
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
 	tabC[0].initCase(0,'D',0,"Depart",0,0,0,0,0);
-	tabC[1].initCase(1,'E',5,"Auchan",5,1000,1,1,5);
-	tabC[2].initCase(1,'E',25,"Aldi",5,5,1,1,5);
-	tabC[3].initCase(1,'E',15,"Carrefour",5,1,1,1,5);
+	tabC[1].initCase(1,'E',5,"Auchan",1000,1000,1,1,5);
+	tabC[2].initCase(1,'E',25,"Aldi",1000,5,1,1,5);
+	tabC[3].initCase(1,'E',15,"Carrefour",5,1,1,1,500);
 	tabC[4].initCase(42,'B',5,"Crédit agricole",0,4,0,0,5);
 	tabC[5].initCase(2,'E',20,"Arkane Studio",10,4,1,1,5);
 	tabC[6].initCase(2,'E',25,"Ankama",10,4,1,1,50);

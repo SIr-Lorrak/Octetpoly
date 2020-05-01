@@ -573,20 +573,12 @@ void Jeu::modeVente(const string touche){
 		}
 	}
 
-	else 
-	{
-		//Deuxième confirmation
-		if(touche=="o"|| touche=="O")
-		{	
-			remiseZeroEtVente();
-			prixAPayer = 0;
-			confirmation = false;
-			vend = false;
-		}
-		else if(touche=="n"||touche=="N")
-		{
-			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-		}	
+	if(confirmation) 
+	{	
+		remiseZeroEtVente();
+		prixAPayer = 0;
+		confirmation = false;
+		vend = false;	
 	}
 }
 
@@ -1111,22 +1103,14 @@ void Jeu::campagneDePub(const string touche){
 		{
 			ecrire(touche);
 		}
-		else if(confirmation)
+		if(confirmation)
 		{
-			//Deuxième confirmation
-			if(touche=="o"|| touche=="O")
-			{
-				pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
-				getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
-				ad = false;
-				confirmation = false;
-				attendreAmplete = false;
-				choix = "";
-			}
-			else if(touche=="n"||touche=="N")
-			{
-				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-			}
+			pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
+			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
+			ad = false;
+			confirmation = false;
+			attendreAmplete = false;
+			choix = "";
 		}
 	}
 
@@ -1168,23 +1152,15 @@ void Jeu::porteOuverte(const string & touche){
 		{
 			ecrire(touche);
 		}
-		else if(confirmation)
+		if(confirmation)
 		{
-			//Deuxième confirmation
-			if(touche=="o"|| touche=="O")
-			{
-				getPion(joueurCourant)->setPos(stoul(choix));
-				getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
-				getPion(joueurCourant)->setTicket(false);	
-				attendreAmplete = false;
-				choix = "";
-				porteO = false;
-				confirmation=false;
-			}
-			else if(touche=="n"||touche=="N")
-			{
-				confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-			}
+			getPion(joueurCourant)->setPos(stoul(choix));
+			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
+			getPion(joueurCourant)->setTicket(false);	
+			attendreAmplete = false;
+			choix = "";
+			porteO = false;
+			confirmation=false;
 		}
 	}
 
@@ -1428,8 +1404,21 @@ void Jeu::action(const string & action){
 			confirmation=false;
 		}
 
-		if(action[0]=='c'&&action[1]=='a'&&action[2]=='r'){
+		else if(action[0]=='c'&&action[1]=='a'&&action[2]=='r'){
 			getPion(action[3])->setCar(action[4]);
+		}
+		else if(action[0]=='c'){
+			if(action.length()==3){
+				string act="  ";
+				act[0]=action[1];
+				act[1]=action[2];
+				choix=act;
+			}
+			else{
+				string act=" ";
+				act[0]=action[1];
+				choix=act;
+			}
 		}
 	}
 }

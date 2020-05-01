@@ -522,10 +522,6 @@ void JeuTXT::affichageCampagneDePub(){
 	if(!j.getBool("confirmation")){
 		cout<<"Confirmer (o/n) ";Endl();	
 	}
-
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
-	}
 }
 
 void JeuTXT::affichagePorteOuvete(){
@@ -547,10 +543,6 @@ void JeuTXT::affichagePorteOuvete(){
 
 	if(!j.getBool("confirmation")){
 		cout<<"Confirmer (o/n) ";Endl();	
-	}
-
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
 	}
 }
 
@@ -598,10 +590,6 @@ void JeuTXT::affichageVente(){
 
 	if(!j.getBool("confirmation")){
 		cout<<"Confirmer (o/n) ";Endl();	
-	}
-
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
 	}
 }
 

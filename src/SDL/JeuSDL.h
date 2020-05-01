@@ -66,6 +66,7 @@ private:
 	Image ange;
 	Image demon;
 	Image DE;
+	Image Carte;
 
 //---different boutons
 	Image button;
@@ -82,7 +83,7 @@ private:
 //---differents pions
 	Image pions[16];
 
-//---image pour l'escape
+//---images pour l'escape
 	Image ARRIVEE;
 	Image DEPART;
 	Image H;//herbe
@@ -95,11 +96,30 @@ private:
 	Image T4;//virage de haut vers la droite
 	Image M;//mur
 
+//---image pour hacker
 	Image hack;
+
+
+//---images pour cliker
+	Image clicker;
+	Image pub1;
+	Image pub2;
+	Image pub3;
+	Image pub4;
+	Image pub5;
+	Image pub6;
+	Image pub7;
+	Image pub8;
+	Image pub9;
+	Image pub10;
+	Image pub11;
+	Image pub12;
 
 	bool act;
 	bool animation;
-	bool dees;
+	//pour le cliquer le a stock l'id de l'image de pub
+	int a;
+	bool clique;
 	//quand animation est a true l'utilisateur ne peut rien faire
 	//pour laisser le temps a l'animation de se terminer.
 
@@ -169,7 +189,35 @@ private:
 	/**
 	@brief permet d'afficher les propriete de chaque joueur
 	*/
-	void affichageProrpiete(Pion *p,int h);
+	void affichageProrpiete(Pion * p,int h,bool jc);
+
+	/**
+	@brief permet d'afficher les cartes chances
+	@param none
+	*/
+	void affichageCarteChance();
+
+	/**
+	@brief permet d'aficher la campagne de pub
+	@param un pointeur vers pion, un pointeur vers case
+	*/
+	void affichageCampagnePub(Pion *p,Case *c);
+
+	/**
+	@brief permet d'afficher la prison
+	@param un pointeur vers pion
+	*/
+	void affichagePrison(Pion *p);
+
+	/**
+	@brief permet d'afficher la porte ouverte
+	@param un pointeur vers pion, un pointeur vers case
+	*/
+	void affichagePorteOuverte(Pion *p,Case *c);
+
+	void affichageVente();
+
+	void affichageVictoire();
 
 	/**
 	@brief permet d'afficher l'écran de pause au centre du plateau.

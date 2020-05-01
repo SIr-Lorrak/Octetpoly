@@ -1,5 +1,6 @@
 #include "JeuSDL.h"
 #include <assert.h>
+#include <sstream>
 
 using namespace std;
 
@@ -109,6 +110,7 @@ JeuSDL::JeuSDL(){
     ange.loadFichier("data/images/ange.png",renderer);
     demon.loadFichier("data/images/demon.png",renderer);
     DE.loadFichier("data/images/DE.png",renderer);
+    Carte.loadFichier("data/images/CarteChance.png",renderer);
 
     //Pions :
     pions[0].loadFichier("data/images/Alex.png",renderer);
@@ -154,6 +156,20 @@ JeuSDL::JeuSDL(){
 
     hack.loadFichier("data/images/hack.png",renderer);
 
+    clicker.loadFichier("data/images/clicker.png",renderer);
+    pub1.loadFichier("data/images/pub1.png",renderer);
+    pub2.loadFichier("data/images/pub2.png",renderer);
+    pub3.loadFichier("data/images/pub3.png",renderer);
+    pub4.loadFichier("data/images/pub4.png",renderer);
+    pub5.loadFichier("data/images/pub5.jpg",renderer);
+    pub6.loadFichier("data/images/pub6.png",renderer);
+    pub7.loadFichier("data/images/pub7.png",renderer);
+    pub8.loadFichier("data/images/pub8.png",renderer);
+    pub9.loadFichier("data/images/pub9.png",renderer);
+    pub10.loadFichier("data/images/pub10.png",renderer);
+    pub11.loadFichier("data/images/pub11.png",renderer);
+    pub12.loadFichier("data/images/pub12.png",renderer);
+
     Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
     if (Police == NULL) {
             cout << "Failed to load DejaVuSansCondensed.ttf! SDL_TTF Error: " << TTF_GetError() << endl; SDL_Quit(); exit(1);
@@ -162,8 +178,8 @@ JeuSDL::JeuSDL(){
     font_color.r = 0;font_color.g = 0;font_color.b = 0;
     m.x=-1;m.y=-1;
     act = false;
-
-    dees = true;
+    a=3;
+    clique = true;
 }
 
 
@@ -269,7 +285,96 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
 
 
 void JeuSDL::affichageClicker(){
-    //TODO
+    clicker.dessineTexture(renderer,112,110,495,495);
+    string texte;
+    if (j.getc().getFin()==false){
+        texte = "Timer : ";
+        texte+=to_string(10-((clock()/CLOCKS_PER_SEC)-(j.gete().gettempsD()/CLOCKS_PER_SEC)));
+        texte+=" seconde";
+        dessineTexte(texte,122,110,12);
+        texte ="Appuyez à répétion sur la pub ";
+        dessineTexte(texte,135,135,12);
+        texte ="pour faire de la pub!";
+        dessineTexte(texte,135,155,12);
+        texte ="nombre de pub réalisé : ";
+        texte+=to_string(j.getc().getnbclique());
+        dessineTexte(texte,135,180,12);
+
+        switch(a){
+                case 1:
+                pub1.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 2:
+                pub2.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 3:
+                pub3.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 4:
+                pub4.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 5:
+                pub5.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 6:
+                pub6.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 7:
+                pub7.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 8:
+                pub8.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 9:
+                pub9.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 10:
+                pub10.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 11:
+                pub11.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 12:
+                pub12.dessineTexture(renderer,200,230,300,300);
+                break;
+            }
+
+        newButton(" ",400,550,120,30,BLUE,"pubber");
+        if( action ==" "&& clique){
+            int temp = a;
+            srand (time(NULL));
+            while(a == temp){
+                a = (rand()%12)+1;
+            }
+            clique = false;
+        }
+        else if (action ==""&& !clique){
+            clique = true;
+        }
+
+        
+    }   
+    else{
+        texte = "TERMINER! Vous avez réalisé ";
+        texte+=to_string(j.getc().getnbclique());
+        dessineTexte(texte,135,135,12);
+        texte ="Vous gagner ";
+        texte+=to_string(j.gete().getgain());
+        texte+="$";
+        dessineTexte(texte,135,155,12);
+        newButton("\n",300,500,120,30,BLUE,"Continuer");
+    }
 }
 
 
@@ -602,6 +707,225 @@ void JeuSDL::affichageDees(){
 }
 
 
+void JeuSDL::affichageCampagnePub(Pion *p,Case *c){
+    string texte;
+    if (p->getNbPropriete() > 0 && p->getCoin() >= j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+    {
+        texte = "Vous pouvez organiser une campagne de"; 
+        dessineTexte(texte,125,120,12);
+        texte = "PUB! Faire de la pub pour ";
+        texte+=to_string(c->getPrix());
+        texte+="$ ?";
+        dessineTexte(texte,125,145,12);
+        newButton("o",125,560,120,30,BLUE,"   Oui   ");  
+        newButton("\n",300,560,120,30,BLUE,"   Non   ");
+    }
+    else{
+        texte = "Vous êtes sur la campagne de PUB,";
+        dessineTexte(texte,125,120,12);
+        texte = "Mais vous n'y avez pas accès";
+        dessineTexte(texte,125,145,12);
+        newButton("\n",300,565,120,30,BLUE,"Continuer");
+
+    }
+    if(j.getBool("ad")){
+        dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+        texte= "Sur quel propriété faire votre campagne ?";
+        dessineTexte(texte,125,120,12);
+        int h = 110;
+        int l = 165;
+        for (unsigned int i = 0; i < p->getNbPropriete() ; ++i){   
+            if(i%3==0){
+                l = 165;
+                h+=40;
+            }
+            string val ="c"+to_string(i); 
+            if (j.getChoix()==to_string(i)){
+                newButton(val,l,h,120,30,GREEN,p->getPropriete(i)->getNom());
+            }
+            else{
+                newButton(val,l,h,120,30,BLUE,p->getPropriete(i)->getNom());
+            }
+            l+=135;
+                    
+        }
+        newButton("o",300,565,120,30,BLUE,"Valider"); 
+    }
+}
+
+//permet d'afficher la porte ouverte
+void JeuSDL::affichagePorteOuverte(Pion *p,Case *c){
+    string texte;
+    if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+    {
+         texte = "Journée porte ouverte! Vous pouvez";
+        dessineTexte(texte,125,120,12);
+        texte ="aller où vous voulez.";
+        dessineTexte(texte,125,145,12);
+        texte =" Acheter un ticket pour ";
+        texte+=to_string(c->getPrix());
+        texte+="$ ?";
+        dessineTexte(texte,125,170,12);
+        newButton("o",125,560,120,30,BLUE,"   Oui   ");  
+        newButton("\n",300,560,120,30,BLUE,"   Non   ");
+        
+    }
+    else{
+        texte = "Journée porte ouverte!";
+        dessineTexte(texte,125,120,12);
+        texte ="Dommage vous n'y avez pas accès";
+        dessineTexte(texte,125,145,12);
+        newButton("\n",300,565,120,30,BLUE,"Continuer");
+    }
+
+    if(j.getBool("porteO")){
+        dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+        texte= "Où-voulez vous vous rendre?";
+        dessineTexte(texte,125,120,12);
+        int h = 110;
+        int l = 165;
+        int nb = 0;
+        for(unsigned int i = 0 ; i < 32 ; i++){
+            if(j.board.getCase(i)->getOccupation() == 0 && (j.board.getCase(i)->getType() == 'B' || j.board.getCase(i)->getType() == 'E')){
+                if(nb%3==0){
+                    l = 165;
+                    h+=40;
+                }
+                string val ="c"+to_string(i); 
+                if (j.getChoix()==to_string(i)){
+                    newButton(val,l,h,120,30,GREEN,j.board.getCase(i)->getNom());
+                }
+                else{
+                    newButton(val,l,h,120,30,BLUE,j.board.getCase(i)->getNom());
+                }
+                l+=135;
+                nb++;   
+            }
+        }
+        newButton("o",300,565,120,30,BLUE,"Valider"); 
+    }
+}
+
+
+void JeuSDL::affichageVente(){
+    Pion * p = j.getPion(j.getJoueurCourant());
+    dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+    string texte = "Vous n'avez plus suffisament de sous!";
+    dessineTexte(texte,125,120,12);
+    texte = "Séléctionner une de vos ville";
+    dessineTexte(texte,125,145,12);
+    texte = " pour la vendre :";
+    dessineTexte(texte,125,170,12);
+
+    int h = 195;
+    int l = 165;
+    for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
+    {
+        if(i%3==0){
+            l = 165;
+            h+=40;
+        }
+        texte = p->getPropriete(i)->getNom();
+        texte +=" ";
+        texte += to_string(p->getPropriete(i)->getPrixDeVente());
+        texte+="$";
+        string val ="c"+to_string(i); 
+        if(!j.dejaEnVente(i))
+        {
+            if (j.getChoix()==to_string(i)){
+                newButton(val,l,h,120,30,GREEN,texte);
+            }
+            else{
+                newButton(val,l,h,120,30,BLUE,texte);
+            }
+        }
+        else
+        {
+            newButton(" ",l,h,120,30,RED,texte);
+        }
+        l+=135;
+    }
+    newButton("+",165,565,120,30,BLUE,"Ajouter");
+    newButton("-",305,565,120,30,BLUE,"Retirer");
+    if(!j.getBool("confirmation")){
+        newButton("o",445,565,120,30,BLUE,"Confirmer");
+    }
+
+    texte = "Vous aurez :";
+    texte+=to_string((p->getCoin() + j.totalVente()));
+    texte +="$";
+    dessineTexte(texte,125,540,10);
+
+    if(j.getPrixAPayer() - (p->getCoin() + j.totalVente()) > 0)
+    {
+        texte = "Il manque ";
+        texte += to_string( j.getPrixAPayer() - (p->getCoin() + j.totalVente()));
+        texte+="$";
+        dessineTexte(texte,420,540,10);
+                  
+    }
+    else
+    {
+        texte = "Somme suffisante!";
+        dessineTexte(texte,420,540,10);
+    }
+    
+}
+
+
+void JeuSDL::affichagePrison(Pion *p){
+    string texte = "Bienvenue en Prison ";
+    if(p->getNom()==""){
+        texte+= "<anonyme>";
+    }
+    else{
+        texte+=p->getNom();
+    }
+    texte+=" !";
+    dessineTexte(texte,125,120,12);
+    if(j.getBool("avance")){
+        newButton("\n",300,560,120,30,BLUE,"Continuer");
+    }
+            
+    if(!j.getBool("desLance")){
+        texte = "Faire un double";
+        newButton("1",125,565,120,30,BLUE,texte);
+        texte = "Payer ";
+        texte+= to_string(j.getPrixAPayer());
+        texte+="$";
+        newButton("2",300,565,120,30,BLUE,texte);
+    }
+    if(j.getBool("desLance")){
+        affichageDees();
+        newButton("\n",300,560,120,30,BLUE,"Continuer");
+    }
+
+}
+
+
+void JeuSDL::affichageCarteChance(){
+    Carte.dessineTexture(renderer,150,210,400,240);
+    dessineTexte(j.getCarte()->getTitre(),150+(400-(j.getCarte()->getTitre().length()*10))/2,230,10,{255,0,0});
+                
+    int h =330;
+    string texte =j.getCarte()->getTexte();
+    istringstream iss(texte);
+    string mot; 
+    string tmp;
+    while ( getline( iss, mot, ' ' ) ) 
+    { 
+        if((tmp.length()*8)+(mot.length()*8)+8<312){
+            tmp+=" "+mot;
+        }
+        else{
+            dessineTexte(tmp,150+(400-(tmp.length()*8))/2,h,8,{255,0,0});
+            h+=15;
+            tmp = mot;
+        }                    
+    } 
+    dessineTexte(tmp,150+(400-(tmp.length()*8))/2,h,8,{255,0,0});
+}
+
 void JeuSDL::affichageInteraction(){
     Pion * p = j.getPion(j.getJoueurCourant());
     Case * c = j.board.getCase(p->getPos());
@@ -625,63 +949,34 @@ void JeuSDL::affichageInteraction(){
             break;
 
         case 'P':
-            texte = "Bienvenue en Prison ";
-            if(p->getNom()==""){
-                texte+= "<anonyme>";
-            }
-            else{
-                if(p->getNom()==""){
-                    texte+="<anonyme>";
-                }
-                else{
-                    texte+=p->getNom();
-                }
-            }
-            texte+=" !";
-            dessineTexte(texte,125,120,12);
-            if(j.getBool("avance")){
-                newButton("\n",300,560,120,30,BLUE,"Continuer");
-            }
-            
-            if(!j.getBool("desLance")){
-                texte = "Faire un double";
-                newButton("1",125,565,120,30,BLUE,texte);
-                //cout<<"pour vous libérer vous pouvez (Appuyez sur la touche correspondante) :"<<endl<<"1. tentez de faire un double"<<endl;
-            }
-            if(j.getBool("desLance")){
-                affichageDees();
-                newButton("\n",300,560,120,30,BLUE,"Continuer");
-            }
+            affichagePrison(p);
             break;
         case 'I':
             texte = "Il faut payer ses impots monsieur !"; 
-            dessineTexte(texte,125,560,12);
+            dessineTexte(texte,125,120,12);
+            texte = "Payer ";
+            texte+=to_string(j.getPrixAPayer());
+            texte+="$";
+            newButton("\n",300,565,120,30,BLUE,texte);
             break;
         case 'C':
             if(j.getCarte()==NULL){
                 string texte = "Piochez une carte chance !";
                 dessineTexte(texte,125,520,12);
+                newButton("\n",300,560,120,30,BLUE,"Piocher");
             }
             else{
-                // ecrire sur la carte cout<<"votre carte : "<<endl<<j.getCarte()->getTitre()<<endl<<j.getCarte()->getTexte()<<endl;
+                affichageCarteChance();
+                newButton("\n",300,565,120,30,BLUE,"Continuer");
             }
             break;
         case 'A':
-            texte = "vous pouvez organiser une campagne de PUB! Faire de la pub ?";
-            dessineTexte(texte,125,560,12);
-
-            if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
-            {
-                //cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
-            }
+            
+            affichageCampagnePub(p,c);
+           
             break;
         case 'O':
-            texte = "Journée porte ouverte! Vous pouvez aller où vous voulez. Acheter un ticket?";
-            dessineTexte(texte,125,560,12);
-            if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
-            {
-                //cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
-            }
+            affichagePorteOuverte(p,c);
             break;
         default:
             cout<<c->getType()<<endl;
@@ -724,21 +1019,27 @@ void JeuSDL::affichageInteraction(){
             texte += j.getPion(c->getOccupation())->getNom();
             texte += " !";
             dessineTexte(texte,125,475,12);
-            newButton("\n",125,560,120,30,BLUE,"Payer");
+            newButton("\n",125,560,120,30,BLUE,"   Payer   ");
         }
         if(j.getBool("attendreAmplete")&&j.getBool("avance")){//si le pion a avance et qu'il na plus d'action obligatoire, il doit faire ces amplète
             if(c->getOccupation() == j.getJoueurCourant()){
+                texte = "coût + :";
+                texte +=to_string(c->getPrixB());
+                texte+="$         coût - :";
+                texte +=to_string(c->getPrixM());
+                texte+="$";
+                dessineTexte(texte,125,195,12);
                 dessineTexte("+ pour investir dans le légal,",125,470,12);
                 dessineTexte("- pour investir dans l'illégal.",125,490,12);
-               texte ="/!\\ si vous avez déjà investit dans le légal,";
-               dessineTexte(texte,125,515,10);
-               texte = "investir dans l'illégal enlèvera vos ";
-               dessineTexte(texte,125,530,10);
-               texte ="investissement précédent et inverssement !";
-               dessineTexte(texte,125,545,10);
-               newButton("+",125,565,30,30,BLUE,"+");
-               newButton("-",175,565,30,30,BLUE,"-");
-               newButton("\n",300,565,120,30,BLUE,"Valider");
+                texte ="/!\\ si vous avez déjà investit dans le légal,";
+                dessineTexte(texte,125,515,10);
+                texte = "investir dans l'illégal enlèvera vos ";
+                dessineTexte(texte,125,530,10);
+                texte ="investissement précédent et inverssement !";
+                dessineTexte(texte,125,545,10);
+                newButton("+",125,565,30,30,BLUE,"+");
+                newButton("-",175,565,30,30,BLUE,"-");
+                newButton("\n",300,565,120,30,BLUE,"Continuer");
                 
             }
 
@@ -765,7 +1066,8 @@ void JeuSDL::affichageInteraction(){
 }
 
 
-void JeuSDL::affichageProrpiete(Pion * p,int h){
+
+void JeuSDL::affichageProrpiete(Pion * p,int h,bool jc){
     int hp = h;
     string texte;
     if(p->getNom()==""){
@@ -777,7 +1079,12 @@ void JeuSDL::affichageProrpiete(Pion * p,int h){
     texte+= " : ";
     texte+=to_string(p->getCoin());
     texte+="$";
-    dessineTexte(texte,740,h,11);
+    if(jc == 1){
+        dessineTexte(texte,740,h,11,{255,0,0});
+    }
+    else{
+         dessineTexte(texte,740,h,11);
+    }
     for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
         {   
             texte = p->getPropriete(i)->getNom();
@@ -787,7 +1094,36 @@ void JeuSDL::affichageProrpiete(Pion * p,int h){
             texte += to_string(p->getPropriete(i)->getLoyer());
             texte +="$ )";
             hp =h+20+20*i;
-            dessineTexte(texte,730,hp,10,{124,122,120});
+            switch(p->getPropriete(i)->getGroup()){
+                case 1:
+                    dessineTexte(texte,730,hp,10,{148,72,40});
+                    break;
+                case 2:
+                    dessineTexte(texte,730,hp,10,{ 255 , 43 , 149});
+                    break;
+                case 3:
+                    dessineTexte(texte,730,hp,10,{173 , 33 , 106});
+                    break;
+                case 4:
+                    dessineTexte(texte,730,hp,10,{ 245 , 143 , 0});
+                    break;
+                case 5:
+                    dessineTexte(texte,730,hp,10,{ 225, 0 , 15});
+                    break;
+                case 6:
+                    dessineTexte(texte,730,hp,10,{252 , 235 , 1});
+                    break;
+                case 7:
+                    dessineTexte(texte,730,hp,10,{31 , 164 , 74});
+                    break;
+                case 8:
+                    dessineTexte(texte,730,hp,10,{1 , 104 , 179});
+                    break;
+                case 42:
+                    dessineTexte(texte,730,hp,10,{124,122,120});
+                    break;
+            }
+            
 
         }
 
@@ -795,14 +1131,17 @@ void JeuSDL::affichageProrpiete(Pion * p,int h){
 
 
 void JeuSDL::affichageJeu(){
-    //TODO
     plateau.dessineTexture(renderer,0,0,DIMY,DIMY);
     int h= 30 ;
     for(unsigned int i=1;i<=4;i++){
         unsigned int pos = j.getPion(i)->getPos();
         int x,y;
         
-        affichageProrpiete(j.getPion(i),h);
+        bool jc;//joueur courant
+        jc = j.getPion(i)==j.getPion(j.getJoueurCourant());
+
+        affichageProrpiete(j.getPion(i),h,jc);
+
         h+=30+20*j.getPion(i)->getNbPropriete();
         
         if(pos>=0&&pos<8){
@@ -861,6 +1200,10 @@ void JeuSDL::affichageJeu(){
         
         
     }
+    else if(j.getBool("vend"))
+    {
+            affichageVente();
+    }
     else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")){
         string texte = "Fin du tour. ";
         dessineTexte(texte,125,560,12);
@@ -871,6 +1214,53 @@ void JeuSDL::affichageJeu(){
 
     }
         
+}
+
+
+void JeuSDL::affichageVictoire(){
+    bool v = false;
+    string texte = "FIN DE PARTIE !";
+    dessineTexte(texte,30,0,70,{255,0,0});
+    texte = "Victoire de ";
+    if (j.getPion(j.getVainqueur())->getNom()==""){
+        texte += "<anonyme>";
+    }
+    else{
+        texte +=j.getPion(j.getVainqueur())->getNom();
+    }
+    dessineTexte(texte,30,100,20,{255,0,0});
+    for(unsigned int i=1;i<=4;i++){
+        int sous = j.getPion(i)->getCoin();
+        if(sous == -1){
+            v = true;
+        }
+    }
+    
+        if (j.getPion(j.getVainqueur())->getNom()==""){
+            texte = "<anonyme>";
+        }
+        else{
+            texte =j.getPion(j.getVainqueur())->getNom();
+        }
+    if(v){
+        texte += " à gagner en provoquant la faillite des ses advaisaires.";
+        dessineTexte(texte,30,200,15);
+
+    }
+    else{
+        texte += " à gagner en le monopole des propriétés";
+        dessineTexte(texte,30,200,15);
+    }
+    texte = "Valeur du patrimoine actif :";
+    texte += to_string(j.getPion(j.getVainqueur())->patrimoineActif());
+    texte +="$";
+    dessineTexte(texte,30,250,15);
+    texte = "Valeur du compte en banque :";
+    texte += to_string(j.getPion(j.getVainqueur())->getCoin());
+    texte +="$";
+    dessineTexte(texte,30,300,15);
+    newButton("\n",400,565,200,50,BLUE,"    Retour au menu    ");
+
 }
 
 void JeuSDL::affichagePause(){
@@ -919,6 +1309,9 @@ void JeuSDL::affichage(){
 
     if(j.getNbTour()==0){
         affichageMenu();
+    }
+    else if(j.getVainqueur()!=0){
+        affichageVictoire();
     }
     else{
 
