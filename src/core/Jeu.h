@@ -64,6 +64,7 @@ class Jeu{
 		Hacking h;
 		Clicker c;
 		Escape es;
+		Lucky lu;
 		
 //-------------------------------------Méthodes------------------------------------------
 
@@ -316,7 +317,9 @@ class Jeu{
 		@brief Tire une carte chance 
 		@param none	
 		*/
-		void carteChance(const string & touche);
+		void actionChance(const string & touche);
+
+		void carteChance();
 
 		/**
 		@brief Permet d'augmenter le loyer d'une entreprise
@@ -377,6 +380,8 @@ class Jeu{
 		Clicker getc();
 
 		Escape getes();
+
+		Lucky getlu();
 
 		/**
 		@brief permet de reset le clicker

@@ -22,46 +22,45 @@ Evenement::Evenement(){
 bool Evenement::Declenchement(int karma){
 
 	srand (time(NULL));
-	//unsigned int randKarma;
+	unsigned int a;
 
 	if((rand()%100)<10){
-		int a = (rand()%3);
-		
+
 		//Accès uniquement au mini-jeu niveau 1 bon
-		if(karma >= 0 && karma < 25 )
+		if(karma >= 0 && karma < 50 )
 		{
 			a = 2;
 		}
 
 		//Accès uniquement au mini-jeu niveau 1 mauvais 
-		else if(karma < 0 && karma > -25)
+		else if(karma < 0 && karma > -50)
 		{
 			a = 0;
 		}
 
 		//Accès uniquement au mini-jeu niveau 1 mauvais et niveau 2 mauvais
-		else if(karma <= -25)
+		else if(karma <= -50)
 		{
 			a = rand()%2;
 		}
 
 		//Accès uniquement au mini-jeu niveau 1 bon et niveau 2 bon
-		else if(karma >= 25)
+		else if(karma >= 50)
 		{
 			a = (rand()%2)+2;
 		}
+
 		if(a ==0){n = "hack";}
 
-		else if(a == 1){n = "clicker";}
+		else if(a == 1){n = "escape";}
 
-		else if(a == 2){n = "escape";}
-		
+		else if(a == 2){n = "clicker";}
+
+		else if(a == 3){n = "lucky";}
 
 		tps = 0;
 		tempsD = clock();
-
 	}
-	//n="escape";
 	tps = 0;
 	tempsD = clock();
 	return n != "rien";
@@ -479,6 +478,48 @@ void Escape::deplacePolice(clock_t tempsD){
 	}
 }
 
+//-----------------------------------------LUCKY-------------------------------------------------------
+//Constructeur par défaut
+Lucky::Lucky(){
+	cartePiocher = false;
+}
 
+//Destructeur 
+Lucky::~Lucky(){
+
+}
+
+//Permet de récupèrer un pointeur sur la carteUn
+Carte * Lucky::getCarteUn(){
+	return &*carteUn;
+}
+
+//Permet de récupèrer un pointeur sur la carteDeux
+Carte * Lucky::getCarteDeux(){
+	return &*carteDeux;
+}
+
+//Permet de connaître la valeur du booléen cartePiocher
+bool Lucky::getCartePiocher(){
+	return cartePiocher;
+}
+
+//Permet de piocher deux cartes 
+void Lucky::pioche(){
+	carteUn = new Carte;
+	carteDeux = new Carte;
+	carteUn->randomCarte();
+	carteDeux->randomCarte();
+	cartePiocher = true;
+}
+
+//Reset Lucky
+void Lucky::reset(){
+	delete carteUn;
+	delete carteDeux;
+	carteUn = NULL;
+	carteDeux = NULL;
+	cartePiocher = false;
+}
 
 

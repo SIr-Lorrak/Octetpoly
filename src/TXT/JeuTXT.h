@@ -49,6 +49,8 @@ private:
 
 	void affichageEscape();
 
+	void affichageLucky();
+
 	/**
 	@brief permet l'affichage txt de l'évenement hacking
 	@param none

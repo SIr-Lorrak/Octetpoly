@@ -363,7 +363,7 @@ unsigned int Pion::plusCher() const
 
 void Pion::ajouterLettre(const string lettre)
 {
-    if(nom.length()<=20)
+    if(nom.length()<=14)
         nom+=lettre;
 }
 

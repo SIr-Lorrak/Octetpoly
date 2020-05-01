@@ -1170,25 +1170,16 @@ void Jeu::porteOuverte(const string & touche){
 	}
 }
 
-void Jeu::carteChance(const string & touche){
+void Jeu::carteChance(){
 	Pion * joueur = getPion(joueurCourant); 
-	int id_Case;
-	int gain;
-	bool casePlus3;
-	attendreAmplete = false; //le joueur ne fera pas d'amplete sur une carte chance.
-	if(chance == NULL){//si une la carte n'a pas encore été tirée.{
-		if(touche == "\n")//le joueur pioche une carte avec entrer 
-		{
-			chance = new Carte;
-			chance->randomCarte();
-		}
-	}
-	else{//si la carte est déjà tirée
+		int id_Case;
+		int gain;
+		bool casePlus3;
 
 		id_Case = chance->getid_case();
 		gain = chance->getgain();
 		casePlus3 = chance->getcasePlus3();
-		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
+		
 			if(gain != 0)
 			{
 				joueur->setCoin(joueur->getCoin() + gain);//le gain peut aussi être une perte.
@@ -1216,6 +1207,17 @@ void Jeu::carteChance(const string & touche){
 				joueur->setTourUn(true);
 				joueur->salaire();
 			}
+			else if(id_Case > 0)
+			{
+				if((int)joueur->getPos() > id_Case)
+				{
+					joueur->salaire();
+					joueur->setTourUn(true);
+				}
+				actionObligatoire = true;
+				attendreAmplete = true;
+				joueur->setPos(id_Case);
+			}
 			else if(casePlus3)
 			{
 				joueur->setPos(joueur->getPos() + 3);
@@ -1223,11 +1225,32 @@ void Jeu::carteChance(const string & touche){
 				{
 					joueur->setPos(joueur->getPos() - 32);
 				}
+				if(board.getCase(getPion(joueurCourant)->getPos())->getType() == 'E'	
+					|| board.getCase(getPion(joueurCourant)->getPos())->getType() == 'B')
+				{
+					actionObligatoire = true;
+					attendreAmplete = true;
+				}
 			}
-			
 			actionObligatoire = false; //si le joueur a pu payer il a fini ses action obligatoire	
-			delete chance;//puis on delete la carte chance
-			chance = NULL;//<-- très important
+			//delete chance;//puis on delete la carte chance
+			//chance = NULL;//<-- très important
+}
+
+void Jeu::actionChance(const string & touche){
+	attendreAmplete = false; //le joueur ne fera pas d'amplete sur une carte chance.
+	if(chance == NULL){//si une la carte n'a pas encore été tirée.{
+		if(touche == "\n")//le joueur pioche une carte avec entrer 
+		{
+			chance = new Carte;
+			chance->randomCarte();
+		}
+	}
+	else{//si la carte est déjà tirée
+		if(touche=="\n"){//le joueur appuie a nouveau sur entrer après qu'il est lu ça carte
+		carteChance();
+		delete chance;
+		chance = NULL;
 		}
 	}
 }
@@ -1271,7 +1294,7 @@ void Jeu::actionCase(const string & touche){
 			break;
 
 		case 'C':
-			carteChance(touche);
+			actionChance(touche);
 			break;
 
 		case 'A':
@@ -1355,6 +1378,49 @@ void Jeu::actionMiniJeu(const string touche){
 			es.avancerJoueur(touche);
 		}
 		
+	}
+	if(e.getn() == "lucky"){
+
+		if(!lu.getCartePiocher()){//si les cartes n'ont pas encore été tirées.
+
+			if(touche == "\n")//le joueur pioche deux cartes avec entrer 
+			{
+				lu.pioche();
+			}
+		}
+
+		else{//si la carte est déjà tirée
+
+			//1 pour saisir la première carte
+			if(touche == "1")
+			{
+				chance = lu.getCarteUn();
+				carteChance();
+				e.reset();
+				lu.reset();
+				chance = NULL;
+			}
+
+			//2 pour saisir la seconde carte
+			if(touche == "2")
+			{
+				chance = lu.getCarteDeux();	
+				carteChance();
+				e.reset();
+				lu.reset();
+				chance = NULL;
+			}
+
+			//3 pour ne choisir aucune des deux cartes
+			if(touche == "3")
+			{
+				e.reset();
+				lu.reset();
+				chance = NULL;
+				tourSuivant();
+			}
+
+		}
 	}
 }
 
@@ -1599,6 +1665,10 @@ Clicker Jeu::getc(){
 
 Escape Jeu::getes(){
 	return es;
+}
+
+Lucky Jeu::getlu(){
+	return lu;
 }
 
 //seteur permettant de mettre à jour clicker c

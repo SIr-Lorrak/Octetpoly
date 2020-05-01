@@ -261,6 +261,27 @@ void JeuTXT::affichageEscape(){
 
 }
 
+
+void JeuTXT::affichageLucky(){
+	cout<<"<[-($)-]¯-_-¯-LUCKY-_-¯-_-[-($)-]>"<<endl<<endl;
+	if(!j.getlu().getCartePiocher()){
+		cout << "Quelle chance vous venez d'apercevoir deux cartes chances sur le sol" << endl;
+		cout << "retournez-les" << endl;
+	}
+
+	else{
+		cout << "Voici les deux cartes :" << endl;
+		cout << endl <<   "Carte 1 " << endl << j.getlu().getCarteUn()->getTitre() << endl << j.getlu().getCarteUn()->getTexte() << endl;
+		cout << endl <<   "Carte 2 " << endl << j.getlu().getCarteDeux()->getTitre() << endl << j.getlu().getCarteDeux()->getTexte() << endl;
+
+		cout << endl << "Quelle carte voulez-vous garder ?" << endl;
+		cout << "1/Carte 1" << endl;
+		cout << "2/Carte 2" << endl;
+		cout << "3/Aucune des deux" << endl;
+	}
+
+}
+
 void affichePion(const Pion & p){
 	if(p.getNom()==""){
 		cout<<"<anonyme>";
@@ -620,6 +641,9 @@ void JeuTXT::affichage(){
 	}
 	else if(j.gete().getn()=="escape"){
 		affichageEscape();
+	}
+	else if(j.gete().getn()=="lucky"){
+		affichageLucky();
 	}
 	else if(j.getBool("pause")){
 		affichagePause();

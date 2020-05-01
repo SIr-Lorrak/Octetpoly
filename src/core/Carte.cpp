@@ -33,7 +33,6 @@ string Carte::getTexte() const{
 //pioche une carte au hasard
 void Carte::randomCarte(){
 
-	srand (time(NULL));
 	id_carte = rand()%25;
 	switch(id_carte){
 		case 0:
@@ -55,12 +54,12 @@ void Carte::randomCarte(){
 			break;
 
 		case 3:
-			id_case = 0;
+			id_case = 19;
 			gain = 0;
 			casePlus3 = false;
 			break;
 
-		case 4:
+		case 4://Carte spéciale
 			id_case = -1;
 			gain = 0;
 			casePlus3 = false;
@@ -78,7 +77,7 @@ void Carte::randomCarte(){
 			casePlus3 = false;
 			break;
 
-		case 7:
+		case 7://Carte spéciale
 			id_case = -1;
 			gain = 100;
 			casePlus3 = false;
@@ -98,19 +97,19 @@ void Carte::randomCarte(){
 //--------------------------------------------
 		case 10:
 			id_case = -1;
-			gain = 150;
+			gain = -150;
 			casePlus3 = false;
 			break;
 
 		case 11:
 			id_case = -1;
-			gain = 100;
+			gain = -100;
 			casePlus3 = false;
 			break;
 
 		case 12:
 			id_case = -1;
-			gain = 400;
+			gain = -400;
 			casePlus3 = false;
 			break;
 
@@ -151,12 +150,12 @@ void Carte::randomCarte(){
 			break;
 
 		case 19:
-			id_case = 0;
+			id_case = 9;
 			gain = 0;
 			casePlus3 = false;
 			break;
 
-		case 20:
+		case 20://Carte spéciale
 			id_case = -1;
 			gain = 0;
 			casePlus3 = false;
@@ -169,18 +168,18 @@ void Carte::randomCarte(){
 			break;
 
 		case 22:
-			id_case = 0;
+			id_case = 31;
 			gain = 0;
 			casePlus3 = false;
 			break;
 
-		case 23:
+		case 23://Carte spéciale
 			id_case = -1;
 			gain = 0;
 			casePlus3 = false;
 			break;
 
-		case 24:
+		case 24://Carte spéciale
 			id_case = -1;
 			gain = 0;
 			casePlus3 = false;

@@ -618,7 +618,7 @@ void JeuSDL::affichageMenu(){
             if(nom.length()>0){
                 dessineTexte(nom.c_str(),40+(j.getNbJoueur()-1)*250,230,14);
             }
-            afficheCursor(renderer,50+(j.getNbJoueur()-1)*250+nom.length()*16,230,2,20);
+            afficheCursor(renderer,40+(j.getNbJoueur()-1)*250+nom.length()*14,230,2,20);
             newButton("\n",120+(j.getNbJoueur()-1)*250+150,230,70,70,GREEN,"V",NULL,10);
         }
         else if(j.getBool("confirmation")){
