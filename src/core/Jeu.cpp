@@ -578,20 +578,16 @@ void Jeu::modeVente(const string touche){
 		}
 	}
 
-	else 
+	if(confirmation)
 	{
 		//Deuxième confirmation
-		if(touche=="o"|| touche=="O")
-		{	
+			
 			remiseZeroEtVente();
 			prixAPayer = 0;
 			confirmation = false;
 			vend = false;
-		}
-		else if(touche=="n"||touche=="N")
-		{
-			confirmation=false;//si ça n'est pas confirmer on ne commence pas la partie et on reprend la selection des joueurs
-		}	
+			confirmation=false;
+			
 	}
 }
 

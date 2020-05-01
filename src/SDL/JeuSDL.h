@@ -106,6 +106,8 @@ private:
 	Image pub8;
 	Image pub9;
 	Image pub10;
+	Image pub11;
+	Image pub12;
 
 
 	bool act;
@@ -216,6 +218,10 @@ private:
 	@param un pointeur vers pion, un pointeur vers case
 	*/
 	void affichagePorteOuverte(Pion *p,Case *c);
+
+	void affichageVente();
+
+	void affichageVictoire();
 
 
 public:

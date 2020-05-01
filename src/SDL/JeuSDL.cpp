@@ -149,6 +149,8 @@ JeuSDL::JeuSDL(){
     pub8.loadFichier("data/images/pub8.png",renderer);
     pub9.loadFichier("data/images/pub9.png",renderer);
     pub10.loadFichier("data/images/pub10.png",renderer);
+    pub11.loadFichier("data/images/pub11.png",renderer);
+    pub12.loadFichier("data/images/pub12.png",renderer);
 
 
     Police = TTF_OpenFont("data/DejaVuSansCondensed.ttf",50);
@@ -325,6 +327,14 @@ void JeuSDL::affichageClicker(){
                 case 10:
                 pub10.dessineTexture(renderer,200,230,300,300);
                 break;
+
+                case 11:
+                pub11.dessineTexture(renderer,200,230,300,300);
+                break;
+
+                case 12:
+                pub12.dessineTexture(renderer,200,230,300,300);
+                break;
             }
 
         newButton(" ",400,550,120,30,BLUE,"pubber");
@@ -332,7 +342,7 @@ void JeuSDL::affichageClicker(){
             int temp = a;
             srand (time(NULL));
             while(a == temp){
-                a = (rand()%10)+1;
+                a = (rand()%12)+1;
             }
             clique = false;
         }
@@ -748,6 +758,73 @@ void JeuSDL::affichagePorteOuverte(Pion *p,Case *c){
     }
 }
 
+
+void JeuSDL::affichageVente(){
+    Pion * p = j.getPion(j.getJoueurCourant());
+    dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
+    string texte = "Vous n'avez plus suffisament de sous!";
+    dessineTexte(texte,125,120,12);
+    texte = "Séléctionner une de vos ville";
+    dessineTexte(texte,125,145,12);
+    texte = " pour la vendre :";
+    dessineTexte(texte,125,170,12);
+
+    int h = 195;
+    int l = 165;
+    for (unsigned int i = 0; i < p->getNbPropriete() ; ++i)
+    {
+        if(i%3==0){
+            l = 165;
+            h+=40;
+        }
+        texte = p->getPropriete(i)->getNom();
+        texte +=" ";
+        texte += to_string(p->getPropriete(i)->getPrixDeVente());
+        texte+="$";
+        string val ="c"+to_string(i); 
+        if(!j.dejaEnVente(i))
+        {
+            if (j.getChoix()==to_string(i)){
+                newButton(val,l,h,120,30,GREEN,texte);
+            }
+            else{
+                newButton(val,l,h,120,30,BLUE,texte);
+            }
+        }
+        else
+        {
+            newButton(" ",l,h,120,30,RED,texte);
+        }
+        l+=135;
+    }
+    newButton("+",165,565,120,30,BLUE,"Ajouter");
+    newButton("-",305,565,120,30,BLUE,"Retirer");
+    if(!j.getBool("confirmation")){
+        newButton("o",445,565,120,30,BLUE,"Confirmer");
+    }
+
+    texte = "Vous aurez :";
+    texte+=to_string((p->getCoin() + j.totalVente()));
+    texte +="$";
+    dessineTexte(texte,125,540,10);
+
+    if(j.getPrixAPayer() - (p->getCoin() + j.totalVente()) > 0)
+    {
+        texte = "Il manque ";
+        texte += to_string( j.getPrixAPayer() - (p->getCoin() + j.totalVente()));
+        texte+="$";
+        dessineTexte(texte,420,540,10);
+                  
+    }
+    else
+    {
+        texte = "Somme suffisante!";
+        dessineTexte(texte,420,540,10);
+    }
+    
+}
+
+
 void JeuSDL::affichagePrison(Pion *p){
     string texte = "Bienvenue en Prison ";
     if(p->getNom()==""){
@@ -1084,6 +1161,10 @@ void JeuSDL::affichageJeu(){
         
         
     }
+    else if(j.getBool("vend"))
+    {
+            affichageVente();
+    }
     else if(!j.getBool("attendreAmplete")&&!j.getBool("actionObligatoire")&&j.gete().getn()=="rien"){
         string texte = "Fin du tour. ";
         dessineTexte(texte,125,560,12);
@@ -1091,10 +1172,61 @@ void JeuSDL::affichageJeu(){
     }
     else {
         affichageInteraction();
+
     }
         
 }
 
+
+void JeuSDL::affichageVictoire(){
+    bool v = false;
+    string texte = "FIN DE PARTIE !";
+    dessineTexte(texte,30,0,70,{255,0,0});
+    texte = "Victoire de ";
+    if (j.getPion(j.getVainqueur())->getNom()==""){
+        texte += "<anonyme>";
+    }
+    else{
+        texte +=j.getPion(j.getVainqueur())->getNom();
+    }
+    dessineTexte(texte,30,100,20,{255,0,0});
+    for(unsigned int i=1;i<=4;i++){
+        int sous = j.getPion(i)->getCoin();
+        if(sous == -1){
+            v = true;
+        }
+    }
+    
+        if (j.getPion(j.getVainqueur())->getNom()==""){
+            texte = "<anonyme>";
+        }
+        else{
+            texte =j.getPion(j.getVainqueur())->getNom();
+        }
+    if(v){
+        texte += " à gagner en provoquant la faillite des ses advaisaires.";
+        dessineTexte(texte,30,200,15);
+
+    }
+    else{
+        texte += " à gagner en le monopole des propriétés";
+        dessineTexte(texte,30,200,15);
+    }
+    texte = "Valeur du patrimoine actif :";
+    texte += to_string(j.getPion(j.getVainqueur())->patrimoineActif());
+    texte +="$";
+    dessineTexte(texte,30,250,15);
+    texte = "Valeur du compte en banque :";
+    texte += to_string(j.getPion(j.getVainqueur())->getCoin());
+    texte +="$";
+    dessineTexte(texte,30,300,15);
+    newButton("\n",400,565,200,50,BLUE,"    Retour au menu    ");
+
+
+
+
+
+}
 
 void JeuSDL::affichage(){
 
@@ -1108,6 +1240,9 @@ void JeuSDL::affichage(){
 
     if(j.getNbTour()==0){
         affichageMenu();
+    }
+    else if(j.getVainqueur()!=0){
+        affichageVictoire();
     }
     else{
 

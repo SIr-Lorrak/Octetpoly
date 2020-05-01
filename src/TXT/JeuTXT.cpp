@@ -594,9 +594,6 @@ void JeuTXT::affichageVente(){
 		cout<<"Confirmer (o/n) ";Endl();	
 	}
 
-	else{
-		cout<<"vous etes sur ? (o/n) ";Endl();
-	}
 }
 
 void JeuTXT::affichageVictoire(){
