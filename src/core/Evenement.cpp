@@ -24,7 +24,7 @@ bool Evenement::Declenchement(int karma){
 	srand (time(NULL));
 	unsigned int a;
 
-	if((rand()%100)<10){
+	if((rand()%100)<25){
 
 		//Accès uniquement au mini-jeu niveau 1 bon
 		if(karma >= 0 && karma < 50 )
@@ -61,6 +61,7 @@ bool Evenement::Declenchement(int karma){
 		tps = 0;
 		tempsD = clock();
 	}
+	n="clicker";
 	tps = 0;
 	tempsD = clock();
 	return n != "rien";

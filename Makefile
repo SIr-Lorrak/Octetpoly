@@ -51,14 +51,26 @@ mkdir:
 	$(test) $(obj) $(pipe) mkdir $(obj) ; $(test) $(obj)/core $(pipe) mkdir $(obj)/core ; $(test) $(obj)/TXT $(pipe) mkdir $(obj)/TXT ;$(test) $(obj)/SDL $(pipe) mkdir $(obj)/SDL
 	$(test) bin $(pipe) mkdir bin
 
-$(bin)/$(exe_SDL): $(src_SDL)
+$(bin)/$(exe_SDL): $(src_SDL) $(obj)/GetSet.o $(obj)/Touche.o $(obj)/Sauvegarde.o $(obj)/Action.o
 	$(CC) $+ -o $@ $(LIBS_SDL)
 
-$(bin)/$(exe_TXT): $(src_TXT)
+$(bin)/$(exe_TXT): $(src_TXT) $(obj)/GetSet.o $(obj)/Touche.o $(obj)/Sauvegarde.o $(obj)/Action.o
 	$(CC) $+ -o $@
 
-$(bin)/$(exe_Test): $(src_Test)
+$(bin)/$(exe_Test): $(src_Test) $(obj)/GetSet.o $(obj)/Touche.o $(obj)/Sauvegarde.o $(obj)/Action.o
 	$(CC) $+ -o $@
+
+$(obj)/GetSet.o: src/core/GetSet.cpp src/core/Jeu.h
+	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
+
+$(obj)/Touche.o: src/core/Touche.cpp src/core/Jeu.h
+	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
+
+$(obj)/Sauvegarde.o: src/core/Sauvegarde.cpp src/core/Jeu.h
+	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
+
+$(obj)/Action.o: src/core/Action.cpp src/core/Jeu.h
+	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@
 
 $(obj)/%.o: src/%.cpp
 	$(CC) -c $(debug) $(INCLUDE_DIR) $(INCLUDE_DIR_SDL) $< -o $@

@@ -2,8 +2,7 @@
 #define OCTET_JEU_H
 
 #include <iostream>
-#include <fstream>
-#include <string.h>
+#include <string>
 
 #include "Plateau.h"
 #include "Carte.h"
@@ -14,6 +13,7 @@
 using namespace std;
 
 bool fichierExiste(const string & file);
+bool estPasDans(const unsigned int n, const unsigned int tab[],const unsigned int taille = 4);
 
 /**
 brief permet le fonctionnement du jeu peut importe le type d'affichage

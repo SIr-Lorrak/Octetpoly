@@ -7,7 +7,9 @@ using namespace std;
 
 #include "Pion.h"
 #include "Plateau.h"
-
+/**
+@brief si il n'y a pas quatre joueur des ordis vont devoir remplacer les joueurs qui manque
+*/
 class Ordi : public Pion{
 	private : 
 		int risque; //en pourcentage, ça correspond au risque que vas prendre l'Ordi

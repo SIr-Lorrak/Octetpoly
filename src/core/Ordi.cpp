@@ -31,7 +31,7 @@ bool Ordi::AIacheteBanque(const Case * banque) const
 bool Ordi::AIacheteEntreprise(const Case * entreprise) const
 {
 	assert(entreprise->getOccupation() != getRang());
-	return ((getCoin()>(1.1+(0.5-risque/200.0))*entreprise->getPrix())&&getNbPropriete()>=4)||((getCoin()>entreprise->getPrix())&&getNbPropriete()<4);
+	return ((getCoin()>(1.1+(0.5-risque/200.0))*entreprise->getPrix())&&getNbPropriete()>=4)||((getCoin()>(int)entreprise->getPrix())&&getNbPropriete()<4);
 }
 
 
@@ -54,18 +54,18 @@ int Ordi::AIinvesti(const Case * entreprise) const
 	}
 	if(entreprise->getInvestissement() == 0){
 		if(getKarma()>risque-50){
-			if(entreprise->getPrixM()<getCoin()) return -1;
+			if((int)entreprise->getPrixM()<getCoin()) return -1;
 		}
 		else{
-			if(entreprise->getPrixB()<getCoin()) return 1;
+			if((int)entreprise->getPrixB()<getCoin()) return 1;
 		}
 	}
 	else if(entreprise->getInvestissement()*entreprise->getInvestissement()<=limite){
 		if(entreprise->getInvestissement()<0){
-			if(entreprise->getPrixM()<getCoin()) return -1;
+			if((int)entreprise->getPrixM()<getCoin()) return -1;
 		}
 		else{
-			if(entreprise->getPrixB()<getCoin()) return 1;
+			if((int)entreprise->getPrixB()<getCoin()) return 1;
 		}
 	}
 	return 0;

@@ -16,7 +16,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin = 250;//INITCOIN; 
+	bitcoin =INITCOIN; 
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
@@ -46,7 +46,7 @@ unsigned int Pion::getRang() const{
  return rang;
 }
 
-float Pion::getCoin() const{
+int Pion::getCoin() const{
  return bitcoin;
 }
 
@@ -97,7 +97,7 @@ void Pion::setNom(const string & n){
 	nom = n;
 }
 
-void Pion::setCoin(const float argent){
+void Pion::setCoin(const int argent){
 	bitcoin = argent;
 }
 
@@ -223,8 +223,7 @@ void Pion::avancer()
 {
 	if(prisonnier == false)
 	{
-		//pos +=d.D1 + d.D2;
-		pos+=1;
+		pos +=d.D1 + d.D2;
 		//cout << "Le joueur a fait : " << d.D1 << " + " << d.D2 << endl << "Il avance donc de " << d.D1 + d.D2 << " cases !" << endl;
 
 		if(pos >= MAXCASEP)
@@ -254,7 +253,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin >= c->getPrix());
+	assert(bitcoin >= (int)c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;

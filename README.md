@@ -16,13 +16,14 @@ Les évennements/mini jeu sont au nombre de quatre :
 
 
 
-Première démo (version 0.0.1) :
+Version démo rendu final (version 1.0.0) :
 
-Dans la première démo d'Octetpoly, le nom de l'executable du jeu (en affichage txt seulement) est Octetpoly_TXT, il se trouve dans le répertoire bin/
-make fera 3 executables mais seulement Octetpoly_TXT est joueable pour le moment.
+Dans cette version toutes les fonctionnalités proposées ont été réalisées !
+cependant ils n'est pas impossible que nous reprenions le projet a l'avenir pour ajouter un mode réseau, ajouter des animations lors de l'avancement des pions, etc.
 
-Dans cette version vous pouvez faire une partie de 0 a 4 joueurs réels. Si vous ne jouez pas à quatre, les autres joueurs seront remplacés par des bots (Ordi ou IA).
-Les bots ne peuvent qu'avancer et ne peuvent, pour l'instant, pas acheter ni investir.
-Le jeu ne détecte pas encore les joueurs en faillite donc vous pouvez continuer à jouer alors que votre argent est négatif (=> facilement règlable).
+pour générer une documentation du code placer vous à la racine du projet (où se trouve ce README) et lancer la commande "doxygen doc/doxyfile" 
+puis lancer la commande "firefox doc/html/index.html" pour voir la documentation du code.
 
-Dans cette version il y a un mini jeu sur les quatre, le Hacking.
+compile sous linux, (peut-être sous windows)
+
+les executable se trouve dans bin et on pour nom Octetpoly_TXT pour la version txt et Octetpoly_SDL pour la version SDL.

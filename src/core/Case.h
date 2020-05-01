@@ -6,6 +6,9 @@
 
 using namespace std;
 
+/**
+@brief les case du plateau (case départ, entreprise, banque, etc.)
+*/
 class Case{
 private:
 

@@ -15,14 +15,30 @@ const int INITCOIN = 500; ///Argent initial
 const int MAXCARTE = 20;  ///Max cartes du pion
 
 
-const string noms[20] = {"Tom Pousse","Haaamid","Pedro","Sabrina","SaBine",
-						 "Jessica","Nathan","Aspifion","MIEFLE","M. Pronost",
-						 "Granolax","M. Pujo","Corrine","Alexandra","Jus d'huitre",
-						 "GuyZeBoomer","M. Pélouze","BITENTRONC","Patoche","Nabil"};
+const string noms[20] = {"Tom Pousse",//0
+						 "Haaamid",
+						 "Pedro",
+						 "Sabrina",
+						 "SaBine",
+						 "Jessica",//5
+						 "Nathan",
+						 "Aspifion",
+						 "MIEFLE",
+						 "M. Pronost",
+						 "Granolax",//10
+						 "M. Pujo",
+						 "Corrine",
+						 "Alexandra",
+						 "Jus d'huitre",
+						 "GuyZeBoomer",//15
+						 "M. Pélouze",
+						 "BITENTRONC",
+						 "Patoche",
+						 "Nabil"};
 
 
 /**
-@brief Classe Pion
+@brief les doubles dés lancé par les pions
 **/
 struct Des 								///Les 2 Des du pion
 	{	
@@ -30,6 +46,9 @@ struct Des 								///Les 2 Des du pion
 		unsigned int D2;
 	};
 
+/**
+@brief représente les pions qui se déplacent sur le terrain
+*/
 class Pion{
 	
 	private :
@@ -37,7 +56,7 @@ class Pion{
 		string nom;						///Nom du pion
 		int karma;						///Karma du pion
 		unsigned int rang;				///Rang du pion
-		float bitcoin;					///Argent du pion
+		int bitcoin;					///Argent du pion
 		unsigned int nbpropriete;		///Nombre de propriétés que possède le pion
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
@@ -88,7 +107,7 @@ class Pion{
 	@brief Accesseur de l'argent du pion
 	@param none
 	**/
-	float getCoin() const;
+	int getCoin() const;
 
 	/**
 	@brief Accesseur du nombre de propriétés détenues par le joueur
@@ -163,7 +182,7 @@ class Pion{
 	@brief Mutateur de l'argent (bitcoin) du pion
 	@param argent : float
 	**/
-	void setCoin(const float argent);
+	void setCoin(const int argent);
 
 	void setNom(const string & n);
 

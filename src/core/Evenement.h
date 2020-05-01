@@ -105,7 +105,7 @@ class Evenement{
 
 
 /**
-@brief classe qui gère l'évenement haching
+@brief classe qui gère l'évenement haching, un Mini-Jeu dans lequel il faut taper rapidement du texte
 */
 class Hacking{
 
@@ -192,7 +192,7 @@ class Hacking{
 };
 
 /**
-brief classe qui gère l'évenement clicker
+brief classe qui gère l'évenement clicker, Mini-jeu où il faut clicker plus vite que ton ombre
 */
 class Clicker {
 
@@ -250,7 +250,9 @@ class Clicker {
 
 };
 
-
+/**
+@brief gère l'evenement "escape", c'est un Mini-Jeu ou tu dois fuire la police pour ne pas te retrouver en prison
+*/
 class Escape {
 
 	private :
@@ -278,7 +280,9 @@ class Escape {
 };
 
 
-
+/**
+@brief gère l'évenement lucky, tu pioche deux cartes chances et tu choisis laquel tu veux.
+*/
 class Lucky {
 	
 	private : 

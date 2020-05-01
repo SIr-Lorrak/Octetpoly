@@ -279,7 +279,12 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
         im_contenue.dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
     }
     else if(c2!=NULL){
-        c2->dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
+        if(clicked){
+            c2->dessineTexture(renderer,x+margin+(w*0.05),y+margin+(h*0.05),w-margin*2-(w*0.05),h-margin*2-(h*0.05));
+        }
+        else{
+            c2->dessineTexture(renderer,x+margin,y+margin,w-margin*2,h-margin*2);
+        }
     }
 }
 
@@ -709,7 +714,7 @@ void JeuSDL::affichageDees(){
 
 void JeuSDL::affichageCampagnePub(Pion *p,Case *c){
     string texte;
-    if (p->getNbPropriete() > 0 && p->getCoin() >= j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+    if (p->getNbPropriete() > 0 && p->getCoin() >= (int)j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
     {
         texte = "Vous pouvez organiser une campagne de"; 
         dessineTexte(texte,125,120,12);
@@ -756,7 +761,7 @@ void JeuSDL::affichageCampagnePub(Pion *p,Case *c){
 //permet d'afficher la porte ouverte
 void JeuSDL::affichagePorteOuverte(Pion *p,Case *c){
     string texte;
-    if (j.board.nbCaseFree() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
+    if (j.board.nbCaseFree() > 0 && p->getCoin() > (int)j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix())
     {
          texte = "Journée porte ouverte! Vous pouvez";
         dessineTexte(texte,125,120,12);
@@ -1043,7 +1048,7 @@ void JeuSDL::affichageInteraction(){
                 
             }
 
-            else if(p->getCoin()>=c->getPrix()){
+            else if(p->getCoin()>=(int)c->getPrix()){
                 if(c->getOccupation()==0){
                     newButton("o",125,560,120,30,BLUE,"Acheter");  
                     newButton("\n",300,560,120,30,BLUE,"Ne pas acheter"); 
@@ -1389,8 +1394,6 @@ bool JeuSDL::update(SDL_Event & events){
                 case SDL_MOUSEBUTTONUP:
                     if(events.button.button==SDL_BUTTON_LEFT){
                         //lancer l'action donner par un bouton lors du relachement de la souris
-                        cout<<m.x<<"-"<<m.y<<endl;
-                        cout<<action<<endl;
                         if(!j.getBool("tourOrdi")||j.getBool("pause")){
                             j.action(action);
                         }

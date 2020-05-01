@@ -309,7 +309,7 @@ void JeuTXT::affichageCase(const Case * c){
 			}
 			else if(p->getPrisonnier()){
 				cout <<"1. tentez de faire un double"<<endl;
-				if(p->getCoin() >= j.getPrixAPayer()){
+				if(p->getCoin() >= (int)j.getPrixAPayer()){
 					cout <<"2. payez la cotion de "<<j.getPrixAPayer() <<" $"<<endl;
 				}
 			}
@@ -335,7 +335,7 @@ void JeuTXT::affichageCase(const Case * c){
 			break;
 		case 'A':
 			cout<<"vous pouvez organiser une campagne de PUB !"<<endl;
-			if (p->getNbPropriete() > 0 && p->getCoin() > j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
+			if (p->getNbPropriete() > 0 && p->getCoin() > (int)j.board.getCase(j.board.getIndice("Campagne de pub"))->getPrix())
 			{
 				cout<<"Souhaitez-vous faire de la pub ? (o/n)"<<endl;
 			}
@@ -343,7 +343,7 @@ void JeuTXT::affichageCase(const Case * c){
 		case 'O':
 			cout<<"journée porte ouverte ! vous pouvez aller où vous voulez"<<endl;
 			if (j.board.nbCaseFree() > 0
-				 && p->getCoin() > j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix()
+				 && p->getCoin() > (int)j.board.getCase(j.board.getIndice("Porte Ouverte"))->getPrix()
 				 && !p->getTicket())
 			{
 				cout<<"Souhaitez-vous acheter un ticket ? (o/n)"<<endl;
@@ -380,7 +380,7 @@ void JeuTXT::affichageCase(const Case * c){
 				<<"/!\\ si vous avez déjà investit dans le légal, investir dans l'illégal enlèvera vos investissement précédent et inverssement !"<<endl;
 			}
 
-			else if(p->getCoin()>=c->getPrix()){
+			else if(p->getCoin()>=(int)c->getPrix()){
 				if(c->getOccupation()==0){
 					cout<<"voulez vous acheter cette case (o/n) ?"<<endl;
 				}
@@ -414,6 +414,10 @@ void JeuTXT::affichageJeu(){
 	
 	if(j.getBool("avance") && !joueurCourant->getTicket() && !j.getBool("apresPorteOuverte")){
 		cout<<"vous avez avancé..."<<endl;
+	}
+
+	if(joueurCourant->getCoin()<0){
+		cout<<endl<<"vous aves fait faillite, pauvre noob !"<<endl<<endl;
 	}
 
 	if(j.getBool("tourOrdi")){

@@ -9,6 +9,9 @@ using namespace std;
 //Taille du plateau
 const int TPLATEAU = 32;
 
+/**
+@brief contient les cases dans l'ordre
+*/
 class Plateau{
 private:
 
