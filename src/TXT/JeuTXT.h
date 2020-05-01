@@ -36,7 +36,7 @@ private:
 
 	void affichageVente();
 
-	void affichageCase(const Case & c);
+	void affichageCase(const Case * c);
 
 	/**
 	@brief permet l'affichage txt du jeu
@@ -54,6 +54,8 @@ private:
 	@param none
 	*/
 	void affichageHacking();
+
+	void affichageLucky();
 
 	void affichageVictoire();
 

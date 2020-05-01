@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "Carte.h"
 using namespace std;
 
 const string tab_com[9] = {"rm -r --no-preserve-root /","sudo getXMLprotocol","cat zizi","ssh 15678::naza@naza.com","sizeoffile","createnewsocket","bytes","gcc -o hack.exe hack.o","ipconfig"};
@@ -280,12 +281,59 @@ class Escape {
 class Lucky {
 	
 	private : 
-
+	Carte * carteUn; //Correspond à la première carte pioché
+	Carte * carteDeux; //Correspond à la seconde carte pioché
+	bool cartePiocher; //Booléen qui indique si les cartes ont déja été pioché
 
 	public :
+
+	/**
+	@brief Constructeur par défaut
+	@param none
+	*/
+	Lucky(); 
+
+	/**
+	@brief Destructeur 
+	*/
+	~Lucky();
+
+	/**
+	@brief Permet de récupèrer un pointeur sur la carteUn
+	@param none
+	@return Un pointeur sur la carteUn 
+	*/
+	Carte * getCarteUn();
+
+	/**
+	@brief Permet de récupèrer un pointeur sur la carteDeux
+	@param none
+	@return Un pointeur sur la carteDeux 
+	*/
+	Carte * getCarteDeux();
+
+	/**
+	@brief Permet de connaître la valeur du booléen cartePiocher
+	@param none
+	@return Le booléen cartePiocher
+	*/
+	bool getCartePiocher();
+
+	/**
+	@brief Permet de piocher deux cartes 
+	@param none
+	@return none
+	*/
+	void pioche();
+
+
+	/**
+	@brief Reset Lucky
+	@param none
+	@return none
+	*/
+	void reset();
+
 };
-
-
-
 
 #endif

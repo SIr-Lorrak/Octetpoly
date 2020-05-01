@@ -189,16 +189,14 @@ void Pion::avancer()
 
 		if(pos >= MAXCASEP)
 		{
-			pos = pos%MAXCASEP;
 			salaire();
-			tourUn = true;
 		}
-
+		pos = pos%MAXCASEP;
 		if(pos == 8)
 		{
 			prisonnier = true;
 		}
-	}	
+	}
 }
 
 
@@ -216,7 +214,7 @@ void Pion::salaire()
 
 void Pion::achete(Case * c)
 {
-	assert(bitcoin >= c->getPrix());
+	assert((unsigned int)bitcoin >= c->getPrix());
 
 	bitcoin -= c->getPrix();
 	propriete[nbpropriete] = c;
@@ -338,30 +336,30 @@ void Pion::effacerLettre()
 
 void Pion::investit(int i,Case * c){
 
-	assert(i != 0);
+    assert(i != 0);
 
-	if(i==-1){
-		bitcoin -= c->getPrixM();
-		karma = karma - c->getKarmaCase();
+    if(i==-1){
+        bitcoin -= c->getPrixM();
+        karma = karma - c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma < -100)
-		{
-			karma = -100;
-		}
-	}
-	else{
-		bitcoin -= c->getPrixB();
-		karma = karma + c->getKarmaCase();
+        /// Le karma doit être entre -100 et 100
+        if(karma < -100)
+        {
+            karma = -100;
+        }
+    }
+    else{
+        bitcoin -= c->getPrixB();
+        karma = karma + c->getKarmaCase();
 
-		/// Le karma doit être entre -100 et 100
-		if(karma > 100)
-		{
-			karma = 100;
-		}
-	}
+        /// Le karma doit être entre -100 et 100
+        if(karma > 100)
+        {
+            karma = 100;
+        }
+    }
 
-	c->investir(i);
+    c->investir(i);
 }
 
 void Pion::EstEnFaillite()

@@ -37,7 +37,7 @@ class Pion{
 		string nom;						///Nom du pion
 		int karma;						///Karma du pion
 		unsigned int rang;				///Rang du pion
-		float bitcoin;					///Argent du pion
+		int bitcoin;					///Argent du pion
 		unsigned int nbpropriete;		///Nombre de propriétés que possède le pion
 		unsigned int pos;				///Position du pion
 		char car;						///Caractère du pion
@@ -46,8 +46,8 @@ class Pion{
 		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
-		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
-		bool tourUn;
+		bool ticket;					///Ticket du joueur (utiliser pour les portes ouvertes)
+		bool tourUn;					///Booleen qui indique si le joueur a déja fait un premier tour de plateau
 
 	public :
 
