@@ -22,7 +22,7 @@ class Carte {
 													//-TITRE
 										 {"Allez récupérer votre paye !",
 										  "Vous êtes vieux ?",
-										  "Violence gratuite !",
+										  "Quelqu'un vous a poussé",
 										  "Rendez-vous jusqu’à l’entreprise Sanofi",
 								/*5*/	  "Vous êtes libéré de prison",
 										  "L'alcule cé du jus ! Hic", 
@@ -50,7 +50,7 @@ class Carte {
 										  			//-DESCRIPTION
 										  {"Avancez jusqu’à la case départ.",
 										   "Payer vos cotisations de retraite s’élevant à 500$.",
-										   "Reculez de trois cases.",
+										   "Avancez de trois cases.",
 										   "Une bonne santé est importe de nos jour. Si vous passez par la case départ recevez 500$",
 								/*5*/	   "Je pense qu'il est impossible d'être chef d'entreprise sans un minimum d'audace, cette carte peut être conservée jusqu’à ce qu'elle soit utilisée.",
 										   "Amande pour ivresse, 100$.",
