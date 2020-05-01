@@ -1015,8 +1015,9 @@ void JeuSDL::affichageInteraction(){
     if(c->getType()=='E'||c->getType()=='B'){
         texte = "Prix :";
         texte += to_string(c->getPrix());
-        texte+= "   Loyer :";
+        texte+= "$    Loyer :";
         texte+= to_string(c->getLoyer());
+        texte+= "$";
         dessineTexte(texte,125,170,12);
         texte = "   Propriétaire : ";
         

@@ -36,6 +36,12 @@ private:
 
 	unsigned int prixDeVente; //Prix de revente
 	unsigned int prixDeVenteInitial;
+
+	float coeffUn;
+	float coeffDeux;
+	float coeffTrois;
+	float coeffQuatre;
+	float coeffCinq;
 	
 public:
 	//---------------------------------Constructeurs--------------------------------------
@@ -143,7 +149,7 @@ public:
 	le prix, son nom,son influence sur le karma, le prix de vente, le prix mauvais investissement, 
 	le prix bon investissement et le loyer 
 	*/ 
-	void initCase(unsigned int group,char categorie,unsigned int p,string n,unsigned int karma,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l);
+	void initCase(unsigned int group,char categorie,unsigned int p,string n,unsigned int karma,unsigned int pV,unsigned int pM,unsigned int pB,unsigned int l,float c1,float c2,float c3,float c4,float c5);
 
 	/**
 	@brief Initialise les prix initiaux d'une entreprise ou d'une banque

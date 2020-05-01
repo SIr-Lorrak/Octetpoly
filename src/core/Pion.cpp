@@ -241,7 +241,7 @@ void Pion::avancer()
 
 void Pion::salaire()
 {
-	float argentCD = 20;
+	float argentCD = 20000;
 	if(pos < d.D1 + d.D2)
 	{
 		//cout << "Le joueur est sur la case départ, il reçoit donc 20 bitcoins !" << endl;

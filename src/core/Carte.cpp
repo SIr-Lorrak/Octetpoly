@@ -43,7 +43,7 @@ void Carte::randomCarte(){
 
 		case 1:
 			id_case = -1;
-			gain = -500;
+			gain = 5000;
 			casePlus3 = false;
 			break;
 
@@ -67,55 +67,55 @@ void Carte::randomCarte(){
 
 		case 5:
 			id_case = -1;
-			gain = -100;
+			gain = -2000;
 			casePlus3 = false;
 			break;
 
 		case 6:
 			id_case = -1;
-			gain = 250;
+			gain = -2500;
 			casePlus3 = false;
 			break;
 
 		case 7://Carte spéciale
 			id_case = -1;
-			gain = 100;
+			gain = 1000;
 			casePlus3 = false;
 			break;
 
 		case 8:
 			id_case = -1;
-			gain = 200;
+			gain = 20000;
 			casePlus3 = false;
 			break;
 
 		case 9:
 			id_case = -1;
-			gain = 500;
+			gain = 1000;
 			casePlus3 = false;
 			break;
 //--------------------------------------------
 		case 10:
 			id_case = -1;
-			gain = -150;
+			gain = -15000;
 			casePlus3 = false;
 			break;
 
 		case 11:
 			id_case = -1;
-			gain = -100;
+			gain = -1500;
 			casePlus3 = false;
 			break;
 
 		case 12:
 			id_case = -1;
-			gain = -400;
+			gain = -10000;
 			casePlus3 = false;
 			break;
 
 		case 13:
 			id_case = -1;
-			gain = 350;
+			gain = 5000;
 			casePlus3 = false;
 			break;
 
@@ -127,13 +127,13 @@ void Carte::randomCarte(){
 
 		case 15:
 			id_case = -1;
-			gain = 150;
+			gain = 20000;
 			casePlus3 = false;
 			break;
 
 		case 16:
 			id_case = -1;
-			gain = 200;
+			gain = 5000;
 			casePlus3 = false;
 			break;
 
@@ -145,7 +145,7 @@ void Carte::randomCarte(){
 
 		case 18:
 			id_case = -1;
-			gain = 400;
+			gain = 1000;
 			casePlus3 = false;
 			break;
 
@@ -157,13 +157,13 @@ void Carte::randomCarte(){
 
 		case 20://Carte spéciale
 			id_case = -1;
-			gain = 0;
+			gain = -1000;
 			casePlus3 = false;
 			break;
 
 		case 21:
 			id_case = -1;
-			gain = 150;
+			gain = -2000;
 			casePlus3 = false;
 			break;
 

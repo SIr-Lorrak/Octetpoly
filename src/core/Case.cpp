@@ -29,6 +29,12 @@ Case::Case(){
 
 	prixDeVente = 0;
 	prixDeVenteInitial = 0;
+
+	coeffUn = 0;
+	coeffDeux = 0;
+	coeffTrois = 0;
+	coeffQuatre = 0;
+	coeffCinq = 0;
 }
 
 Case::~Case(){
@@ -119,7 +125,8 @@ void Case::setOccupation(unsigned int r){
 //(prix de base,type,nom de la case,etc)
 void Case::initCase(unsigned int group,char categorie,unsigned int p,
 					string n,unsigned karma,unsigned int pV,
-					unsigned int pM,unsigned int pB,unsigned int l){
+					unsigned int pM,unsigned int pB,unsigned int l,
+					float c1,float c2,float c3,float c4,float c5){
 	nom = n;
 	type = categorie;
 	groupe = group;
@@ -190,61 +197,61 @@ void Case::investir(int i){
 	//Investissement < 0 : on opte pour une politique illégal
 	switch(investissement){
 		case 1:
-			loyer = loyer*1.2;
-			prix = prix*1.2;
-			prixDeVente = prixDeVente*1.2;
+			loyer = loyer*coeffUn;
+			prix = prix*4.5;
+			prixDeVente = prixDeVente*4.5;
 			break;
 
 		case 2:
-			loyer = loyer*1.3;
-			prix = prix*1.3;
-			prixDeVente = prixDeVente*1.3;
+			loyer = loyer*coeffDeux;
+			prix = prix*3;
+			prixDeVente = prixDeVente*3;
 			break;
 
 		case 3:
-			loyer = loyer*1.4;
-			prix = prix*1.4;
-			prixDeVente = prixDeVente*1.4;
+			loyer = loyer*coeffTrois;
+			prix = prix*3;
+			prixDeVente = prixDeVente*3;
 			break;
 
 		case 4:
-			loyer = loyer*1.5;
+			loyer = loyer*coeffQuatre;
+			prix = prix*2;
+			prixDeVente = prixDeVente*2;
+			break;
+
+		case 5:
+			loyer = loyer*coeffCinq;
 			prix = prix*1.5;
 			prixDeVente = prixDeVente*1.5;
 			break;
 
-		case 5:
-			loyer = loyer*1.6;
-			prix = prix*1.6;
-			prixDeVente = prixDeVente*1.6;
-			break;
-
 		case -1:
-			loyer = loyer*1.2;
+			loyer = loyer*(coeffUn+0.1);
 			prix = prix*1.2;
 			prixDeVente = prixDeVente*1.2;
 			break;
 
 		case -2:
-			loyer = loyer*1.4;
+			loyer = loyer*(coeffDeux+0.1);
 			prix = prix*1.4;
 			prixDeVente = prixDeVente*1.4;
 			break;
 
 		case -3:
-			loyer = loyer*1.6;
+			loyer = loyer*(coeffTrois+0.1);
 			prix = prix*1.6;
 			prixDeVente = prixDeVente*1.6;
 			break;
 
 		case -4:
-			loyer = loyer*1.8;
+			loyer = loyer*(coeffQuatre+0.1);
 			prix = prix*1.8;
 			prixDeVente = prixDeVente*1.8;
 			break;
 
 		case -5:
-			loyer = loyer*2;
+			loyer = loyer*(coeffCinq+0.1);
 			prix = prix*2;
 			prixDeVente = prixDeVente*2;
 			break;
@@ -314,7 +321,7 @@ void Case::affichageRegression(){
 void Case::testRegressionCase(){
 	cout << endl << endl;
 	cout << "Appel initCase() : ....." << endl;
-	initCase(1,'E',35,"testEntreprise",10,45,7,42,69);
+	//initCase(1,'E',35,"testEntreprise",10,45,7,42,69);
 	affichageRegression();
 
 	cout << endl << "Appel estAcheter() : ....." << endl;
