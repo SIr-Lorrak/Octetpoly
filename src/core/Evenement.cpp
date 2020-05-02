@@ -24,7 +24,7 @@ bool Evenement::Declenchement(int karma){
 	srand (time(NULL));
 	unsigned int a;
 
-	if((rand()%100)<25){
+	if((rand()%100)<100){
 
 		//Accès uniquement au mini-jeu niveau 1 bon
 		if(karma >= 0 && karma < 50 )
@@ -106,7 +106,7 @@ void Evenement::fini(int clique){
 
 		else{
 			t = false;
-			gain = -50;
+			gain = -10000;
 		}
 
 		
@@ -114,7 +114,7 @@ void Evenement::fini(int clique){
 
 	if (n == "clicker"){
 
-		gain = 0.5*clique;
+		gain = 0.5*clique*100;
 
 	}
 
@@ -140,6 +140,8 @@ clock_t Evenement::gettempsD(){
 
 }
 
+
+//retourne le temps de fin (0 si le jeu est encore en cour)
 clock_t Evenement::getTempsF() const{
 	return tempsF;
 }
@@ -169,6 +171,8 @@ void Hacking::saisir(string N){
 
 }
 
+
+//enlève le dernier caractère de motSaisie
 void Hacking::effacerLettre()
 {
     if(motSaisie.length()>0)
@@ -217,6 +221,7 @@ string Hacking::getMot(){
 
 }
 
+
 //retourne le mot tapé par l'utilisateur
 string Hacking::getMotSaisie(){
 
@@ -232,6 +237,8 @@ unsigned int Hacking::getnbSaisie(){
 
 }
 
+
+//retourne d=le nombre de mot saisie
 unsigned int Hacking::getnbMot(){
 	return nbMot;
 }
@@ -244,6 +251,8 @@ int Hacking::getIntAff(){
 	
 }
 
+
+//retourne le booléen qui dit si le hacking 
 bool Hacking::getFin() const{
 	return fin;
 }
@@ -316,6 +325,7 @@ void Clicker::resetClicker(){
 
 //-----------------------Escape--------------------------------------
 
+//constructeur du mini jeu
 Escape::Escape(){
 	Joueur.x = 7;
 	Joueur.y = 9;
@@ -331,6 +341,8 @@ Escape::Escape(){
 
 }
 
+
+//fait le reset
 void Escape::resetEscape(){
 	Joueur.x = 7;
 	Joueur.y = 9;
@@ -345,10 +357,8 @@ void Escape::resetEscape(){
 	JoueurPasse.y = 9;
 }
 
-/*bool operator== (const& vec2D a, const& vec2D b){
-	return ((a.x==b.x)&&(a.y==b.y));
-}*/
 
+//permet de faire le déplacement du joueur
 void Escape::avancerJoueur(string direction){
 	
 
@@ -406,25 +416,32 @@ void Escape::avancerJoueur(string direction){
 	}
 }
 
+
 //retourne le bool fin
 bool Escape::getFin() const{
 	return Fin;
 }
 
+
+//retourne l'echec
 bool Escape::getEchec(){
 	return echec;
 }
 
 
+//retourne les coord du joueur joueur
 vec2D Escape::getJoueur(){
 	return Joueur;
 }
 
+
+//retourne les coord de la police 
 vec2D Escape::getPolice(){
 	return Police;
 }
 
 
+//victoire ou defaite
 void Escape::victoireDefaite(){
 	if((Joueur.x==Police.x)&&(Joueur.y==Police.y)){
 		Fin = true;
@@ -436,10 +453,14 @@ void Escape::victoireDefaite(){
 	}
 }
 
+
+// retourne la fin
 bool Escape::getFin(){
 	return Fin;
 }
 
+
+//permet de deplacer la police a intervalle régulier
 void Escape::deplacePolice(clock_t tempsD){
 	//for(int i=0;i<5;i++){cout<<"aa"<<endl;}
 	clock_t temps = clock();

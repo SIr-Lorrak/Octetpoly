@@ -25,6 +25,8 @@ bool kbhit()
     return byteswaiting > 0;
 }
 
+
+
 void setTerm(){
 	#ifndef _WIN32
 		system("setterm -cursor off");
@@ -192,6 +194,7 @@ void JeuTXT::affichageClicker(){
 }
 
 
+//permet l'affichage du mini jeu escape
 void JeuTXT::affichageEscape(){
 	jeuClear();
 	if(j.getes().getFin()==false){
@@ -262,6 +265,7 @@ void JeuTXT::affichageEscape(){
 }
 
 
+//permet l'affichage du mini jeu Lucky
 void JeuTXT::affichageLucky(){
 	cout<<"<[-($)-]¯-_-¯-LUCKY-_-¯-_-[-($)-]>"<<endl<<endl;
 	if(!j.getlu().getCartePiocher()){
@@ -282,6 +286,7 @@ void JeuTXT::affichageLucky(){
 
 }
 
+
 void affichePion(const Pion & p){
 	if(p.getNom()==""){
 		cout<<"<anonyme>";
@@ -289,6 +294,8 @@ void affichePion(const Pion & p){
 	cout<<p.getNom()<<"  : "<<p.getCoin()<<"k $"<<endl;	
 }
 
+
+//permet l'affichage d'une case
 void JeuTXT::affichageCase(const Case * c){
 	Pion * p = j.getPion(j.getJoueurCourant());
 	switch(c->getType()){
@@ -392,6 +399,8 @@ void JeuTXT::affichageCase(const Case * c){
 	}
 }
 
+
+//permet l'affichage txt du jeu
 void JeuTXT::affichageJeu(){
 	cout<<"tour : "<<j.getNbTour()<<endl;
 	
@@ -447,6 +456,8 @@ void JeuTXT::affichageJeu(){
 	cout<<endl;
 }
 
+
+//permet l'affichage txt du menu de départ
 void JeuTXT::affichageMenu(){
 	cout<<"<[-($)-]-_-¯-_-¯-OCTETPOLY-¯-_-¯-_-[-($)-]>"<<endl<<endl;
 	if(j.getBool("nouvellePartie")){//si le joueur crée une nouvelle partie
@@ -506,6 +517,7 @@ void JeuTXT::affichageMenu(){
 }
 
 
+//permet l'affichage du menu de pause
 void JeuTXT::affichagePause() const{
 
 	cout<<"<------------pause------------>"<<endl;
@@ -533,6 +545,7 @@ void JeuTXT::affichagePause() const{
 }
 
 
+//permet l'affichage de la campagne de pub
 void JeuTXT::affichageCampagneDePub(){
 	cout<<"<[-($)-]¯-_-¯-CAMPAGNE DE PUB-_-¯-_-[-($)-]>"<<endl<<endl;
 	cout << "Pour quel quartier voulez vous faire de la pub" << endl;
@@ -549,6 +562,8 @@ void JeuTXT::affichageCampagneDePub(){
 	}
 }
 
+
+//permet l'affichage de la porte ouverte
 void JeuTXT::affichagePorteOuvete(){
 	cout<<"<[-($)-]¯-_-¯-PORTE OUVERTE-_-¯-_-[-($)-]>"<<endl<<endl;
 	cout << "Vers quel voulez-vous vous rendre ?" << endl;
@@ -571,6 +586,8 @@ void JeuTXT::affichagePorteOuvete(){
 	}
 }
 
+
+//permet l'affichage du mode vente si on à plus de sous
 void JeuTXT::affichageVente(){
 	Pion * p = j.getPion(j.getJoueurCourant());
 
@@ -618,12 +635,14 @@ void JeuTXT::affichageVente(){
 	}
 }
 
+
+//permet l'affichage de la victoire
 void JeuTXT::affichageVictoire(){
 	cout<<j.getPion(j.getVainqueur())->getNom()<<" a gagné gg a lui !"<<endl;
 }
 
 
-
+//affiche le jeu dans un terminal
 void JeuTXT::affichage(){
 	/*if(j.gete().getn() == "rien"){
 
@@ -666,6 +685,7 @@ void JeuTXT::affichage(){
 		affichageJeu();
 	}
 }
+
 
 //permet de mettre a jour les objets suite à l'appuie d'une touche
 void JeuTXT::update(){

@@ -147,6 +147,12 @@ void Case::initCase(unsigned int group,char categorie,unsigned int p,
 	loyerInitial = l;
 	loyer = loyerInitial;
 
+	coeffUn = c1;
+	coeffDeux = c2;
+	coeffTrois = c3;
+	coeffQuatre = c4;
+	coeffCinq = c5;
+
 }
 
 //Initialise les prix initiaux d'une entreprise ou d'une banque

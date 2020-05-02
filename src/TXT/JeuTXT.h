@@ -28,14 +28,34 @@ private:
 	*/
 	void affichageMenu();
 
+	/**
+	@brief permet l'affichage du menu de pause
+	@param none
+	*/
 	void affichagePause() const;
 
+	/**
+	@brief permet l'affichage de la campagne de pub
+	@param none
+	*/
 	void affichageCampagneDePub();
 
+	/**
+	@brief permet l'affichage de la porte ouverte
+	@param none
+	*/
 	void affichagePorteOuvete();
 
+	/**
+	@brief permet l'affichage du mode vente si on à plus de sous
+	@param none
+	*/
 	void affichageVente();
 
+	/**
+	@brief permet l'affichage d'une case
+	@param none
+	*/
 	void affichageCase(const Case * c);
 
 	/**
@@ -44,11 +64,22 @@ private:
 	*/
 	void affichageJeu();
 
-
+	/**
+	@brief permet l'affichage su mini jeu clicker
+	@param none
+	*/
 	void affichageClicker();
 
+	/**
+	@brief permet l'affichage du mini jeu escape
+	@param none
+	*/
 	void affichageEscape();
 
+	/**
+	@brief permet l'affichage du mini jeu Lucky
+	@param none
+	*/
 	void affichageLucky();
 
 	/**
@@ -57,6 +88,10 @@ private:
 	*/
 	void affichageHacking();
 
+	/**
+	@brief permet l'affichage de la victoire
+	@param none
+	*/
 	void affichageVictoire();
 
 	/**

@@ -108,6 +108,12 @@ void Jeu::actionPartie(const string & touche)
 					attendreAmplete=false;
 					actionObligatoire=false;
 				}
+				if((c->getType() == 'E'||c->getType()=='B')&&c->getOccupation()==0){
+                    actionObligatoire=false;
+                    if(getPion(joueurCourant)->getCoin()<(int)c->getPrix()){
+                        attendreAmplete=false;
+                    }
+                }
 				avance = true;
 			}
 		}
@@ -278,6 +284,9 @@ void Jeu::actionBE(const string touche){
 		if(occupant != 0 && actionObligatoire){// La case appartient a une autre personne
 			if(touche == "\n"){
 				payeLoyerJoueur(touche);
+				if(getPion(joueurCourant)->getCoin()<(int)c->getPrix()){
+					attendreAmplete = false;
+				}
 			}
 			if(c->getType()=='B'){//si c'est une banque acheté alors le joueur ne peut plus faire d'amplètes (pas d'investissement sur les banques)
 				attendreAmplete = false;

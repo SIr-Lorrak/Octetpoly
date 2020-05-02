@@ -169,6 +169,10 @@ class Hacking{
 		*/
 		unsigned int getnbSaisie();
 
+		/**
+		@brief retourne d=le nombre de mot saisie
+		@param none
+		*/
 		unsigned int getnbMot();
 
 		/**
@@ -184,8 +188,8 @@ class Hacking{
 		bool getFin() const;
 
 		/**
-		brief permet de reset les données membres à la fin de l'évenement hacking
-		param none
+		@brief permet de reset les données membres à la fin de l'évenement hacking
+		@param none
 		*/
 		void resetHack();
 		 	
@@ -205,8 +209,8 @@ class Clicker {
 	public :
 	
 	/**
-	brief constructeur met le nombre de clique et le temps à 0
-	param none
+	@brief constructeur met le nombre de clique et le temps à 0
+	@param none
 	*/
 	Clicker();
 
@@ -217,7 +221,7 @@ class Clicker {
 	void gestionTps(clock_t tempsD);
 
 	/**
-	brief permet d'ajouter un clique au compteur
+	@brief permet d'ajouter un clique au compteur
 	@param none
 	*/
 	void ajoutClique();
@@ -229,20 +233,20 @@ class Clicker {
 	bool getFin() const;
 
 	/**
-	brief retourne le temps actuel pour le timer
-	param none
+	@brief retourne le temps actuel pour le timer
+	@param none
 	*/
 	float gettps_actuel();
 
 	/**
-	brief retourne le nombre d'appuie 
-	param none
+	@brief retourne le nombre d'appuie 
+	@param none
 	*/
 	unsigned int getnbclique();
 
 	/**
-	brief permet de reset les données membres à la fin de l'évenement clicker
-	param none
+	@brief permet de reset les données membres à la fin de l'évenement clicker
+	@param none
 	*/
 	void resetClicker();
 
@@ -266,15 +270,66 @@ class Escape {
 
 
 	public :
+
+	/**
+	@brief constructeur du mini jeu
+	@param none
+	*/
 	Escape();
+
+	/**
+	@brief permet de deplacer la police a intervalle régulier
+	@param varable de temps du début
+	*/
 	void deplacePolice(clock_t tempsD);
+
+	/**
+	@brief permet de faire le déplacement du joueur
+	@param touche pour le déplacement
+	*/
 	void avancerJoueur(string direction);
+
+	/**
+	@brief victoire ou defaite
+	@param none
+	*/
 	void victoireDefaite();
+
+	/**
+	@brief retourne les coord du joueur joueur
+	@param none
+	*/
 	vec2D getJoueur();
+
+	/**
+	@brief retourne les coord de la police 
+	@param none
+	*/
 	vec2D getPolice();
+
+	/**
+	@brief retourne la fin
+	@param none
+	*/
 	bool getFin();
+
+	/**
+	@brief retourne la fin
+	@param none
+	*/
 	bool getFin() const;
+
+
+	/**
+	@brief retourne l'echec
+	@param none
+	*/
 	bool getEchec();
+
+	/**
+	@brief fait le reset
+	@param none
+	*/
 	void resetEscape();
 
 };

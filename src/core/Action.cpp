@@ -43,6 +43,9 @@ void Jeu::reset()
 		ordre[i] = alea;
 	}
 	joueurCourant = ordre[0];
+	for(unsigned int i=0;i<32;i++){
+        board.getCase(i)->reset();
+    }
 }
 
 void Jeu::resetBool()

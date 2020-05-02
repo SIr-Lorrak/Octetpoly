@@ -66,6 +66,7 @@ bool Jeu::getBool(const string & type) const
 	else if(type=="apresPorteOuverte")
 		return apresPorteOuverte;
 	else
+		cout<<type<<endl;
 		assert(false);
 }
 
