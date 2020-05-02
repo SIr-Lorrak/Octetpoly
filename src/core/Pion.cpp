@@ -9,6 +9,7 @@ using namespace std;
 
 ///-----------------------------------------------------Constructeur par défaut------------------------------------------------------
 
+//Crée le Joueur (constructeur par défaut)
 Pion::Pion(){
 	
 	srand(time(NULL));
@@ -251,6 +252,7 @@ void Pion::salaire()
 }
 
 
+//Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé
 void Pion::achete(Case * c)
 {
 	assert(bitcoin >= (int)c->getPrix());
@@ -269,6 +271,8 @@ void Pion::don(Case * c)
 	nbpropriete++;
 }
 
+
+//Procédure qui permet au pion de vendre une propriété
 void Pion::vend(string nom)
 {
 	assert(nbpropriete != 0);
@@ -301,6 +305,8 @@ void Pion::vend(string nom)
 	nbpropriete = nbpropriete - 1;
 }
 
+
+//Le Pion est exproprié de l'entreprise/la banque nom
 void Pion::estRacheter(string nom){
 	assert(nbpropriete != 0);
 
@@ -330,6 +336,8 @@ void Pion::estRacheter(string nom){
 	nbpropriete = nbpropriete - 1;
 }
 
+
+//renvoie la somme des prix de vente de toutes les propriété de Pion
 unsigned int Pion::patrimoineActif(){
 	unsigned int somme = 0;
 	for (unsigned int i = 0 ; i < nbpropriete ; i++)
@@ -338,6 +346,7 @@ unsigned int Pion::patrimoineActif(){
 	}
 	return somme;
 }	
+
 
 unsigned int Pion::rapportePlus() const
 {
@@ -373,6 +382,8 @@ void Pion::effacerLettre()
         nom = nom.substr(0, nom.size()-1);
 }
 
+
+//Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case
 void Pion::investit(int i,Case * c){
 
     assert(i != 0);
@@ -387,6 +398,7 @@ void Pion::investit(int i,Case * c){
             karma = -100;
         }
     }
+
     else{
         bitcoin -= c->getPrixB();
         karma = karma + c->getKarmaCase();
@@ -401,6 +413,8 @@ void Pion::investit(int i,Case * c){
     c->investir(i);
 }
 
+
+//Procédure qui reset
 void Pion::EstEnFaillite()
 {
 	for(unsigned int i = 0; i < nbpropriete; i++)
@@ -409,6 +423,7 @@ void Pion::EstEnFaillite()
 
 		propriete[i] = NULL;
 	}
+	
 	nbpropriete = 0;
 	bitcoin = -1;
 }
@@ -416,6 +431,7 @@ void Pion::EstEnFaillite()
 
 ///----------------------------------------------------------------Destructeur--------------------------------------------------------------
 
+//Destructeur de la classe
 Pion::~Pion(){
 	delete [] propriete;
 }

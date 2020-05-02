@@ -48,6 +48,7 @@ void Jeu::reset()
     }
 }
 
+
 void Jeu::resetBool()
 {
 	konamiCode("");
@@ -66,6 +67,7 @@ void Jeu::resetBool()
 	/////////////////
 }
 
+
 bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
 	if(n!=0){
 		for(unsigned int i=0;i<n;i++){
@@ -76,6 +78,7 @@ bool nomExiste(const string & nom,const Ordi o[],unsigned int n){
 	}
 	return false;
 }
+
 
 void Jeu::commencerPartie()
 {	
@@ -94,6 +97,7 @@ void Jeu::commencerPartie()
 	}
 	tourSuivant();
 }
+
 
 void Jeu::ajouterJoueur()
 {
@@ -124,16 +128,20 @@ void Jeu::enleverJoueur(unsigned int n)
 	nbJoueur--;
 }
 
+
+//Retire la dernière propriété ajouter dans le tableau vente
 void Jeu::enleverVente(){
 	nbVente--;
 	vente[nbVente] = "";
 }
+
 
 void Jeu::ajouterLettre(const unsigned int n, const string lettre)
 {
 	assert(n<nbJoueur);
 	tabJ[n]->ajouterLettre(lettre);
 }
+
 
 void Jeu::ajouterNombre(const string nombre)
 {
@@ -145,6 +153,7 @@ void Jeu::effacerNombre()
 {
 	choix = choix.substr(0, choix.size()-1);     
 }
+
 
 void Jeu::ecrire(const string touche){
 	if(touche[0]==127||touche[0]==8||touche[0]=='\b')
@@ -158,6 +167,7 @@ void Jeu::ecrire(const string touche){
 	}
 }
 
+
 unsigned int Jeu::totalVente(){
 	unsigned int total = 0;
 	for (unsigned int i = 0; i < nbVente; ++i)
@@ -166,6 +176,7 @@ unsigned int Jeu::totalVente(){
 	}
 	return total;
 }
+
 
 void Jeu::remiseZeroEtVente(){
 	for (unsigned int i = 0; i < nbVente; ++i)
@@ -183,12 +194,12 @@ void Jeu::prixKarma(){
 	//Avec un karma positif, on paye entre 0% et 90% moins cher 
 	if(getPion(joueurCourant)->getKarma() > 0)
 	{
-		prixAPayer = prixAPayer*(1+ (0.1-1)*(getPion(joueurCourant)->getKarma()-1)/(100-1));
+		prixAPayer = prixAPayer*(1.0+ (0.1-1.0)*(((float)getPion(joueurCourant)->getKarma())-1.0)/(100.0-1.0));
 	}
 	//Avec un karma negatif, on paye entre 0% et 100% plus cher 
 	else
 	{
-		prixAPayer = prixAPayer*(1+ (2-1)*(getPion(joueurCourant)->getKarma()-1)/(100-1));	
+		prixAPayer = prixAPayer*(1.0+ (2.0-1.0)*((-1.0*((float)getPion(joueurCourant)->getKarma()))-1.0)/(100.0-1.0));	
 	}
 }
 

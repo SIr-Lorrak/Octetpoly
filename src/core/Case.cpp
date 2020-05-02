@@ -4,6 +4,7 @@
 using namespace std;
 
 //---------------------------------Constructeurs------------------------------------------
+//Crée une case (constructeur par défaut)
 Case::Case(){
 	occupation = 0;
 	type = '0';
@@ -37,10 +38,14 @@ Case::Case(){
 	coeffCinq = 0;
 }
 
+
+//Destructeur de la classe
 Case::~Case(){
 	//TODO
 }
 
+
+//Set les différents attributs Variable de Case
 void Case::set(unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i){
 	prix = p;
 	loyer = l;
@@ -53,68 +58,86 @@ void Case::set(unsigned int p,unsigned int l,unsigned int prixdevente,unsigned i
 
 //-------------------------------------Getters-------------------------------------------
 
+//Renvoie le Nom de la Case
 string Case::getNom() const{
 	return nom;
 }
 
+
+//Indique à qui appartient l'entreprise ou la banque
 unsigned int Case::getOccupation() const{
 	return occupation;
 }
 
 
+//Indique le prix de l'entreprise ou de la banque
 unsigned int Case::getPrix() const{
 	return prix;
 }
 
 
+//Indique le prix d'un investissement illégal (mauvais)
 unsigned int Case::getPrixM() const{
 	return prixM;
 }
 
 
+//Indique le prix d'un investissement légal (bon)
 unsigned int Case::getPrixB() const{
 	return prixB;
 }
 
+
+//Renvoie le Loyer d'une Case (ce que les joueurs doivent payer en tombant dussus)
 unsigned int Case::getLoyer() const{
 	return loyer;
 }
 
 
+//Informe sur le prix initial de l'entreprise ou banque
 unsigned int Case::getPrixInitial() const{
 	return prixInitial;
 }
 
 
+//Informe sur le prix de vente de l'entreprise ou de la banque
 unsigned int Case::getPrixDeVente() const{
 	return prixDeVente;
 }
 
 
+//Indique l'investissement de l'entreprise
 int Case::getInvestissement() const{
 	return investissement;
 }
 
 
+//Récupére le type de la case
 char Case::getType() const{
 	return type;
 }
 
 
+//Indique si la Case est en campagne de Pub ou pas
 bool Case::getAd() const{
 	return ad;
 }
 
+
+//Renvoie le numero du groupe de la Case
 unsigned int Case::getGroup() const{
 	return groupe;
 }
 
+
+//Renvoie le Karma d'une Case (taux d'impact sur le karma des Pions)
 unsigned int Case::getKarmaCase() const{
 	return karmaCase;
 }
 
 //-------------------------------------Setters-------------------------------------------
 
+//Set le propriétaire d'une Case (/!\ uniquement lors du chargement d'une sauvegarde normalement)
 void Case::setOccupation(unsigned int r){
 	occupation = r;
 }
@@ -122,7 +145,9 @@ void Case::setOccupation(unsigned int r){
 //-------------------------------------Méthodes------------------------------------------
 
 // Permet l'initialisation d'une case au lancement d'une partie 
-//(prix de base,type,nom de la case,etc)
+//Dans l'ordre suivant
+//(groupe ; type; prix ; nom ; karmaCase ; prixDeVente ; prixMauvais ; 
+//prixBon ; loyer ; coeffUn ; coeffDeux ; coeffTrois ; coeffQuatre ; coeffCinq)
 void Case::initCase(unsigned int group,char categorie,unsigned int p,
 					string n,unsigned karma,unsigned int pV,
 					unsigned int pM,unsigned int pB,unsigned int l,
@@ -155,6 +180,7 @@ void Case::initCase(unsigned int group,char categorie,unsigned int p,
 
 }
 
+
 //Initialise les prix initiaux d'une entreprise ou d'une banque
 void Case::initPrixInitial(){
 	//Utile pour la fonction investissement car quand on investit, c'est qu'on posséde
@@ -177,15 +203,19 @@ void Case::initPrixInitial(){
 	loyer = loyerInitial; 
 }
 
+
 //Change l'investissment, le prix,le loyer,le prix de vente,le prixB, le prixM
 void Case::investir(int i){
 	assert(i != 0);
-	//Vérifie si l'entreprise n'a pas changé de politique
+
+	//Vérifie si l'entreprise n'a pas changé de politique (Passer de l'illégale ou légale)
+	//ou inversement
 	if((investissement > 0 && i == -1) || (investissement < 0 && i == 1))
 	{
 		initPrixInitial();
 		investissement = 0;
 	}
+
 
 	if(i == -1)
 	{
@@ -264,11 +294,15 @@ void Case::investir(int i){
 	}
 }
 
+
+//Affecte un propriètaire et change les prix
 void Case::estAcheter(unsigned int i){
 	occupation = i;
 	prix = prix*2;
 }
 
+
+//Indique que l'entreprise fait de la pub (Change les prix)
 void Case::advertising(){
 	ad = true;
 	coeffAd = coeffAd*1.2;
@@ -277,6 +311,8 @@ void Case::advertising(){
 	prixDeVente = prixDeVente*coeffAd;
 }
 
+
+//Indique que l'entreprise ne fait plus de pub (Change les prix)
 void Case::endAdvertising(){
 	ad = false;
 	prix = prix/coeffAd;
@@ -285,13 +321,15 @@ void Case::endAdvertising(){
 	coeffAd = 1.0;
 }
 
+
+//Réinitialisation de la case
 void Case::reset(){
 	occupation = 0;
 	investissement = 0;
 	ad = false;
 	coeffAd = 1.0;
 
-	//On renitialise les prix
+	//On réinitialise les prix
 	initPrixInitial();
 }
 

@@ -66,7 +66,7 @@ class Pion{
 		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
 		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
-		bool tourUn;
+		bool tourUn;					//Booléen qui indique si le pion a déja effectuer un premier tour
 
 	public :
 
@@ -272,54 +272,63 @@ class Pion{
 	/**
 	@brief Fonction qui fait la somme de la revente de tous les biens (entreprises et banques) du pion
 	@param none
+	@return none
 	*/
 	float ReventeToFaillite();
 
 	/**
 	@brief renvoie la somme des prix de vente de toutes les propriété de Pion
 	@param none
+	@return none
 	*/
 	unsigned int patrimoineActif();
 
 	/**
 	@brief Procédure qui donne 20 bitcoins au pion lorsqu'il passe par la case départ
 	@param none
+	@return none
 	*/
 	void salaire();
 
 	/**
 	@brief Procédure qui permet au pion de vendre une propriété
 	@param indP : entier non signé , c : Un pointeur vers la case que le pion veut vendre
+	@return none
 	*/
 	void vend(string nom);
 
 	/**
-	@brief Le Pion est exproprié de l'entreprise/la banque nom
+	@brief Le Pion est exproprié de l'entreprise/la banque
 	@param le nom de la Case, nom
+	@return none
 	*/
 	void estRacheter(string nom);
 
 	/**
 	@brief Procédure qui permet au pion d'acheter l'entreprise ou la banque sur laquelle le pion est tombé
 	@param c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
+	@return none
 	*/
 	void achete(Case * c);
 
 	/**
 	@brief on donne une case au Pion (/!\ uniquement lors du chargement d'une sauvegarde)
 	@param le pointeur vers la case donnée
+	@return none
 	*/
 	void don(Case *c);
 
 	/**
 	@brief Procédure qui permet au pion d'investir dans son entreprise s'il se trouve sur sa case
 	@param i : l'entier qui nous dit si le joueur investit dans l'illégal ou non,	c : Un pointeur vers la case entreprise ou banque où se trouve le pion 
+	@return none
 	*/
 	void investit(int i,Case * c);
 
 	/**
 	@brief Procédure qui reset
 	@param none
+	@return none
 	*/
 	void EstEnFaillite();
 

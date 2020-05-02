@@ -10,6 +10,10 @@ Plateau::Plateau(){
 
 	//D : Départ ; E : Entreprise ; B : Banque ; P : Prison ; C : Chance ; I : Impôt 
 	//O : Porte Ouverte ; A : Publicité (Advertising)
+	//Initialisation des cases au lancement d'une partie 
+	//Dans l'ordre suivant
+	//(groupe ; type ; prix ; nom ; karmaCase ; prixDeVente ; prixMauvais ; 
+	//prixBon ; loyer ; coeffUn ; coeffDeux ; coeffTrois ; coeffQuatre ; coeffCinq)
 	tabC[0].initCase(0,'D',0,"Depart",0,0,0,0,0,0,0,0,0,0);
 	tabC[1].initCase(1,'E',6000,"Auchan",10,3000,3000,5000,200,5,3,3,1.77,1.56);
 	tabC[2].initCase(1,'E',6000,"Aldi",10,3000,3000,5000,200,5,3,3,1.77,1.56);
@@ -49,16 +53,20 @@ Plateau::Plateau(){
 	casePub = 0;
 }
 
+
 //Destructeur de la classe
 Plateau::~Plateau(){
 	delete [] tabC;
 }
+
 
 //Permet de récupèrer l'adresse d'une case
 Case * Plateau::getCase(unsigned int numCase) const{
 	return &tabC[numCase];
 }
 
+
+//Permet de set les différents attributs variables d'une case (lors du chargement d'une partie).
 void Plateau::setCase(unsigned int numCase,unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i){
 	tabC[numCase].set(p,l,prixdevente,pM,pB,prop,i);
 }
@@ -70,7 +78,7 @@ unsigned int Plateau::getcasePub() const {
 }
 //---------------------------------Setters-------------------------------------------
 
-//Permet de changer la valeur de setcasePub 
+//Permet de changer la valeur de casePub 
 void Plateau::setcasePub(unsigned int numCase){
 	casePub = numCase;
 }
@@ -92,7 +100,7 @@ void Plateau::setcasePub(unsigned int numCase){
 		return nbcase;
 	}
 
-	//Permet de recupérer l'indice d'une case entreprise ou banque par l'intermédiaire de son nom
+	//Permet de récupérer l'indice d'une case entreprise ou banque par l'intermédiaire de son nom
 	unsigned int Plateau::getIndice(const string & nom) const{
     	unsigned int i=0;
     	while(tabC[i].getNom()!=nom){

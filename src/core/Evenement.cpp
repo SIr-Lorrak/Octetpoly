@@ -24,7 +24,7 @@ bool Evenement::Declenchement(int karma){
 	srand (time(NULL));
 	unsigned int a;
 
-	if((rand()%100)<100){
+	if((rand()%100)<25){
 
 		//Accès uniquement au mini-jeu niveau 1 bon
 		if(karma >= 0 && karma < 50 )
@@ -505,25 +505,30 @@ Lucky::Lucky(){
 	cartePiocher = false;
 }
 
+
 //Destructeur 
 Lucky::~Lucky(){
 
 }
+
 
 //Permet de récupèrer un pointeur sur la carteUn
 Carte * Lucky::getCarteUn(){
 	return &*carteUn;
 }
 
+
 //Permet de récupèrer un pointeur sur la carteDeux
 Carte * Lucky::getCarteDeux(){
 	return &*carteDeux;
 }
 
+
 //Permet de connaître la valeur du booléen cartePiocher
 bool Lucky::getCartePiocher(){
 	return cartePiocher;
 }
+
 
 //Permet de piocher deux cartes 
 void Lucky::pioche(){
@@ -533,6 +538,7 @@ void Lucky::pioche(){
 	carteDeux->randomCarte();
 	cartePiocher = true;
 }
+
 
 //Reset Lucky
 void Lucky::reset(){

@@ -54,7 +54,7 @@ class Jeu{
 		bool quitte;
 		bool pause;
 		bool nouvellePartie;
-		bool desLancePrison;
+		bool desLancePrison; 
 		bool apresPorteOuverte;//Permet d'empêcher de jouer juste après une porte ouverte
 
 
@@ -114,21 +114,21 @@ class Jeu{
 
 		/**
 		@brief Permet ajouter un nombre à la séléction lors du mode vente ou pour choisir sa destination
-		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu,etc
 		@param un string : le/les nombre a rajouter 
 		*/
 		void ajouterNombre(const string nombre);
 
 		/**
 		@brief Permet effacer un nombre à la selection lors du mode vente ou pour choisir sa destination
-		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu,etc
 		@param none 
 		*/
 		void effacerNombre();
 
 		/**
 		@brief Permet ajouter ou effacer un nombre, permet au joueur de choisir sa destination
-		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu
+		dans porte ouverte ou pour savoir sur quelle quartier la campagne de pub aura lieu,etc
 		ou bien quelle quartier veut-il vendre
 		@param touche : string
 		*/
@@ -151,6 +151,7 @@ class Jeu{
 		/**
 		@brief détecte si il y a une victoire monopole et met le vainqueur dans vainqueur.
 		@param none
+		@return none
 		*/
 		void victoireMonopole();
 
@@ -197,13 +198,13 @@ class Jeu{
 		void actionVictoire();
 
 		/**
-		@brief Procédure qui gère les action sur une case banque ou entreprise d'un ordi
+		@brief Procédure qui gère les actions sur une case banque ou entreprise 
 		@param none
 		*/
 		void actionBE(const string touche);
 
 		/**
-		@brief Procédure qui gère les investissement d'un joueur
+		@brief Procédure qui gère les investissements
 		@param none
 		*/
 		void investirEJoueur(const string touche);
@@ -222,7 +223,7 @@ class Jeu{
 
 		/**
 		@brief Fonction qui prends en paramètre la case sur laque le joueurCourant veux
-		mettre un pub
+		mettre une pub
 		@param quelleCase : unsigned int
 		*/
 		void pub(unsigned int quelleCase);

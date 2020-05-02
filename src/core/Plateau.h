@@ -43,15 +43,16 @@ public:
 	Case * getCase(unsigned int numCase) const;
 
 	/**
-	@brief permet de set les different attribut variable d'une case (lors du chargement d'une partie).
+	@brief Permet de set les differents attributs variables d'une case (lors du chargement d'une partie).
 	@param respectivement : le numéro de la Case son prix, son loyer, son prix de vente, son prix d'investissement illégal, son prix d'investissement légal, son propriétaire et le niveau d'investissement
+	@return none
 	*/
 	void setCase(unsigned int numCase,unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i);
 
 	/**
 	@brief Permet de récupérer la case qui est actuellement en campagne de pub
 	@param none
-	@return La case qui est en camapagne de pub (sa position sur le plateau)
+	@return La case qui est en campagne de pub (sa position sur le plateau)
 	*/
 	unsigned int getcasePub() const;
 
