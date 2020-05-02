@@ -9,11 +9,6 @@ void Jeu::getOrdre(unsigned int tab[4]) const
 	for(int i =0; i<4 ; i++){ tab[i] = ordre[i];}
 }
 
-Case & Jeu::getJCase(const unsigned int i)
-{
-	return *board.getCase(i);
-}
-
 string Jeu::getChoix() const
 {
 	return choix;

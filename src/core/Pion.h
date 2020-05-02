@@ -139,6 +139,10 @@ class Pion{
 	**/
 	Pion * getPion();
 
+	/**
+	@brief renvoie les Dés du Pion
+	@param
+	*/
 	Des getDes() const;
 
 	/**
@@ -148,8 +152,16 @@ class Pion{
 	**/
 	bool getTicket() const;
 
+	/**
+	@brief renvoie si le Pion est déjà repassé par la Case départ (ce qui veut dire qu'il a effectué un tour et qu'il n'est plus limité)
+	@param none
+	*/
 	bool getTourUn() const;
 
+	/**
+	@brief donne un ticket gratuitement au Pion (/!\ sers uniquement lors du chargement d'une partie)
+	@param none
+	*/
 	void donTicket();
 
 
@@ -184,14 +196,34 @@ class Pion{
 	**/
 	void setCoin(const int argent);
 
+	/**
+	@brief set le nom du Pion (uniquement lors du chargement)
+	@param le nom n du Pion
+	*/
 	void setNom(const string & n);
 
+	/**
+	@brief set le rang du Pion
+	@param le rang r
+	*/
 	void setRang(const unsigned int r);
 
+	/**
+	@brief set la position du Pion sur le Plateau
+	@param la position p
+	*/
 	void setPos(const unsigned int p);
 
+	/**
+	@brief set le pion comme ayant déjà fait le premier tour (unsiquement lors du chargement)
+	@param un entier non-signé tour
+	*/
 	void setTourUn(const unsigned int tour);
 
+	/**
+	@brief choisi un nom aleatoire pour le Pion (sers pour les Ordis seulement)
+	@param none
+	*/
 	void nomAleatoire();
 
 	/**
@@ -243,6 +275,10 @@ class Pion{
 	*/
 	float ReventeToFaillite();
 
+	/**
+	@brief renvoie la somme des prix de vente de toutes les propriété de Pion
+	@param none
+	*/
 	unsigned int patrimoineActif();
 
 	/**
@@ -257,6 +293,10 @@ class Pion{
 	*/
 	void vend(string nom);
 
+	/**
+	@brief Le Pion est exproprié de l'entreprise/la banque nom
+	@param le nom de la Case, nom
+	*/
 	void estRacheter(string nom);
 
 	/**
@@ -265,6 +305,10 @@ class Pion{
 	*/
 	void achete(Case * c);
 
+	/**
+	@brief on donne une case au Pion (/!\ uniquement lors du chargement d'une sauvegarde)
+	@param le pointeur vers la case donnée
+	*/
 	void don(Case *c);
 
 	/**

@@ -57,8 +57,16 @@ public:
 	*/
 	~Case();
 
+	/**
+	@brief set les différents attributs Variable de Case
+	@param respectivement : son prix, son loyer, son prixdevente, son prix de l'investissement illégal, son prix de l'investissement légal, son niveau d'investissement
+	*/
 	void set(unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i);
 
+	/**
+	@brief renvoie le Nom d'une Case
+	@param none
+	*/
 	string getNom() const;
 
 
@@ -71,14 +79,14 @@ public:
 	unsigned int getOccupation() const;
 
 	/**
-	@brief
-	@param
+	@brief renvoie le Prix de base (celui qui ne varie pas) d'une Case
+	@param none
 	*/
 	unsigned int getPrixDeBase() const;
 
 	/**
-	@brief
-	@param
+	@brief renvoie le Loyer d'une Case (ce que les joueurs doivent payer en tombant dussus)
+	@param none
 	*/
 	unsigned int getLoyer() const;
 
@@ -133,13 +141,29 @@ public:
 	*/ 
 	char getType() const;
 
+	/**
+	@brief renvoie si la Case est en campagne de Pub ou pas
+	@param none
+	*/
 	bool getAd() const;
 
+	/**
+	@brief renvoie le numero du groupe de la Case
+	@param none
+	*/
 	unsigned int getGroup() const;
 
+	/**
+	@brief renvoie le Karma d'une Case (taux d'impacte sur le karma des Pions)
+	@param none
+	*/
 	unsigned int getKarmaCase() const;
 	//----------------------------------Setters------------------------------------------
 
+	/**
+	@brief set le propriétaire d'une Case (/!\ uniquement lors du chargement d'une sauvegarde normalement)
+	@param le rang du nouveau propriétaire, r
+	*/
 	void setOccupation(unsigned int r);
 	//---------------------------------Methodes------------------------------------------
 	/**

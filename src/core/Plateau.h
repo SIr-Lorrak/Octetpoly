@@ -44,6 +44,7 @@ public:
 
 	/**
 	@brief permet de set les different attribut variable d'une case (lors du chargement d'une partie).
+	@param respectivement : le numéro de la Case son prix, son loyer, son prix de vente, son prix d'investissement illégal, son prix d'investissement légal, son propriétaire et le niveau d'investissement
 	*/
 	void setCase(unsigned int numCase,unsigned int p,unsigned int l,unsigned int prixdevente,unsigned int pM,unsigned int pB,unsigned int prop, int i);
 

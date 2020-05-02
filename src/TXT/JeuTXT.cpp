@@ -26,7 +26,7 @@ bool kbhit()
 }
 
 
-
+//Met le terminal op pour le jeu (mode non canonique+cacher le cursor)
 void setTerm(){
 	#ifndef _WIN32
 		system("setterm -cursor off");
@@ -39,7 +39,7 @@ void setTerm(){
 }
 
 
-
+//clear le terminal
 void clear(){
 	#ifdef _WIN32
 	    system("cls");
@@ -48,6 +48,7 @@ void clear(){
 	#endif
 }
 
+//remet le terminal comme il était
 void restoreTerm(){
 	#ifndef _WIN32
 		system("setterm -cursor on");

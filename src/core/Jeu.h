@@ -93,13 +93,13 @@ class Jeu{
 		void enleverJoueur(unsigned int n=0);
 
 		/**
-		@brief 
+		@brief ajoute dans vend[] le nom de l'entreprise choisi d'on l'indice est dans choix.
 		@param none
 		*/
 		void ajouterVente();
 
 		/**
-		@brief 
+		@brief enleve le dernier choix de vend[]
 		@param none
 		*/
 		void enleverVente();
@@ -134,6 +134,10 @@ class Jeu{
 		*/
 		void ecrire(const string touche);
 
+		/**
+		@brief dans Touche.cpp permet de gerer les touche lors de la vente
+		@param un string, touche, correspond à la touche enfoncée pas l'utilisateur.
+		*/
 		void modeVente(const string touche);
 
 		/**
@@ -144,6 +148,10 @@ class Jeu{
 		*/
 		void remiseZeroEtVente();
 
+		/**
+		@brief détecte si il y a une victoire monopole et met le vainqueur dans vainqueur.
+		@param none
+		*/
 		void victoireMonopole();
 
 		/**
@@ -176,8 +184,16 @@ class Jeu{
 		*/
 		void actionMenu(const string & touche);
 
+		/**
+		@brief permet de gérer les touches rentré par l'utilisateur dans le menu de pause
+		@param un string, touche, représente la touche enfoncé.
+		*/
 		void actionPause(const string & touche);
 
+		/**
+		@brief permet de gerer l'action alors que la partie est terminée
+		@param none mait pourrais prendre une touche pour changer d'action (pour voir les stats de la partie par exemple dans un futur plus ou moins proche)
+		*/
 		void actionVictoire();
 
 		/**
@@ -211,8 +227,16 @@ class Jeu{
 		*/
 		void pub(unsigned int quelleCase);
 
+		/**
+		@brief permet de gérer les touches de l'utilisateur pendant qu'il doit payer les impôts
+		@param un string touche, la touche entrée par l'utilisateur
+		*/
 		void impot(const string touche);
 
+		/**
+		@brief permet de gérer les touches rentrée par l'utilisateur alors qu'il est en prison
+		@param toujours la même la touche rentrée sous forme de string.	
+		*/
 		void actionPrison(const string touche);
 
 		/**
@@ -221,11 +245,16 @@ class Jeu{
 		*/
 		void actionCase(const string & touche = "");
 
+		/**
+		@brief permet à la fin de chaque tour de reset tous les booléens pour le déroulement du tour suivant
+		@param none
+		*/
 		void resetBool();
 		
 
 	public :
-		Plateau board;
+		Plateau board;//seul donnée membre en public.
+
 		/**
 		@brief constructeur par défaut de Jeu
 		@param aucun
@@ -248,8 +277,10 @@ class Jeu{
 		*/
 		bool getBool(const string & type) const;
 
-		Case & getJCase(const unsigned int i);
-
+		/**
+		@brief renvoie le nombre d'entreprises/banques qui ont été choisi pour être vendu
+		@param none
+		*/
 		unsigned int getNbVente();
 
 		/**
@@ -270,14 +301,34 @@ class Jeu{
 		*/
 		Joueur * getJoueur(const unsigned int i) const;
 
+		/**
+		@brief renvoie un pointeur vers un Ordi de rang i
+		@param le rang i, un entier non-signé
+		*/
 		Ordi * getOrdi(const unsigned int i) const;
 
+		/**
+		@brief renvoie le pointeur vers Pion de rang i (le rang commence a 1 contrairement a l'indice)
+		@param le rang i, un entier non-signé
+		*/
 		Pion * getPion(const unsigned int i) const;
 
+		/**
+		@brief renvoie le rang du joueur dont c'est le tour
+		@param none
+		*/
 		unsigned int getJoueurCourant()const;
 
+		/**
+		@brief renvoie un pointeur vers la Carte actuellement piocher
+		@param none
+		*/
 		Carte * getCarte()const;
 
+		/**
+		@brief renvoie le nom de la i-ème entreprise vendu
+		@param l'indice indice, un entier non-signé
+		*/
 		string getVente(unsigned int indice);
 
 		/**
@@ -289,6 +340,10 @@ class Jeu{
 		*/
 		string getChoix() const;
 
+		/**
+		@brief renvoie le prix que le joueur doit payer lors des impôts, de la prison, ou pendant la vente
+		@param none
+		*/
 		unsigned int getPrixAPayer();
 		
 		/**
@@ -297,8 +352,16 @@ class Jeu{
 		*/
 		void actionClavier(const string & touche);
 
+		/**
+		@brief permet de définir les actions qu'ont les boutons
+		@param l'action du bouton enfoncé ou relaché selon le choix (actuellement c'est au relachement)
+		*/
 		void action(const string & action);
 
+		/**
+		@brief permet de définir les actions que fera une IA durant son tour
+		@param none
+		*/
 		void actionOrdi();
 
 		/**
@@ -319,6 +382,10 @@ class Jeu{
 		*/
 		void actionChance(const string & touche);
 
+		/**
+		@brief fait les différente action qu'on une carte chance Carte
+		@param none
+		*/
 		void carteChance();
 
 		/**
@@ -379,8 +446,16 @@ class Jeu{
 		*/
 		Clicker getc();
 
+		/**
+		@brief renvoie le mini jeu Escape es
+		@param none
+		*/
 		Escape getes();
 
+		/**
+		@brief renvoie le mini jeu Lucky lu
+		@param none
+		*/
 		Lucky getlu();
 
 		/**
@@ -389,9 +464,16 @@ class Jeu{
 		*/
 		void setc();
 
-
+		/**
+		@brief reset entièrement le Jeu à la fin d'une partie ou quand le joueur souhaite retourner au menu de départ en cour de partie
+		@param none
+		*/
 		void reset();
 
+		/**
+		@brief test de régression de Jeu
+		@param none
+		*/
 		void testRegression();
 
 		/**
@@ -400,8 +482,16 @@ class Jeu{
 		*/
 		~Jeu();
 
+		/**
+		@brief permet de définir les condition pour lesquels on ne veut pas que le joueur utilise le clavier (pour l'instant on l'autorise tout le temps)
+		@param none
+		*/
 		bool accepteClavier() const;
 
+		/**
+		@brief permet d'update les minis Jeux automatiquement lorsque le joueur ne fait rien (pour le timer et la police qui avance)
+		@param none
+		*/
 		void updateMiniJeu();
 		
 

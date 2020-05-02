@@ -55,9 +55,10 @@ class Ordi : public Pion{
 		*/
 		unsigned int AIchampionat() const;
 
-
-		unsigned int AIporteOuverte(const Plateau & board)const;
-
+		/**
+		@brief renvoie le nom de l'entreprise que l'Ordi souhaite vendre
+		@param dejaVendu[], le tableau des noms d'entreprise déjà vendu ainsi que nbVente, sa longueur
+		*/
 		string AIvend(const string dejaVendu[],unsigned int nbVente)const;
 };
 
