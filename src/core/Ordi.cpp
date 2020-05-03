@@ -37,8 +37,8 @@ bool Ordi::AIacheteEntreprise(const Case * entreprise) const
 
 unsigned int Ordi::AIchampionat() const
 {
-	if(risque>50) return rapportePlus();//organise les championats sur la case rapportant le plus actuellement
-	else return plusCher();//organise les championats sur la case ayant le coût d'achat le plus cher
+	if(risque>50) return rapportePlus();//organise les championnats sur la case rapportant le plus actuellement
+	else return plusCher();//organise les championnats sur la case ayant le coût d'achat le plus cher
 }
 
 

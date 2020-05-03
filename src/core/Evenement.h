@@ -28,18 +28,18 @@ struct vec2D
 
 
 /**
-@brief classe qui permet de déclancher un évenement selon le karma du jour, avec le gain positif ou negatif a la fin de l'évenement
+@brief classe qui permet de déclancher un évènement selon le karma du joueur, avec le gain positif ou negatif à la fin de l'évènement
 */
 class Evenement{
 	private :
 
-		unsigned int ch; //chance en pourcentage du déclenchement de l'événement
-		string n; //nom de l'evenement
-		bool t; //true si l'evenement et bénéfique et false si il est maléfique
-		clock_t tempsD; //heure d edépart d'un évenement
-		clock_t tempsF; //heure de fin d'un évenement
-		float tps; //durée totale d el'évenement
-		int gain; //montant que vous aller gagner ou perdre
+		unsigned int ch; //chance en pourcentage du déclenchement de l'évènement
+		string n; //nom de l'évènement
+		bool t; //true si l'évènement et bénéfique et false s'il est maléfique
+		clock_t tempsD; //heure de départ d'un évènement
+		clock_t tempsF; //heure de fin d'un évènement
+		float tps; //durée totale de l'évènement
+		int gain; //montant que vous allez gagner ou perdre
 
 	public :
 
@@ -50,25 +50,25 @@ class Evenement{
 		Evenement();
 
 		/**
-		@brief permet de déclancher un événément lors d'un déplacement en fonction du karma renvoie true si une un mini jeu est lancé
+		@brief permet de déclancher un évènement lors d'un déplacement en fonction du karma renvoie true si un mini jeu est lancé
 		@param none
 		*/
 		bool Declenchement(int karma);
 
 		/**
-		@brief retourne n (nous de l'évenement en court)
+		@brief retourne n (nom de l'évènement en cours)
 		@param none
 		*/
 		string getn();
 
 		/**
-		@brief retourne tps (temps du jours sur l'évenement)
+		@brief retourne tps (temps du jours sur l'évènement)
 		@param none
 		*/
 		float gettps();
 
 		/**
-		@brief retourne t (bool qui permet de savoir si on gagne ou perd de l'argent )
+		@brief retourne t (bool qui permet de savoir si l'on gagne ou perd de l'argent )
 		@param none
 		*/
 		bool getT();
@@ -77,13 +77,13 @@ class Evenement{
 
 
 		/**
-		@brief pemet de calculer le temps qu'a mit le joueur a faire l'évenement
+		@brief pemet de calculer le temps qu'a mit le joueur à faire l'évènement
 		@param none
 		*/
 		void fini(int clique = 0);
 
 		/**
-		@brief retourne le gain à la fin de l'évenement
+		@brief retourne le gain à la fin de l'évènement
 		@param none
 		*/
 		int getgain();
@@ -95,7 +95,7 @@ class Evenement{
 		clock_t gettempsD();
 
 		/**
-		@brief retourne le temps de fin (0 si le jeu est encore en cour)
+		@brief retourne le temps de fin (0 si le jeu est encore en cours)
 		@param none
 		*/
 		clock_t getTempsF() const;
@@ -105,31 +105,31 @@ class Evenement{
 
 
 /**
-@brief classe qui gère l'évenement haching, un Mini-Jeu dans lequel il faut taper rapidement du texte
+@brief classe qui gère l'évènement haching, un Mini-Jeu dans lequel il faut taper rapidement du texte
 */
 class Hacking{
 
 	private :
 
 		string mot; //mot à saisir
-		unsigned int nbSaisie; //nombre de mot valider
-		string motSaisie; //mot actuellement taper par le joueur
+		unsigned int nbSaisie; //nombre de mot validé
+		string motSaisie; //mot actuellement tapé par le joueur
 		bool fin;//dit si le jeu est fini 
-		unsigned int nbMot; //nombre de mot a saisir pour finir
+		unsigned int nbMot; //nombre de mot à saisir pour finir
 	
 	public :
 
 		int intAff;
 
 		/**
-		@brief constructeur, initialise le premier, le nb sde saisie et l'affichage
+		@brief constructeur, initialise le premier, le nb de saisie et l'affichage
 		@param none
 		*/
 		Hacking();
 
 		/**
-		@brief concate le caractere N au reste du mot
-		@param string N(caractere tapé par le joueur) 
+		@brief concate le caractère N au reste du mot
+		@param string N(caractère tapé par le joueur) 
 		*/
 		void saisir(string N);
 
@@ -140,7 +140,7 @@ class Hacking{
 		void effacerLettre();
 
 		/**
-		@brief permet de valider ou non le mot saisit par le joueur
+		@brief permet de validé ou non le mot saisit par le joueur
 		@param none
 		*/
 		void valider();
@@ -182,13 +182,13 @@ class Hacking{
 		int getIntAff();
 
 		/**
-		@brief retourne le booléen qui dit si le hacking 
+		@brief retourne le booléen qui dit si le hacking est fini
 		@param none
 		*/
 		bool getFin() const;
 
 		/**
-		@brief permet de reset les données membres à la fin de l'évenement hacking
+		@brief permet de reset les données membres à la fin de l'évènement hacking
 		@param none
 		*/
 		void resetHack();
@@ -196,14 +196,14 @@ class Hacking{
 };
 
 /**
-brief classe qui gère l'évenement clicker, Mini-jeu où il faut clicker plus vite que ton ombre
+brief classe qui gère l'évènement clicker, Mini-jeu où il faut clicker plus vite que ton ombre
 */
 class Clicker {
 
 	private :
 
 	bool Fin;
-	unsigned int nbclique; // nombre d'appue sur la barre espace
+	unsigned int nbclique; // nombre d'appuie sur la barre espace
 	float tps_actuel; //temps actuel pour le timer
 
 	public :
@@ -215,7 +215,7 @@ class Clicker {
 	Clicker();
 
 	/**
-	@brief permet le gestion du temps et la fin du mini jeu
+	@brief permet la gestion du temps et la fin du mini jeu
 	@param clock_t tempsD(temps de départ)
 	*/
 	void gestionTps(clock_t tempsD);
@@ -227,7 +227,7 @@ class Clicker {
 	void ajoutClique();
 
 	/**
-	@brief retourne le bool fin
+	@brief retourne le booléen fin
 	@param none
 	*/
 	bool getFin() const;
@@ -245,7 +245,7 @@ class Clicker {
 	unsigned int getnbclique();
 
 	/**
-	@brief permet de reset les données membres à la fin de l'évenement clicker
+	@brief permet de reset les données membres à la fin de l'évènement clicker
 	@param none
 	*/
 	void resetClicker();
@@ -255,7 +255,7 @@ class Clicker {
 };
 
 /**
-@brief gère l'evenement "escape", c'est un Mini-Jeu ou tu dois fuire la police pour ne pas te retrouver en prison
+@brief gère l'évènement "escape", c'est un Mini-Jeu où tu dois fuir la police pour ne pas te retrouver en prison
 */
 class Escape {
 
@@ -278,8 +278,8 @@ class Escape {
 	Escape();
 
 	/**
-	@brief permet de deplacer la police a intervalle régulier
-	@param varable de temps du début
+	@brief permet de deplacer la police à intervalle régulier
+	@param variable de temps du début
 	*/
 	void deplacePolice(clock_t tempsD);
 
@@ -296,7 +296,7 @@ class Escape {
 	void victoireDefaite();
 
 	/**
-	@brief retourne les coord du joueur joueur
+	@brief retourne les coord du joueur
 	@param none
 	*/
 	vec2D getJoueur();
@@ -336,14 +336,14 @@ class Escape {
 
 
 /**
-@brief gère l'évenement lucky, tu pioche deux cartes chances et tu choisis laquel tu veux.
+@brief gère l'évènement lucky, tu pioches deux cartes chances et tu choisis laquelle tu veux.
 */
 class Lucky {
 	
 	private : 
-	Carte * carteUn; //Correspond à la première carte pioché
-	Carte * carteDeux; //Correspond à la seconde carte pioché
-	bool cartePiocher; //Booléen qui indique si les cartes ont déja été pioché
+	Carte * carteUn; //Correspond à la première carte piochée
+	Carte * carteDeux; //Correspond à la seconde carte piochée
+	bool cartePiocher; //Booléen qui indique si les cartes ont déjà été piochées
 
 	public :
 
@@ -359,14 +359,14 @@ class Lucky {
 	~Lucky();
 
 	/**
-	@brief Permet de récupèrer un pointeur sur la carteUn
+	@brief Permet de récupérer un pointeur sur la carteUn
 	@param none
 	@return Un pointeur sur la carteUn 
 	*/
 	Carte * getCarteUn();
 
 	/**
-	@brief Permet de récupèrer un pointeur sur la carteDeux
+	@brief Permet de récupérer un pointeur sur la carteDeux
 	@param none
 	@return Un pointeur sur la carteDeux 
 	*/

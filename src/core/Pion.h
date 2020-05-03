@@ -38,7 +38,7 @@ const string noms[20] = {"Tom Pousse",//0
 
 
 /**
-@brief les doubles dés lancé par les pions
+@brief les doubles dés lancés par les pions
 **/
 struct Des 								///Les 2 Des du pion
 	{	
@@ -53,24 +53,24 @@ class Pion{
 	
 	private :
 
-		string nom;						///Nom du pion
-		int karma;						///Karma du pion
-		unsigned int rang;				///Rang du pion
-		int bitcoin;					///Argent du pion
-		unsigned int nbpropriete;		///Nombre de propriétés que possède le pion
-		unsigned int pos;				///Position du pion
-		char car;						///Caractère du pion
-		Des d;							///Dés du pion
-		bool prisonnier;				///Booléen qui indique si le pion est prisonnier ou non
-		Case ** propriete;				///Tableau de pointeur vers case de propriétés du pion
-		bool doubles[2];				///Tableau de trois booléens qui indique le nombre de double à la suite du pion
+		string nom;						//Nom du pion
+		int karma;						//Karma du pion
+		unsigned int rang;				//Rang du pion
+		int bitcoin;					//Argent du pion
+		unsigned int nbpropriete;		//Nombre de propriétés que possède le pion
+		unsigned int pos;				//Position du pion
+		char car;						//Caractère du pion
+		Des d;							//Dés du pion
+		bool prisonnier;				//Booléen qui indique si le pion est prisonnier ou non
+		Case ** propriete;				//Tableau de pointeur vers case de propriétés du pion
+		bool doubles[2];				//Tableau de trois booléens qui indique le nombre de double à la suite du pion
 		//Carte ** deck;
 		bool ticket;					//Ticket du joueur (utiliser pour les portes ouvertes)
-		bool tourUn;					//Booléen qui indique si le pion a déja effectuer un premier tour
+		bool tourUn;					//Booléen qui indique si le pion a déja effectué un premier tour
 
 	public :
 
-///-----------------------Constructeur/Destructeur--------------------------------------
+//-----------------------Constructeur/Destructeur--------------------------------------
 	/**
 	@brief Crée le Joueur (constructeur par défaut)
 	@param none
@@ -83,7 +83,7 @@ class Pion{
 	**/
 	~Pion();
 
-///---------------------------------Méthode-------------------------------------------
+//---------------------------------Méthodes-------------------------------------------
 	
 	/**
 	@brief Accesseur du nom du pion
@@ -166,7 +166,7 @@ class Pion{
 
 
 	/**
-	@brief met le pion en prison si il est libre et inversement (utiliser a l'exterieur que au chargement d'un fichier de sauvegarde)
+	@brief met le pion en prison s'il est libre et inversement (utiliser à l'exterieur qu'au chargement d'un fichier de sauvegarde)
 	@param none
 	*/
 	void setPrisonnier();
@@ -215,20 +215,20 @@ class Pion{
 	void setPos(const unsigned int p);
 
 	/**
-	@brief set le pion comme ayant déjà fait le premier tour (unsiquement lors du chargement)
+	@brief set le pion comme ayant déjà fait le premier tour (uniquement lors du chargement)
 	@param un entier non-signé tour
 	*/
 	void setTourUn(const unsigned int tour);
 
 	/**
-	@brief choisi un nom aleatoire pour le Pion (sers pour les Ordis seulement)
+	@brief choisie un nom aleatoire pour le Pion (sers pour les Ordis seulement)
 	@param none
 	*/
 	void nomAleatoire();
 
 	/**
 	@brief Permet de modifier la valeur du ticket 
-	@param achat : bool, true si le joueur a acheter un ticket, false si il l'a consommé
+	@param achat : bool, true si le joueur a acheté un ticket, false s'il l'a consommé
 	@return none
 	**/
 	void setTicket(bool achat);
@@ -277,7 +277,7 @@ class Pion{
 	float ReventeToFaillite();
 
 	/**
-	@brief renvoie la somme des prix de vente de toutes les propriété de Pion
+	@brief renvoie la somme des prix de vente de toutes les propriétés de Pion
 	@param none
 	@return none
 	*/

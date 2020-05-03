@@ -8,15 +8,15 @@ using namespace std;
 #include "Pion.h"
 #include "Plateau.h"
 /**
-@brief si il n'y a pas quatre joueur des ordis vont devoir remplacer les joueurs qui manque
+@brief s'il n'y a pas quatre joueurs des ordis vont devoir remplacer les joueurs qui manquent
 */
 class Ordi : public Pion{
 	private : 
-		int risque; //en pourcentage, ça correspond au risque que vas prendre l'Ordi
+		int risque; //en pourcentage, ça correspond au risque que va prendre l'Ordi
 	public :
 
 		/**
-		@brief constructeur par défaut de Ordi il assigne un risque au hasard entre 0 et 100
+		@brief constructeur par défaut de Ordi, il assigne un risque au hasard entre 0 et 100
 		@param aucun
 		*/
 		Ordi();
@@ -30,27 +30,27 @@ class Ordi : public Pion{
 		
 
 		/**
-		@brief renvoie true si l'Ordi décide d'acheté la banque false sinon
+		@brief renvoie true si l'Ordi décide d'acheter la banque, sinon false
 		@param une Case banque : la banque en question
 		*/
 		bool AIacheteBanque(const Case * banque) const;
 
 
 		/**
-		@brief renvoie true si l'Ordi souhaite acheté l'entreprise false sinon
+		@brief renvoie true si l'Ordi souhaite acheter l'entreprise, sinon false
 		@param une Case entreprise : l'entreprise en question
 		*/
 		bool AIacheteEntreprise(const Case * entreprise) const;
 
 
 		/**
-		@brief renvoie in entier correspondant a l'investissement choisit (-1 dans l'illégal +1 dans le légal et 0 si rien n'est choisi)
-		@param une Case entreprise : l'entreprise dans laquel il vas investir (ça doit être la case sur laquel il se tient)
+		@brief renvoie un entier correspondant à l'investissement choisie (-1 dans l'illégal +1 dans le légal et 0 si rien n'est choisi)
+		@param une Case entreprise : l'entreprise dans laquelle il va investir (ça doit être la case sur laquelle il se tient)
 		*/
 		int AIinvesti(const Case * entreprise) const;
 
 		/**
-		@brief renvoie l'indice de la case sur laquel il veut organisé les championa du monde (0 si il ne veut rien faire)
+		@brief renvoie l'indice de la case sur laquelle il veut organiser les championnats du monde (0 s'il ne veut rien faire)
 		@param aucun
 		*/
 		unsigned int AIchampionat() const;

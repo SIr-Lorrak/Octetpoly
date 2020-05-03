@@ -25,7 +25,7 @@ Image::Image(){
 void Image::loadFichier(const char* nom_fichier, SDL_Renderer * renderer){
     surface = IMG_Load(nom_fichier);
     if(surface == NULL){
-        cout<<"probleme chargement image :"<<nom_fichier<<endl;
+        cout<<"problème chargement image :"<<nom_fichier<<endl;
         exit(1);
     }
 
@@ -38,7 +38,7 @@ void Image::loadFichier(const char* nom_fichier, SDL_Renderer * renderer){
      //cout<<SDL_GetError()<<endl;
     
      if(texture == NULL){
-        cout<<"probleme creation texture :"<<nom_fichier<<endl;
+        cout<<"problème création texture :"<<nom_fichier<<endl;
         exit(1);
      }
 }
@@ -108,7 +108,7 @@ JeuSDL::JeuSDL(){
 
     window = SDL_CreateWindow("OctetPoly", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DIMX, DIMY, SDL_WINDOW_SHOWN );
     if (window == NULL) {
-        cout << "Erreur lors de la creation de la fenetre : " << SDL_GetError() << endl; SDL_Quit(); exit(1);
+        cout << "Erreur lors de la création de la fenêtre : " << SDL_GetError() << endl; SDL_Quit(); exit(1);
     }
 
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
@@ -285,7 +285,7 @@ void JeuSDL::newButton(const string & effet,const int x,const int y,const int w,
         case INVISIBLE:
             break;//on n'affiche rien puisqu'il est invisible
         default:
-            cout<<"erreur : type de bouton invalid"<<endl;
+            cout<<"erreur : type de bouton invalide"<<endl;
             assert(false);
             break;//je sais que le break sers a rien mais je le met pour la forme
     }
@@ -346,7 +346,7 @@ void JeuSDL::affichageClicker(){
         dessineTexte(texte,135,135,12);
         texte ="pour faire de la pub!";
         dessineTexte(texte,135,155,12);
-        texte ="Nombre de pub réalisé : ";
+        texte ="Nombre de pub réalisée : ";
         texte+=to_string(j.getc().getnbclique());
         dessineTexte(texte,135,180,12);
 
@@ -581,7 +581,7 @@ void JeuSDL::affichageEscape(){
         }
             
         dessineTexte("Utilsez les touches Z, Q, S et D ",122,110,12);
-        dessineTexte("pour échaper rapidement à la police",122,130,12);
+        dessineTexte("pour échapper rapidement à la police",122,130,12);
 
         dessineTexte("Attention de ne pas quitter la route!",122,565,12);
         
@@ -609,13 +609,13 @@ void JeuSDL::affichageEscape(){
 
         if(j.getes().getEchec()==true){
 
-            dessineTexte("Vous n'avez pas reussit ",172,245,11);
-            dessineTexte("à vous échaper!",172,265,11);
+            dessineTexte("Vous n'avez pas reussi ",172,245,11);
+            dessineTexte("à vous échapper!",172,265,11);
             dessineTexte("Direction la prison!",172,300,11);
             newButton("\n",300,500,120,30,BLUE,"Continuer");
         }
         else{
-            dessineTexte("Vous avez reussit à vous échaper",172,245,11);
+            dessineTexte("Vous avez reussi à vous échapper",172,245,11);
             newButton("\n",300,500,120,30,BLUE,"Continuer");
 
         }
@@ -704,7 +704,7 @@ void JeuSDL::affichageMenu(){
 }
 
 
-//permet d'afficher les dées
+//permet d'afficher les dés
 void JeuSDL::affichageDees(){
         DE.dessineTexture(renderer,130,160,60,60);
         DE.dessineTexture(renderer,220,160,60,60);
@@ -780,7 +780,7 @@ void JeuSDL::affichageCampagnePub(Pion *p,Case *c){
     }
     if(j.getBool("ad")){ // si choisit d'y participer
         dessineRectangle(renderer,110,112,495,495,COL_WINDOW);
-        texte= "Sur quel propriété faire votre campagne ?";
+        texte= "Sur quelle propriété faire votre campagne ?";
         dessineTexte(texte,125,120,12);
         int h = 110;
         int l = 165;
@@ -1092,11 +1092,11 @@ void JeuSDL::affichageInteraction(){
                 dessineTexte(texte,125,195,12);
                 dessineTexte("+ pour investir dans le légal,",125,470,12);
                 dessineTexte("- pour investir dans l'illégal.",125,490,12);
-                texte ="/!\\ si vous avez déjà investit dans le légal,";
+                texte ="/!\\ si vous avez déjà investi dans le légal,";
                 dessineTexte(texte,125,515,10);
                 texte = "investir dans l'illégal enlèvera vos ";
                 dessineTexte(texte,125,530,10);
-                texte ="investissement précédent et inverssement !";
+                texte ="investissement précédent et inversement !";
                 dessineTexte(texte,125,545,10);
                 newButton("+",125,565,30,30,BLUE,"+");
                 newButton("-",175,565,30,30,BLUE,"-");
@@ -1328,12 +1328,12 @@ void JeuSDL::affichageVictoire(){
             texte =j.getPion(j.getVainqueur())->getNom();
         }
     if(v){
-        texte += " à gagné en provoquant la faillite des ses advaisaires.";
+        texte += " a gagné en provoquant la faillite des ses advaisaires.";
         dessineTexte(texte,30,200,15);
 
     }
     else{
-        texte += " à gagner en ayant le monopole des propriétés";
+        texte += " a gagné en ayant le monopole des propriétés";
         dessineTexte(texte,30,200,15);
     }
     texte = "Valeur du patrimoine actif :";

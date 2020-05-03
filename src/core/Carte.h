@@ -8,15 +8,15 @@ using namespace std;
 
 
 /**
-@brief classe qui définie les cartes chances
+@brief classe qui définit les cartes chances
 */
 class Carte {
 
 	private:
 
-		int gain; // somme gagner ou perdu indiqué sur la carte
-		int id_case; // id de la case où le jouer doit se rendre indiqué sur la carte
-		int id_carte; // id de la carte pioché
+		int gain; // somme gagnée ou perdue indiquée sur la carte
+		int id_case; // id de la case où le joueur doit se rendre indiqué sur la carte
+		int id_carte; // id de la carte piochée
 		bool casePlus3; // indique si le joueur doit reculer de 3 cases
 		const string tab_carte[2][25] = {
 													//-TITRE
@@ -30,7 +30,7 @@ class Carte {
 										  "Vos amis seront ravis !",
 										  "Made in China", 
 								/*10*/	  "Jour de paye !", 
-										  "C’est leur de manger !", 
+										  "C’est l'heure de manger !", 
 										  "Police Nationale, que faites-vous !",
 										  "Soyez présentable !", 
 										  "Money money money !", 
@@ -51,7 +51,7 @@ class Carte {
 										  {"Avancez jusqu’à la case départ.",
 										   "Payer vos cotisations de retraite s’élevant à 5000$.",
 										   "Avancez de trois cases.",
-										   "Une bonne santé est importe de nos jour. Si vous passez par la case départ recevez 20000$",
+										   "Une bonne santé est important de nos jours. Si vous passez par la case départ recevez 20000$",
 								/*5*/	   "Je pense qu'il est impossible d'être chef d'entreprise sans un minimum d'audace, cette carte peut être conservée jusqu’à ce qu'elle soit utilisée.",
 										   "Amande pour ivresse, 2000$.",
 										   "Recevez vos intérêts sur l’emprunt à 7 %, 2500$.",
@@ -77,7 +77,7 @@ class Carte {
 	public:
 
 		/**
-		@brief retourne le gain0
+		@brief retourne le gain
 		@param none
 		*/
 		int getgain() const;
@@ -107,7 +107,7 @@ class Carte {
 		string getTexte() const;
 
 		/** 
-		@brief retourne un bool
+		@brief retourne un booléen
 		@param none
 		*/
 		bool getcasePlus3() const;

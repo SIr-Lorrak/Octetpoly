@@ -161,7 +161,7 @@ private:
 
 	bool act; 
 	int a;//pour le clicker; le "a" stock l'id de l'image de pub
-	bool clique;//permet de savoir si on a cliqué sur une pub
+	bool clique;//permet de savoir si l'on a cliqué sur une pub
 	
 	
 
@@ -173,7 +173,7 @@ private:
 	@param un entier non-signé correspondant au type (il faut utiliser les constantes DEFAULT RED GREEN BLUE et INVISIBLE) (DEFAULT par défaut en même temps c'est évident)
 	@param un string c1, le contenu du bouton sous forme de texte (vide par défaut)
 	@param un pointeur sur Image c2, le contenu du bouton sous forme d'une Image (à NULL par défaut)
-	@param un entier margin, la largeur en pixel des bords entre le contenu et les bords du bouton (de 5 pixels par dafaut)
+	@param un entier margin, la largeur en pixel des bords entre le contenu et les bords du bouton (de 5 pixels par défaut)
 	@param un SDL_Color, la couleur du texte contenu dans le bouton (blanc par défaut)
 	*/
 	void newButton(const string & effet,const int x,const int y,const int w,const int h,const unsigned int type=DEFAULT,const string & c1="",const Image * c2=NULL,const int margin=5,const SDL_Color couleur={255,255,255});
@@ -221,19 +221,19 @@ private:
 	void affichage();
 
 	/**
-	@brief recupère les touches
+	@brief récupère les touches
 	@param évents SDL
 	*/
 	bool update(SDL_Event & events);
 
 	/**
-	@brief permet d'afficher les dées
+	@brief permet d'afficher les dés
 	@param none
 	*/
 	void affichageDees();
 
 	/**
-	@brief permet d'afficher les interaction quand on se trouve sur une case
+	@brief permet d'afficher les interactions quand on se trouve sur une case
 	@param none
 	*/
 	void affichageInteraction();
@@ -251,7 +251,7 @@ private:
 	void affichageCarteChance(int H,string Titre, string Texte);
 
 	/**
-	@brief permet d'aficher la campagne de pub
+	@brief permet d'afficher la campagne de pub
 	@param un pointeur vers pion, un pointeur vers case
 	*/
 	void affichageCampagnePub(Pion *p,Case *c);

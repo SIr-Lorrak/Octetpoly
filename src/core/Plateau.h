@@ -15,7 +15,7 @@ const int TPLATEAU = 32;
 class Plateau{
 private:
 
-	//Champs liée au plateau
+	//Champs liés au plateau
 	Case * tabC; //Un tableau de case (représente le plateau)
 	unsigned int casePub; //La case (position) où à lieu la campagne de pub
 
@@ -68,9 +68,9 @@ public:
 	//---------------------------------Méthodes-------------------------------------------
 
 	/**
-	@brief Compte le nombre restant d'entreprise et de banque non-occupé
+	@brief Compte le nombre restant d'entreprises et de banques non-occupées
 	@param none
-	@return Le nombre restant d'entreprise et de banque non-occupé 
+	@return Le nombre restant d'entreprises et de banques non-occupées 
 	*/
 	unsigned int nbCaseFree();
 
@@ -83,7 +83,7 @@ public:
 	unsigned int getIndice(const string & nom) const;
 
 	/**
-	@brief Permet de vérifier si la case entreprise ou banque entrez par le joueur pour les
+	@brief Permet de vérifier si la case entreprise ou banque entrée par le joueur pour les
 	portes ouvertes est disponible ou non 
 	@param choix : unsigned int, la case choisie par le joueur, joueur : unsigned int, le numéro du joueur qui joue
 	@return true si la case entreprise ou banque appartient au joueur ou à personne sinon false 
@@ -93,7 +93,7 @@ public:
 	//-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**
-	@brief Permet d'afficher toutes les données membre de la classe
+	@brief Permet d'afficher toutes les données membres de la classe
 	@param none
 	*/
 	void affichageRegression();

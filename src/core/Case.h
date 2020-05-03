@@ -7,7 +7,7 @@
 using namespace std;
 
 /**
-@brief les case du plateau (case départ, entreprise, banque, etc.)
+@brief les cases du plateau (case départ, entreprise, banque, etc.)
 */
 class Case{
 private:
@@ -17,12 +17,12 @@ private:
 
 	string nom;//Le nom de la case
 	unsigned int occupation;//Qui occupe la case
-	char type; //Type une entreprise, une banque, un case chance,...
-	int investissement; //Permet de savoir l'entreprise a investi dans le légal ou illégal
-	unsigned int groupe; //Groupe au quelle appartient la case
+	char type; //Type : une entreprise, une banque, un case chance,...
+	int investissement; //Permet de savoir si l'entreprise a investi dans le légal ou illégal
+	unsigned int groupe; //Groupe auquel appartient la case
 	unsigned int karmaCase; //Le karma que rapporte ou retire la case au joueur
 
-	unsigned int loyer; //Prix à payer lorque la case appartient à un autre joueur
+	unsigned int loyer; //Prix à payer lorsque la case appartient à un autre joueur
 	unsigned int loyerInitial;
 
 	unsigned int prix; //Prix d'achat
@@ -37,7 +37,7 @@ private:
 	unsigned int prixDeVente; //Prix de revente
 	unsigned int prixDeVenteInitial;
 
-	//Les Coefficients de multiplicités qui change selon les niveau
+	//Les Coefficients de multiplicités qui changent selon les niveaux
 	//investissement sur la case 
 	float coeffUn; 
 	float coeffDeux;
@@ -155,7 +155,7 @@ public:
 	bool getAd() const;
 
 	/**
-	@brief Renvoie le numero du groupe de la Case
+	@brief Renvoie le numéro du groupe de la Case
 	@param none
 	@return groupe | 0 : groupe case normal ; 1 à 8 : groupe d'entreprise ;
 	42 : groupe banque
@@ -180,9 +180,9 @@ public:
 	/**
 	@brief Permet l'initialisation d'une case au lancement d'une partie 
 	(prix de base,type,nom de la case,etc)
-	@param prend en paramètre le groupe au quelle la case appartient, la catégorie de la case, 
-	le prix, son nom,son influence sur le karma, le prix de vente, le prix mauvais investissement, 
-	le prix bon investissement,le loyer et les cinq coefficient
+	@param prend en paramètre le groupe auquel la case appartient, la catégorie de la case, 
+	le prix, son nom, son influence sur le karma, le prix de vente, le prix mauvais investissement, 
+	le prix bon investissement,le loyer et les cinq coefficients
 	@return none
 	*/ 
 	void initCase(unsigned int group,char categorie,unsigned int p,
@@ -236,7 +236,7 @@ public:
 //-------------------------------------TEST REGRESSION-----------------------------------
 
 	/**
-	@brief Permet d'afficher toutes les données membre de la classe
+	@brief Permet d'afficher toutes les données membres de la classe
 	@param none
 	*/
 	void affichageRegression();
