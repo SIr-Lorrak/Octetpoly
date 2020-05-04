@@ -378,10 +378,10 @@ void Jeu::payeLoyerJoueur(const string touche){
 
 void Jeu::campagneDePub(const string touche){
 	Case * c = board.getCase(board.getIndice("Campagne de pub"));
-	unsigned int coinCourant = getPion(joueurCourant)->getCoin();
+	int coinCourant = getPion(joueurCourant)->getCoin();
 	actionObligatoire = false;//La campagne de Pub n'est pas une action obligatoire
 	if((touche == "o" ||touche == "O") 
-		&& (coinCourant >= c->getPrix())
+		&& (coinCourant >= (int)c->getPrix())
 		&& (!ad)
 		&& ((getPion(joueurCourant)->getNbPropriete()>0)))
 	{
@@ -410,7 +410,6 @@ void Jeu::campagneDePub(const string touche){
 		if(confirmation)
 		{
 			pub(board.getIndice(getPion(joueurCourant)->getPropriete(stoul(choix))->getNom()));
-			getPion(joueurCourant)->setCoin(coinCourant - c->getPrix());
 			ad = false;
 			confirmation = false;
 			attendreAmplete = false;
@@ -460,7 +459,6 @@ void Jeu::porteOuverte(const string & touche){
 		if(confirmation)
 		{
 			getPion(joueurCourant)->setPos(stoul(choix));
-			getPion(joueurCourant)->setCoin(getPion(joueurCourant)->getCoin() - c->getPrix());
 			getPion(joueurCourant)->setTicket(false);	
 			attendreAmplete = false;
 			choix = "";

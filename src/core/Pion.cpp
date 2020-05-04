@@ -17,7 +17,7 @@ Pion::Pion(){
 	karma = rand()%4-2;
 	rang = 0;
 	nom="";
-	bitcoin =INITCOIN; 
+	bitcoin = INITCOIN;
 	nbpropriete = 0;
 	pos = 0;
 	car = '*';
