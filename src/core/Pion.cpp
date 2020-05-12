@@ -230,8 +230,8 @@ void Pion::avancer()
 		if(pos >= MAXCASEP)
 		{
 			salaire();
+			pos = pos%MAXCASEP;
 		}
-		pos = pos%MAXCASEP;
 		if(pos == 8)
 		{
 			prisonnier = true;
@@ -243,12 +243,7 @@ void Pion::avancer()
 void Pion::salaire()
 {
 	float argentCD = 20000;
-	if(pos < d.D1 + d.D2)
-	{
-		//cout << "Le joueur est sur la case départ, il reçoit donc 20 bitcoins !" << endl;
-		bitcoin += argentCD;
-		//cout << "Le joueur a un total de " << bitcoin << "bitcoins." << endl;
-	}
+	bitcoin += argentCD;
 }
 
 
